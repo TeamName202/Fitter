@@ -1,4 +1,4 @@
-package com.fitter.crossfit;
+package com.mk.fitter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
