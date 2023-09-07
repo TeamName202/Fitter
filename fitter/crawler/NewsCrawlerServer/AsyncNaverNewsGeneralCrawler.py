@@ -1,9 +1,10 @@
+import math
 import requests
 from datetime import date
-import math
 from bs4 import BeautifulSoup
 import csv
-import json
+import concurrent.futures
+from datetime import datetime
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
@@ -72,18 +73,26 @@ if __name__ == "__main__":
     news_list = get_news()
 
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
+
     save_to_csv(news_list)
     end_time = time.time()
     print(end_time - start_time)
 
 
 def start():
+    start_time = time.time()
+
     news_list = get_news()
 
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
+
     save_to_csv(news_list)
+    end_time = time.time()
+    print(end_time - start_time)
     return news_list

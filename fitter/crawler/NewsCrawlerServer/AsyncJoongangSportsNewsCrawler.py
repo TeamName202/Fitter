@@ -1,9 +1,9 @@
 import requests
-from datetime import date, datetime
-import math
+from datetime import date
 from bs4 import BeautifulSoup
 import csv
-import json
+import concurrent.futures
+from datetime import datetime
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
@@ -20,11 +20,8 @@ def get_news(tag):
     page = 1
     while True:
         url = f"https://www.joongang.co.kr/{tag}?page={page}"
-        url2 = f"https://www.joongang.co.kr/{tag}?page={page}"
-        url3 = f"https://www.joongang.co.kr/{tag}?page={page}"
         rq = requests.get(url, headers=headers)
         soup = BeautifulSoup(rq.text, "html.parser")
-
         selectedList = soup.select("#story_list li")
         if selectedList == []:
             print("기사가 없습니다.")
@@ -85,27 +82,40 @@ def save_to_csv(news_list):
             csvwriter.writerow(i.values())
 
 
-# Press the green button in the gutter to run the script.
+import time
+
 if __name__ == "__main__":
+    start_time = time.time()
     get_news("sports")
     get_news("culture")
     get_news("society")
+
     print(news_list)
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
 
     save_to_csv(news_list)
+    end_time = time.time()
+    print(news_list)
+    print(end_time - start_time)
 
 
 def start():
+    start_time = time.time()
     get_news("sports")
     get_news("culture")
     get_news("society")
+
     print(news_list)
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
 
     save_to_csv(news_list)
+    end_time = time.time()
+    print(news_list)
+    print(end_time - start_time)
     return news_list

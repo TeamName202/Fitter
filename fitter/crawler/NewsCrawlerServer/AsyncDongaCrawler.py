@@ -1,9 +1,8 @@
 import requests
 from datetime import date
-import math
 from bs4 import BeautifulSoup
 import csv
-import json
+import concurrent.futures
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
@@ -11,13 +10,13 @@ headers = {
 
 
 def get_news():
-    print("뉴스 목록 가져오는 중...")
     today = date.today()
     formatted_date = str(today).replace("-", "")
     formatted_date = int(formatted_date) - 1
     page = 1
     news_list = []
     while True:
+        print("뉴스 목록 가져오는 중... - page : {}", page)
         url = f"https://www.donga.com/news/List?p={page}&prod=news&ymd={formatted_date}&m="
         rq = requests.get(url, headers=headers)
         soup = BeautifulSoup(rq.text, "html.parser")
@@ -87,9 +86,8 @@ if __name__ == "__main__":
     news_list = get_news()
     print(news_list)
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
-
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
     save_to_csv(news_list)
     end_time = time.time()
     print(end_time - start_time)
@@ -97,11 +95,14 @@ if __name__ == "__main__":
 
 
 def start():
+    start_time = time.time()
     news_list = get_news()
     print(news_list)
     print("본문 가져오는 중...")
-    for news in news_list:
-        get_content(news)
-
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(get_content, news_list)
     save_to_csv(news_list)
+    end_time = time.time()
+    print(end_time - start_time)
+    print(news_list.__sizeof__())
     return news_list

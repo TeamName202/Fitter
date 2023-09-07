@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.cors import CORSMiddleware
-import ChosunNewsCrawler
-import JoongangSportsNewsCrawler
-import NaverNewsGeneralCrawler
-import DongaNewsCrawler
+import AsyncChosunNewsCrawler
+import AsyncJoongangSportsNewsCrawler
+import AsyncNaverNewsGeneralCrawler
+import AsyncDongaCrawler
 
 
 app = FastAPI()
@@ -47,19 +47,19 @@ def chosun_crawler(request: Request):
 
 @app.post("/api/chosun")
 def chosun_crawler():
-    return ChosunNewsCrawler.start()
+    return AsyncChosunNewsCrawler.start()
 
 
 @app.post("/api/donga")
 def donga_crawler():
-    return DongaNewsCrawler.start()
+    return AsyncDongaCrawler.start()
 
 
 @app.post("/api/naver")
 def naver_crawler():
-    return NaverNewsGeneralCrawler.start()
+    return AsyncNaverNewsGeneralCrawler.start()
 
 
 @app.post("/api/joongang")
 def joongang_crawler():
-    return JoongangSportsNewsCrawler.start()
+    return AsyncJoongangSportsNewsCrawler.start()

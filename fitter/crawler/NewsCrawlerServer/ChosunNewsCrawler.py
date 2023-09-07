@@ -86,14 +86,19 @@ def save_to_csv(news_list):
             csvwriter.writerow(i.values())
 
 
-# Press the green button in the gutter to run the script.
+import time
+
 if __name__ == "__main__":
+    start_time = time.time()
+
     news_list = get_news()
     print(news_list)
     print("본문 가져오는 중...")
     for news in news_list:
         get_content(news)
     save_to_csv(news_list)
+    end_time = time.time()
+    print(end_time - start_time)
 
 
 def start():
