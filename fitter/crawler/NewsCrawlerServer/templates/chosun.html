@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>주간조선 크롤링</title>
+</head>
+<body>
+    <div id="result">크롤링 진행중...</div>
+</body>
+<script>
+    async function crawler() {
+        try {
+            const response = await fetch("/api/chosun", {
+                method: "POST"
+            });
+            if (response.ok) {
+                const jsonData = await response.json();
+                const tag = document.getElementById("result");
+                tag.innerText = JSON.stringify(jsonData, null, 2); // JSON 데이터를 예쁘게 포맷팅하여 출력
+            } else {
+                console.error("서버로부터 응답을 받을 수 없습니다.");
+            }
+        } catch (error) {
+            console.error("오류 발생:", error);
+        }
+    }
+    crawler();
+</script>
+</html>
