@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,7 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import com.mk.fitter.api.box.repository.dto.BoxDto;
+import com.mk.fitter.api.common.oauth.Role;
+import com.mk.fitter.api.common.oauth.SocialType;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +26,10 @@ import lombok.ToString;
 @Entity(name = "user")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
 	@Id
@@ -43,7 +51,8 @@ public class UserDto {
 
 	private String nickname;
 
-	private int age;
+	@Column(name = "age_range")
+	private String ageRange;
 
 	private boolean gender;
 
@@ -54,4 +63,18 @@ public class UserDto {
 
 	@Column(name = "regist_date")
 	private Date registDate;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
+	@Column(name = "social_id")
+	private String socialId;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "social_type")
+	private SocialType socialType;
+
+	public void authorizeUser() { this.role = Role.USER; }
+
+	public void updateRefreshToken(String updateRefreshToken) { this.refreshToken = updateRefreshToken; }
 }
