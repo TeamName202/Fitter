@@ -78,7 +78,8 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 	 */
 	private UserDto getUser(OAuthAttributes attributes, SocialType socialType) {
 		UserDto findUser = userRepository.findBySocialTypeAndSocialId(socialType, attributes.getOAuth2UserInfo().getId()).orElse(null);
-
+		log.info("attribute :: "+attributes.getOAuth2UserInfo());
+		log.info("attribute id :: "+attributes.getOAuth2UserInfo().getId());
 		if(findUser == null) {
 			return saveUser(attributes, socialType);
 		}
@@ -91,6 +92,8 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 	 */
 	private UserDto saveUser(OAuthAttributes attributes, SocialType socialType) {
 		UserDto createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
+		if(createdUser.getEmail() == null)
+			createdUser.setEmail("null");
 		return userRepository.save(createdUser);
 	}
 

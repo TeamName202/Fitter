@@ -2,6 +2,9 @@ package com.mk.fitter.api.common.oauth.userInfo;
 
 import java.util.Map;
 
+import lombok.ToString;
+
+@ToString
 public abstract class OAuth2UserInfo {
 	protected Map<String, Object> attributes;
 
@@ -17,11 +20,11 @@ public abstract class OAuth2UserInfo {
 
 	// 이메일
 	public abstract String getEmail();
-
-	// 성별
-	public abstract String getGender();
-
-	// 연령대
-	public abstract String getAgeRange();
+	//
+	// // 성별
+	// public abstract Boolean getGender();
+	//
+	// // 연령대
+	// public abstract String getAgeRange();
 
 }

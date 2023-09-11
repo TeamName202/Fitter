@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,7 +16,6 @@ import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.VO.CustomOAuth2User;
 import com.mk.fitter.api.common.service.JwtService;
 import com.mk.fitter.api.user.repository.UserRepository;
-import com.mk.fitter.api.user.repository.dto.UserDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private final JwtService jwtService;
 	private final UserRepository userRepository;
 
-	private String REDIRECT_LOCATION = "http://localhost:3000/login/oauth2/code/kakao";
+	private String REDIRECT_LOCATION = "http://localhost:8000/login/oauth2/code/kakao";
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -40,12 +38,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 		try {
 			CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
-
+			System.out.println(oAuth2User);
 			// User의 Role이 GUEST일 경우 처음 요청한 회원이므로 회원가입 페이지로 리다이렉트
 			if(oAuth2User.getRole() == Role.GUEST) {
 				String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
 				response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
-				response.sendRedirect("oauth2/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
+				response.sendRedirect("/"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
 				jwtService.sendAccessAndRefreshToken(response, accessToken, null);
 
@@ -55,6 +53,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 			} else {
 				loginSuccess(response, oAuth2User); // 로그인에 성공한 경우 access, refresh 토큰 생성
 			}
+			// loginSuccess(response, oAuth2User); // 로그인에 성공한 경우 access, refresh 토큰 생성
 
 		} catch (Exception e){
 			throw e;
@@ -67,13 +66,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
 		response.addHeader(jwtService.getRefreshHeader(), "Bearer "+refreshToken);
 
-		response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_LOCATION)
-			.queryParam("accessToken", accessToken)
-			.queryParam("refreshToken", refreshToken)
-			.queryParam("email", oAuth2User.getEmail())
-			.build()
-			.encode(StandardCharsets.UTF_8)
-			.toUriString());
+		// response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_LOCATION)
+		// 	.queryParam("accessToken", accessToken)
+		// 	.queryParam("refreshToken", refreshToken)
+		// 	.queryParam("email", oAuth2User.getEmail())
+		// 	.build()
+		// 	.encode(StandardCharsets.UTF_8)
+		// 	.toUriString());
 
 		jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
 		jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);

@@ -1,7 +1,6 @@
 package com.mk.fitter.api.common.oauth.VO;
 
 import java.util.Map;
-import java.util.UUID;
 
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.SocialType;
@@ -33,12 +32,13 @@ public class OAuthAttributes {
 	 * 소셜별 of 메소드(ofGoogle, ofKaKao, ofNaver)들은 각각 소셜 로그인 API에서 제공하는
 	 * 회원의 식별값(id), attributes, nameAttributeKey를 저장 후 build
 	 */
-	public static OAuthAttributes of(SocialType provider,
+	public static OAuthAttributes of(SocialType socialType,
 		String userNameAttributeName, Map<String, Object> attributes) {
-		if(provider == SocialType.KAKAO){
-			return ofKakao(userNameAttributeName, attributes);
-		}
-		return null;
+		// if(socialType == SocialType.KAKAO){
+		// 	return ofKakao(userNameAttributeName, attributes);
+		// }
+		// return null;
+		return ofKakao(userNameAttributeName, attributes);
 	}
 
 	private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object>attributes) {
@@ -58,7 +58,6 @@ public class OAuthAttributes {
 		return UserDto.builder()
 			.socialType(socialType)
 			.socialId(oAuth2UserInfo.getId())
-			.email(UUID.randomUUID() + "@socialUser.com")
 			.nickname(oAuth2UserInfo.getNickname())
 			.role(Role.GUEST)
 			.build();

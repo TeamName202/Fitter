@@ -20,7 +20,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 	public String getNickname() {
 		Map<String, Object> profile = (Map<String, Object>)this.account.get("profile");
 		if(this.account == null || profile == null) {
-			return null;
+			return "null";
 		}
 
 		return (String) profile.get("nickname");
@@ -28,19 +28,25 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
 	@Override
 	public String getEmail() {
-		if(this.account == null) return null;
+		// System.out.println("==========================");
+		System.out.println((String)account.get("email"));
+		if(this.account == null || account.get("email") == null)
+			return "null";
 		return (String)account.get("email");
 	}
+	//
+	// @Override
+	// public Boolean getGender() {
+	// 	if(this.account == null || account.get("gender") == null)
+	// 		return null;
+	// 	return (Boolean)account.get("gender");
+	// }
+	//
+	// @Override
+	// public String getAgeRange() {
+	// 	if(this.account == null || account.get("age_range") == null)
+	// 		return null;
+	// 	return (String)account.get("age_range");
+	// }
 
-	@Override
-	public String getGender() {
-		if(this.account == null) return null;
-		return (String)account.get("gender");
-	}
-
-	@Override
-	public String getAgeRange() {
-		if(this.account == null) return null;
-		return (String)account.get("age_range");
-	}
 }

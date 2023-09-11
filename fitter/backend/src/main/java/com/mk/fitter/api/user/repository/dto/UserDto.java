@@ -57,12 +57,12 @@ public class UserDto {
 	@Column(name = "age_range")
 	private String ageRange;
 
-	private boolean gender;
+	private Boolean gender;
 
 	private Date birthday;
 
 	@Column(name = "is_trainer")
-	private boolean isTrainer;
+	private Boolean isTrainer;
 
 	@Column(name = "regist_date")
 	private Date registDate;
