@@ -37,11 +37,11 @@ public class DailyRecordDto {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private UserDto user;
+	private UserDto userDto;
 
 	@ManyToOne
 	@JoinColumn(name = "wod_type_id")
-	private WodTypeDto wodType;
+	private WodTypeDto wodTypeDto;
 
 	private LocalDate date;
 

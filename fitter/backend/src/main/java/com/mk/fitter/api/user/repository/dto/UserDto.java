@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.mk.fitter.api.box.repository.dto.BoxDto;
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.SocialType;
@@ -30,6 +32,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class UserDto {
 
 	@Id
@@ -74,7 +77,11 @@ public class UserDto {
 	@Column(name = "social_type")
 	private SocialType socialType;
 
-	public void authorizeUser() { this.role = Role.USER; }
+	public void authorizeUser() {
+		this.role = Role.USER;
+	}
 
-	public void updateRefreshToken(String updateRefreshToken) { this.refreshToken = updateRefreshToken; }
+	public void updateRefreshToken(String updateRefreshToken) {
+		this.refreshToken = updateRefreshToken;
+	}
 }

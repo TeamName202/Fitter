@@ -11,6 +11,6 @@ import com.mk.fitter.api.dailyrecord.repository.dto.DailyRecordDto;
 @Repository
 public interface DailyRecordRepository extends JpaRepository<DailyRecordDto, Integer> {
 
-	List<DailyRecordDto> findByUser_IdAndDateBetween(int user_id, LocalDate startDate, LocalDate endDate);
+	List<DailyRecordDto> findByUserDto_IdAndDateBetween(int user_id, LocalDate startDate, LocalDate endDate);
 
 }
