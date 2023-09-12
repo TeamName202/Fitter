@@ -28,7 +28,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private final JwtService jwtService;
 	private final UserRepository userRepository;
 
-	private String REDIRECT_LOCATION = "http://localhost:8000/login/oauth2/code/kakao";
+	private String REDIRECT_LOCATION = "http://localhost:8000/login";
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -41,9 +41,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 			System.out.println(oAuth2User);
 			// User의 Role이 GUEST일 경우 처음 요청한 회원이므로 회원가입 페이지로 리다이렉트
 			if(oAuth2User.getRole() == Role.GUEST) {
-				String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
+				String accessToken = jwtService.createAccessToken(oAuth2User.getUid(), oAuth2User.getEmail());
 				response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
-				response.sendRedirect("/"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
+				response.sendRedirect("/sign-up"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
 
 				jwtService.sendAccessAndRefreshToken(response, accessToken, null);
 
@@ -61,18 +61,18 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 	}
 
 	private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User) throws IOException {
-		String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
+		String accessToken = jwtService.createAccessToken(oAuth2User.getUid(), oAuth2User.getEmail());
 		String refreshToken = jwtService.createRefreshToken();
 		response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
 		response.addHeader(jwtService.getRefreshHeader(), "Bearer "+refreshToken);
 
-		// response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_LOCATION)
-		// 	.queryParam("accessToken", accessToken)
-		// 	.queryParam("refreshToken", refreshToken)
-		// 	.queryParam("email", oAuth2User.getEmail())
-		// 	.build()
-		// 	.encode(StandardCharsets.UTF_8)
-		// 	.toUriString());
+		response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_LOCATION)
+			.queryParam("accessToken", accessToken)
+			.queryParam("refreshToken", refreshToken)
+			.queryParam("email", oAuth2User.getEmail())
+			.build()
+			.encode(StandardCharsets.UTF_8)
+			.toUriString());
 
 		jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
 		jwtService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);

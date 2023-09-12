@@ -43,6 +43,7 @@ public class JwtService {
 	 */
 	private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
 	private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
+	private static final String UID_CLAIM = "id";
 	private static final String EMAIL_CLAIM = "email";
 	private static final String BEARER = "Bearer";
 
@@ -51,7 +52,7 @@ public class JwtService {
 	/**
 	 * AccessToken 생성 메소드
 	 */
-	public String createAccessToken(String email) {
+	public String createAccessToken(int uid, String email) {
 		Date now = new Date();
 		return JWT.create()	// JWT 토큰을 생성하는 빌더 반환
 			.withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 subject 지정 -> accessToken
@@ -59,6 +60,7 @@ public class JwtService {
 			//클레임으로는 저희는 email 하나만 사용합니다.
 			//추가적으로 식별자나, 이름 등의 정보를 더 추가하셔도 됩니다.
 			//추가하실 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정해주시면 됩니다
+			.withClaim(UID_CLAIM, uid)
 			.withClaim(EMAIL_CLAIM, email)	// 이메일
 			.sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
 	}
@@ -120,6 +122,35 @@ public class JwtService {
 	}
 
 	/**
+	 * Bearer __________형식으로 되어있는 accessToken에서 Bearer를 제거하는 함수
+	 * */
+	public String extractAccessToken(String accessToken) {
+		return accessToken.replace(BEARER, "");
+	}
+
+	/**
+	 * AccessToken에서 UID 추출
+	 * 추출 전에 JWT.require()로 검증기 생성
+	 * verify로 AceessToken 검증 후
+	 * 유효하다면 getClaim()으로 UID 추출
+	 * 유효하지 않다면 빈 Optional 객체 반환
+	 */
+	public Optional<Integer> extractUID(String accessToken) {
+		try {
+			accessToken = extractAccessToken(accessToken);
+			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
+				.build()
+				.verify(accessToken)
+				.getClaim(UID_CLAIM)
+				.asInt());
+		} catch (Exception e) {
+			log.error("access token이 유효하지 않습니다");
+			return Optional.empty();
+		}
+	}
+
+
+	/**
 	 * AccessToken에서 Email 추출
 	 * 추출 전에 JWT.require()로 검증기 생성
 	 * verify로 AceessToken 검증 후
@@ -128,6 +159,7 @@ public class JwtService {
 	 */
 	public Optional<String> extractEmail(String accessToken) {
 		try {
+			accessToken = extractAccessToken(accessToken);
 			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
 				.build()
 				.verify(accessToken)
