@@ -32,7 +32,8 @@ public class DailyRecordController {
 	private final DailyRecordService dailyRecordService;
 
 	@GetMapping("")
-	public ResponseEntity<?> getAllRecordsByMonth(@RequestParam String date, @RequestHeader String accessToken) {
+	public ResponseEntity<List<DailyRecordDto>> getAllRecordsByMonth(@RequestParam String date,
+		@RequestHeader String accessToken) {
 		try {
 			/*
 			jwt 구현되면 accessToken으로 유저 정보 가져오기 구현
@@ -52,7 +53,7 @@ public class DailyRecordController {
 	}
 
 	@PostMapping("/write")
-	public ResponseEntity<?> writeDailyRecord(@RequestBody DailyRecordDto dailyRecordDto) {
+	public ResponseEntity<Boolean> writeDailyRecord(@RequestBody DailyRecordDto dailyRecordDto) {
 		boolean result = false;
 		try {
 			result = dailyRecordService.writeDailyRecord(dailyRecordDto);
@@ -64,19 +65,21 @@ public class DailyRecordController {
 	}
 
 	@GetMapping("/read/{date}")
-	public ResponseEntity<?> getDailyRecordByDate(@RequestHeader String accessToken, @PathVariable LocalDate date) {
+	public ResponseEntity<DailyRecordDto> getDailyRecordByDate(@RequestHeader String accessToken,
+		@PathVariable LocalDate date) {
 		try {
 			int userId = 1; // JWT 관련 기능 완성되면 수정할 것
 			DailyRecordDto dailyRecordDto = dailyRecordService.getDailyRecordByDate(date, userId);
 			return new ResponseEntity<>(dailyRecordDto, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PutMapping("/modify/{dailyRecordId}")
-	public ResponseEntity<?> modifyDailyRecord(@PathVariable int dailyRecordId, @RequestBody Map<String, String> memo) {
+	public ResponseEntity<Boolean> modifyDailyRecord(@PathVariable int dailyRecordId,
+		@RequestBody Map<String, String> memo) {
 		try {
 			return new ResponseEntity<>(dailyRecordService.modifyDailyRecord(dailyRecordId, memo), HttpStatus.OK);
 		} catch (Exception e) {
@@ -86,7 +89,7 @@ public class DailyRecordController {
 	}
 
 	@DeleteMapping("/delete/{dailyRecordId}")
-	public ResponseEntity<?> deleteDailyRecord(@PathVariable int dailyRecordId) {
+	public ResponseEntity<Boolean> deleteDailyRecord(@PathVariable int dailyRecordId) {
 		boolean result;
 		try {
 			result = dailyRecordService.deleteDailyRecord(dailyRecordId);

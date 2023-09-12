@@ -16,19 +16,16 @@ import com.mk.fitter.api.user.repository.dto.UserDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity(name = "wod_record")
-@Getter
-@Setter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@DynamicInsert @DynamicUpdate
+@DynamicInsert
+@DynamicUpdate
 public class WodRecordDto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -29,7 +29,7 @@ public class WodController {
 	private final WodService wodService;
 
 	@GetMapping("list")
-	public ResponseEntity<?> getWodRecordList() {
+	public ResponseEntity<List<WodRecordDto>> getWodRecordList() {
 		try {
 			List<WodRecordDto> wodRecordList = wodService.getWodRecordList();
 			return new ResponseEntity<>(wodRecordList, HttpStatus.OK);
@@ -40,17 +40,17 @@ public class WodController {
 	}
 
 	@GetMapping("/read/{wodId}")
-	public ResponseEntity<?> getWodRecord(@PathVariable int wodId) {
+	public ResponseEntity<WodRecordDto> getWodRecord(@PathVariable int wodId) {
 		try {
 			return new ResponseEntity<>(wodService.getWodRecord(wodId), HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createWodRecord(@RequestHeader String accessToken,
+	public ResponseEntity<Boolean> createWodRecord(@RequestHeader String accessToken,
 		@RequestBody WodRecordDto wodRecordDto) {
 		// 토큰값으로 유저 가져오거나, 프론트에서 유저 id 받아야 함
 		boolean result = false;
@@ -64,7 +64,7 @@ public class WodController {
 	}
 
 	@PutMapping("/modify/{wodRecordId}")
-	public ResponseEntity<?> modifyWodRecord(@PathVariable int wodRecordId, @RequestBody WodRecordDto time) {
+	public ResponseEntity<Boolean> modifyWodRecord(@PathVariable int wodRecordId, @RequestBody WodRecordDto time) {
 		boolean result = false;
 		try {
 			result = wodService.modifyWodRecord(wodRecordId, time.getTime());
@@ -75,7 +75,7 @@ public class WodController {
 	}
 
 	@DeleteMapping("/delete/{wodRecordId}")
-	public ResponseEntity<?> deleteWodRecord(@PathVariable int wodRecordId) {
+	public ResponseEntity<Boolean> deleteWodRecord(@PathVariable int wodRecordId) {
 		try {
 			return new ResponseEntity<>(wodService.deleteWodRecord(wodRecordId), HttpStatus.OK);
 		} catch (Exception e) {
