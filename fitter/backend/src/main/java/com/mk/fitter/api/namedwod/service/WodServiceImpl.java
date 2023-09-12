@@ -53,9 +53,8 @@ public class WodServiceImpl implements WodService {
 		if (foundWod.isPresent()) {
 			WodRecordDto modifyWod = foundWod.get();
 			modifyWod.setTime(time);
-			wodRecordRepository.save(modifyWod);
 			return true;
-		}else{
+		} else {
 			throw new Exception("와드 기록이 존재하지 않습니다.");
 		}
 	}

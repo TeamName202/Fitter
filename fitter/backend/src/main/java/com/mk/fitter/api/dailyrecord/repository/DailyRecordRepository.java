@@ -13,4 +13,7 @@ public interface DailyRecordRepository extends JpaRepository<DailyRecordDto, Int
 
 	List<DailyRecordDto> findByUserDto_IdAndDateBetween(int user_id, LocalDate startDate, LocalDate endDate);
 
+	DailyRecordDto findByDateAndUserDto_Id(LocalDate date, int userDto_id);
+
+	boolean deleteById(int dailyRecordId);
 }

@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mk.fitter.api.namedwod.repository.dto.WodTypeDto;
 import com.mk.fitter.api.user.repository.dto.UserDto;
@@ -30,6 +33,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicUpdate
+@DynamicInsert
 public class DailyRecordDto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

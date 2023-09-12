@@ -1,12 +1,7 @@
 package com.mk.fitter.api.namedwod.controller;
 
-import java.sql.Time;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
@@ -46,10 +40,10 @@ public class WodController {
 	}
 
 	@GetMapping("/read/{wodId}")
-	public ResponseEntity<?> getWodRecord(@PathVariable int wodId){
-		try{
+	public ResponseEntity<?> getWodRecord(@PathVariable int wodId) {
+		try {
 			return new ResponseEntity<>(wodService.getWodRecord(wodId), HttpStatus.OK);
-		}catch (Exception e){
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -69,28 +63,24 @@ public class WodController {
 		}
 	}
 
-
 	@PutMapping("/modify/{wodRecordId}")
-	public ResponseEntity<?> modifyWodRecord(@PathVariable int wodRecordId, @RequestBody WodRecordDto time){
+	public ResponseEntity<?> modifyWodRecord(@PathVariable int wodRecordId, @RequestBody WodRecordDto time) {
 		boolean result = false;
-		try{
+		try {
 			result = wodService.modifyWodRecord(wodRecordId, time.getTime());
 			return new ResponseEntity<>(result, HttpStatus.OK);
-		}catch (Exception e){
-			HashMap<String, String> map = new HashMap<>();
-			map.put("result", String.valueOf(result));
-			map.put("message", e.getMessage());
-			return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@DeleteMapping("/delete/{wodRecordId}")
-	public ResponseEntity<?> deleteWodRecord(@PathVariable int wodRecordId){
-		try{
+	public ResponseEntity<?> deleteWodRecord(@PathVariable int wodRecordId) {
+		try {
 			return new ResponseEntity<>(wodService.deleteWodRecord(wodRecordId), HttpStatus.OK);
-		}catch (Exception e){
+		} catch (Exception e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
