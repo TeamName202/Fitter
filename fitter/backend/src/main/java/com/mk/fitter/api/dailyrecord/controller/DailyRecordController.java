@@ -3,6 +3,7 @@ package com.mk.fitter.api.dailyrecord.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mk.fitter.api.common.service.JwtService;
 import com.mk.fitter.api.dailyrecord.repository.dto.DailyRecordDto;
 import com.mk.fitter.api.dailyrecord.service.DailyRecordService;
 
@@ -30,15 +32,17 @@ import lombok.extern.slf4j.Slf4j;
 public class DailyRecordController {
 
 	private final DailyRecordService dailyRecordService;
+	private final JwtService jwtService;
 
 	@GetMapping("")
 	public ResponseEntity<List<DailyRecordDto>> getAllRecordsByMonth(@RequestParam String date,
-		@RequestHeader String accessToken) {
+		@RequestHeader String Authorization) {
 		try {
 			/*
 			jwt 구현되면 accessToken으로 유저 정보 가져오기 구현
 			 */
-			int userId = 1; // 임시 값
+			Optional<Integer> UID = jwtService.extractUID(Authorization);
+			int userId = UID.get(); // 임시 값
 			String[] dateSplit = date.split("-");
 			LocalDate startDate = LocalDate.of(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]), 1);
 			LocalDate endDate = startDate.plusMonths(1).minusDays(1);
@@ -53,10 +57,12 @@ public class DailyRecordController {
 	}
 
 	@PostMapping("/write")
-	public ResponseEntity<Boolean> writeDailyRecord(@RequestBody DailyRecordDto dailyRecordDto) {
+	public ResponseEntity<Boolean> writeDailyRecord(@RequestHeader String Authorization,
+		@RequestBody DailyRecordDto dailyRecordDto) {
+		Optional<Integer> UID = jwtService.extractUID(Authorization);
 		boolean result = false;
 		try {
-			result = dailyRecordService.writeDailyRecord(dailyRecordDto);
+			result = dailyRecordService.writeDailyRecord(dailyRecordDto, UID.get());
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -65,10 +71,10 @@ public class DailyRecordController {
 	}
 
 	@GetMapping("/read/{date}")
-	public ResponseEntity<DailyRecordDto> getDailyRecordByDate(@RequestHeader String accessToken,
+	public ResponseEntity<DailyRecordDto> getDailyRecordByDate(@RequestHeader String Authorization,
 		@PathVariable LocalDate date) {
 		try {
-			int userId = 1; // JWT 관련 기능 완성되면 수정할 것
+			int userId = jwtService.extractUID(Authorization).get();
 			DailyRecordDto dailyRecordDto = dailyRecordService.getDailyRecordByDate(date, userId);
 			return new ResponseEntity<>(dailyRecordDto, HttpStatus.OK);
 		} catch (Exception e) {
@@ -89,10 +95,12 @@ public class DailyRecordController {
 	}
 
 	@DeleteMapping("/delete/{dailyRecordId}")
-	public ResponseEntity<Boolean> deleteDailyRecord(@PathVariable int dailyRecordId) {
+	public ResponseEntity<Boolean> deleteDailyRecord(@PathVariable int dailyRecordId,
+		@RequestHeader String Authorization) {
 		boolean result;
 		try {
-			result = dailyRecordService.deleteDailyRecord(dailyRecordId);
+			Integer userId = jwtService.extractUID(Authorization).get();
+			result = dailyRecordService.deleteDailyRecord(dailyRecordId, userId);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());

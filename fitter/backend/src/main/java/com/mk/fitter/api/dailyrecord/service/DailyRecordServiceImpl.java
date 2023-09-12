@@ -32,9 +32,9 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 	}
 
 	@Override
-	public boolean writeDailyRecord(DailyRecordDto dailyRecordDto) throws Exception {
+	public boolean writeDailyRecord(DailyRecordDto dailyRecordDto, int userId) throws Exception {
 		//유저 정보 찾기 추가해야함
-		Optional<UserDto> byId = userRepository.findById(dailyRecordDto.getUserDto().getId());
+		Optional<UserDto> byId = userRepository.findById(userId);
 		if (!byId.isPresent()) {
 			throw new Exception("유저가 없습니다.");
 		}
@@ -53,7 +53,18 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 	}
 
 	@Override
-	public boolean deleteDailyRecord(int dailyRecordId) {
+	public boolean deleteDailyRecord(int dailyRecordId, int userId) throws Exception {
+		Optional<UserDto> findUser = userRepository.findById(userId);
+		Optional<DailyRecordDto> findRecord = dailyRecordRepository.findById(dailyRecordId);
+		if (findUser.isEmpty()) {
+			throw new Exception("유저를 확인해 주세요");
+		}
+		if (findRecord.isEmpty()) {
+			throw new Exception("기록 Id를 확인해 주세요");
+		}
+		if (findRecord.get().getUserDto().getId() != userId) {
+			throw new Exception("본인이 작성한 기록이 아닙니다.");
+		}
 		return dailyRecordRepository.deleteById(dailyRecordId);
 	}
 
