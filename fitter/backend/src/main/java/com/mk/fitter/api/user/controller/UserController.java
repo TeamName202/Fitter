@@ -1,23 +1,21 @@
 package com.mk.fitter.api.user.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.LoginServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
+@RequestMapping("/user")
 public class UserController {
 
-	private final LoginServiceImpl loginService;
-
-	@GetMapping("/oauth2/kakao")
-	public void login(@RequestParam(name = "code") String code) {
-
-	}
 }

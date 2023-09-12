@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.SocialType;
 import com.mk.fitter.api.common.oauth.VO.CustomOAuth2User;
 import com.mk.fitter.api.common.oauth.VO.OAuthAttributes;
@@ -60,6 +61,7 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 			extractAttributes.getNameAttributeKey(),
 			createdUser.getId(),
 			createdUser.getEmail(),
+			createdUser.getNickname(),
 			createdUser.getRole()
 		);
 
@@ -93,10 +95,12 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 	 */
 	private UserDto saveUser(OAuthAttributes attributes, SocialType socialType) {
 		UserDto createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
-		if(createdUser.getEmail() == null)
-			createdUser.setEmail("null");
+		createdUser.setRole(Role.USER);
 		return userRepository.save(createdUser);
 	}
 
+	public UserDto saveUserInfo(UserDto user) throws Exception {
+		return userRepository.save(user);
+	}
 
 }
