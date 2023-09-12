@@ -124,8 +124,10 @@ public class JwtService {
 	/**
 	 * Bearer __________형식으로 되어있는 accessToken에서 Bearer를 제거하는 함수
 	 * */
-	public String extractAccessToken(String accessToken) {
-		return accessToken.replace(BEARER, "");
+	public Optional<String> extractAccessToken(String accessToken) {
+		return Optional.ofNullable(accessToken)
+			.filter(token -> token.startsWith(BEARER))
+			.map(token -> token.replace(BEARER, ""));
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class JwtService {
 	 */
 	public Optional<Integer> extractUID(String accessToken) {
 		try {
-			accessToken = extractAccessToken(accessToken);
+			accessToken = extractAccessToken(accessToken).get();
 			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
 				.build()
 				.verify(accessToken)
@@ -159,7 +161,7 @@ public class JwtService {
 	 */
 	public Optional<String> extractEmail(String accessToken) {
 		try {
-			accessToken = extractAccessToken(accessToken);
+			accessToken = extractAccessToken(accessToken).get();
 			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
 				.build()
 				.verify(accessToken)
