@@ -12,5 +12,5 @@ public interface WodRepository extends JpaRepository<WodDto, Integer> {
 
 	WodDto findByName(String name);
 
-	List<WodDto> findByNamedIs(boolean isNamed);
+	List<WodDto> findByIsNamedIs(boolean isNamed);
 }

@@ -47,7 +47,7 @@ public class WodServiceImpl implements WodService {
 
 	@Override
 	public List<WodDto> getWodList() {
-		return wodRepository.findByNamedIs(true);
+		return wodRepository.findByIsNamedIs(true);
 	}
 
 	@Override
