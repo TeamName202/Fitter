@@ -1,3 +1,4 @@
+import 'package:fitter/screens/sign_up/additional_info.dart';
 import 'package:fitter/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: StartScreen(),
+      home: AdditionalInfo(),
     );
   }
 }
