@@ -1,5 +1,6 @@
-import 'package:fitter/screens/sign_up/additional_info.dart';
-import 'package:fitter/screens/start_screen.dart';
+import 'package:fitter/screens/login_screen.dart';
+import 'package:fitter/screens/nav_bar.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +13,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: AdditionalInfo(),
+      home: BottomNavigationBarExampleApp(),
     );
   }
 }

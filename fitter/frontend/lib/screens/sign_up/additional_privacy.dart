@@ -1,12 +1,12 @@
 import 'package:fitter/screens/sign_up/additional_box.dart';
-import 'package:fitter/screens/sign_up/additional_privacy.dart';
+import 'package:fitter/screens/sign_up/additional_info.dart';
 import 'package:fitter/widgets/button_mold.dart';
+import 'package:fitter/widgets/dropdown.dart';
 import 'package:fitter/widgets/empty_box.dart';
-import 'package:fitter/widgets/input_text.dart';
 import 'package:flutter/material.dart';
 
-class AdditionalInfo extends StatelessWidget {
-  const AdditionalInfo({super.key});
+class AdditionalPrivacy extends StatelessWidget {
+  const AdditionalPrivacy({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,14 @@ class AdditionalInfo extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        foregroundColor: Colors.white,
+        foregroundColor: const Color(0xFF0080FF),
         backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Column(
           children: [
-            const EmptyBox(boxSize: 2),
+            const EmptyBox(boxSize: 1),
             const Row(
               children: [
                 Column(
@@ -42,40 +42,23 @@ class AdditionalInfo extends StatelessWidget {
             const SizedBox(
                 width: 500,
                 child: Divider(color: Color(0xFF0080FF), thickness: 3)),
-            const EmptyBox(boxSize: 1),
-            Center(
-              child: Flexible(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(80),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(180),
-                    child: Image.asset(
-                      "assets/images/default_user_img.jpg",
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            const EmptyBox(boxSize: 2),
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
-                  flex: 3,
-                  child: InputText(hintText: "닉네임"),
+                Dropdown(
+                  dropList: ["여성", "남성"],
+                  hintText: "성별",
+                  width: 150,
                 ),
-                Flexible(
-                  flex: 1,
-                  child: ButtonMold(
-                    btnText: " 중복 확인 ",
-                    verticalLength: 10,
-                    horizontalLength: 5,
-                    buttonColor: true,
-                  ),
+                Dropdown(
+                  dropList: ["10대", "20대", "30대", "40대", "50대", "60대 이상"],
+                  hintText: "연령대",
+                  width: 150,
                 ),
               ],
             ),
-            const EmptyBox(boxSize: 1),
+            const EmptyBox(boxSize: 4),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -94,17 +77,16 @@ class AdditionalInfo extends StatelessWidget {
                         );
                       },
                       pageBuilder: (context, anmation, secondaryAnimation) =>
-                          const AdditionalPrivacy(),
+                          const AdditionalBox(),
                     ));
               },
               child: const ButtonMold(
-                btnText: "다 음 으 로",
-                horizontalLength: 25,
-                verticalLength: 10,
-                buttonColor: true,
-              ),
+                  btnText: "다 음 으 로",
+                  horizontalLength: 25,
+                  verticalLength: 10,
+                  buttonColor: true),
             ),
-            const EmptyBox(boxSize: 4),
+            const EmptyBox(boxSize: 2),
           ],
         ),
       ),

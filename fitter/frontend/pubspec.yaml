@@ -61,6 +61,7 @@ flutter:
   - assets/images/kakao_login_medium_wide.png
   - assets/images/fitter_logo.png
   - assets/images/default_user_img.jpg
+  - assets/images/box_image.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
