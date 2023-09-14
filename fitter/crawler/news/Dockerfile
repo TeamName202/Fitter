@@ -6,8 +6,10 @@ COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-COPY ./crawler /code/app/crawler
+COPY crawler /code/crawler
 
-COPY ./main.py /code/app
+COPY main.py /code/
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY templates /code/templates 
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
