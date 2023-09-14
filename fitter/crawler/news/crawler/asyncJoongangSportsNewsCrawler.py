@@ -39,7 +39,7 @@ def get_news(tag):
                 return
 
             title = temp.select_one(".headline a").text
-            title = title.replace("\n", "").replace("\t", "").lstrip().rstrip()
+            title = title.replace("\n", "").replace("\t", "").replace("\r", "").lstrip().rstrip()
             news_list.append(
                 {
                     "title": title,

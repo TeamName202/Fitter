@@ -45,7 +45,7 @@ def get_content(news):
     for element in newsContent.select(".nbd_table"):
         element.extract()
 
-    content = newsContent.text.replace("\n", "").replace("\t", "").lstrip().rstrip()
+    content = newsContent.text.replace("\n", "").replace("\t", "").replace("\r", "").lstrip().rstrip()
     news["content"] = content
 
 def save_to_csv(news_list):
