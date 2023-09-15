@@ -12,4 +12,6 @@ public interface BoxRepository extends JpaRepository<BoxDto, Integer> {
 	List<BoxDto> findByBoxName(String name);
 
 	List<BoxDto> findAll();
+
+	boolean deleteById(int boxId);
 }
