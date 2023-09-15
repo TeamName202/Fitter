@@ -99,8 +99,4 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 		return userRepository.save(createdUser);
 	}
 
-	public UserDto saveUserInfo(UserDto user) throws Exception {
-		return userRepository.save(user);
-	}
-
 }
