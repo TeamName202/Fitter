@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordCreateRequest;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
+import com.mk.fitter.api.personalrecord.repository.dto.WorkoutDto;
 import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 
 public interface PersonalRecordService {
@@ -19,4 +20,6 @@ public interface PersonalRecordService {
 	Boolean deleteRecord(int personalRecordId, Integer userId) throws Exception;
 
 	List<WorkoutTypeDto> getWorkoutCategory();
+
+	List<WorkoutDto> getWorkoutList();
 }

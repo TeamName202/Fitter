@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.mk.fitter.api.common.service.JwtService;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordCreateRequest;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
+import com.mk.fitter.api.personalrecord.repository.dto.WorkoutDto;
 import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 import com.mk.fitter.api.personalrecord.service.PersonalRecordService;
 
@@ -44,6 +45,17 @@ public class PersonalRecordController {
 		try {
 			List<WorkoutTypeDto> category = personalRecordService.getWorkoutCategory();
 			return new ResponseEntity<>(category, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/workout")
+	@ApiOperation(value = "운동 목록 조회", notes = "운동 목록 리스트를 조회하는 API")
+	public ResponseEntity<List<WorkoutDto>> getWorkoutList() {
+		try {
+			return new ResponseEntity<>(personalRecordService.getWorkoutList(), HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
