@@ -1,5 +1,7 @@
 package com.mk.fitter.api.personalrecord.repository.dto;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,4 +38,7 @@ public class PersonalRecordDto {
 
 	@Column(name = "max_weight")
 	private int maxWeight;
+
+	@Column(name = "create_date")
+	private LocalDate createDate;
 }

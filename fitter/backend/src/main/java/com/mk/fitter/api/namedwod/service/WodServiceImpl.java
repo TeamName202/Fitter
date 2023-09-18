@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.mk.fitter.api.namedwod.repository.WodCategoryRepository;
 import com.mk.fitter.api.namedwod.repository.WodRecordRepository;
 import com.mk.fitter.api.namedwod.repository.WodRepository;
+import com.mk.fitter.api.namedwod.repository.dto.WodCategoryDto;
 import com.mk.fitter.api.namedwod.repository.dto.WodDto;
 import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
 import com.mk.fitter.api.user.repository.UserRepository;
@@ -22,12 +24,18 @@ public class WodServiceImpl implements WodService {
 	private final WodRecordRepository wodRecordRepository;
 	private final UserRepository userRepository;
 	private final WodRepository wodRepository;
+	private final WodCategoryRepository wodCategoryRepository;
 
 	@Override
 	public List<WodRecordDto> getNamedWodList(String namedWodName) {
 		WodDto byName = wodRepository.findByName(namedWodName);
 		List<WodRecordDto> byWodId = wodRecordRepository.findByWod_Id(byName.getId());
 		return byWodId;
+	}
+
+	@Override
+	public List<WodCategoryDto> getWodCategory() {
+		return wodCategoryRepository.findAll();
 	}
 
 	public boolean createWodRecord(WodRecordDto wodRecordDto, int userId) throws Exception {

@@ -30,6 +30,10 @@ public class WodDto {
 	@JoinColumn(name = "wod_type_id")
 	private WodTypeDto wodType;
 
+	@ManyToOne
+	@JoinColumn(name = "wod_category_id")
+	private WodCategoryDto wodCategoryDto;
+
 	private String name;
 
 	@Column(name = "is_named")
