@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mk.fitter.api.common.service.JwtService;
+import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordCreateRequest;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
 import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 import com.mk.fitter.api.personalrecord.service.PersonalRecordService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +77,9 @@ public class PersonalRecordController {
 
 	@PostMapping("/create")
 	@ApiOperation(value = "1RM 기록 생성", notes = "1RM 기록을 생성하는 API")
+	@ApiModelProperty(example = "{\"workoutName\":\"Squat\",\"maxWeight\":100}")
 	public ResponseEntity<Boolean> createRecord(@RequestHeader String Authorization,
-		@RequestBody HashMap<String, String> requestBody) {
+		@RequestBody PersonalRecordCreateRequest requestBody) {
 		try {
 			Optional<Integer> UID = jwtService.extractUID(Authorization);
 			boolean result = personalRecordService.creatRecord(UID.get(), requestBody);
