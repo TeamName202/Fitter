@@ -21,12 +21,15 @@ import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
 import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 import com.mk.fitter.api.personalrecord.service.PersonalRecordService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/record")
+@Api(tags = {"1RM API"})
 @Slf4j
 public class PersonalRecordController {
 
@@ -34,6 +37,7 @@ public class PersonalRecordController {
 	private final JwtService jwtService;
 
 	@GetMapping("/category")
+	@ApiOperation(value = "운동 대분류 리스트", notes = "운동 대분류 리스트 불러오는 API")
 	public ResponseEntity<List<WorkoutTypeDto>> getWorkoutCategory() {
 		try {
 			List<WorkoutTypeDto> category = personalRecordService.getWorkoutCategory();
@@ -45,6 +49,7 @@ public class PersonalRecordController {
 	}
 
 	@GetMapping("/list")
+	@ApiOperation(value = "1RM 기록 리스트", notes = "개인의 1RM리스트를 조회하는 API")
 	public ResponseEntity<List<PersonalRecordDto>> getRecordList(@RequestHeader String Authorization) {
 		try {
 			Optional<Integer> UID = jwtService.extractUID(Authorization);
@@ -57,6 +62,7 @@ public class PersonalRecordController {
 	}
 
 	@GetMapping("/read/{personalRecordId}")
+	@ApiOperation(value = "1RM 단일 기록 조회", notes = "1RM 기록의 세부사항을 조회하는 API")
 	public ResponseEntity<PersonalRecordDto> getRecord(@PathVariable int personalRecordId) {
 		try {
 			PersonalRecordDto result = personalRecordService.getRecord(personalRecordId);
@@ -68,6 +74,7 @@ public class PersonalRecordController {
 	}
 
 	@PostMapping("/create")
+	@ApiOperation(value = "1RM 기록 생성", notes = "1RM 기록을 생성하는 API")
 	public ResponseEntity<Boolean> createRecord(@RequestHeader String Authorization,
 		@RequestBody HashMap<String, String> requestBody) {
 		try {
@@ -81,6 +88,7 @@ public class PersonalRecordController {
 	}
 
 	@PutMapping("/modify/{personalRecordId}")
+	@ApiOperation(value = "1RM 기록 수정", notes = "1RM 기록을 수정하는 API")
 	public ResponseEntity<Boolean> modifyRecord(@PathVariable int personalRecordId,
 		@RequestHeader String Authorization, @RequestBody HashMap<String, Integer> requestBody) {
 		try {
@@ -94,6 +102,7 @@ public class PersonalRecordController {
 	}
 
 	@DeleteMapping("/delete/{personalRecordId}")
+	@ApiOperation(value = "1RM 기록 삭제", notes = "1RM 기록을 삭제하는 API")
 	public ResponseEntity<Boolean> deleteRecord(@PathVariable int personalRecordId,
 		@RequestHeader String Authorization) {
 		try {

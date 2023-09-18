@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,11 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @Slf4j
+@Api(tags = {"유저 API"})
 public class UserController {
 
 	private final UserService userService;
 
 	@GetMapping("/userInfo")
+	@ApiOperation(value = "유저 정보", notes = "유저 정보를 조회하는 API")
 	public ResponseEntity<UserDto> getUserInfo(@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.getUserInfo(accessToken), HttpStatus.OK);
@@ -37,7 +41,9 @@ public class UserController {
 	}
 
 	@PutMapping("/box/{boxId}")
-	public ResponseEntity<UserDto> modifyBox(@PathVariable(name = "boxId") Integer boxId, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 박스 수정", notes = "유저의 박스를 수정하는 API")
+	public ResponseEntity<UserDto> modifyBox(@PathVariable(name = "boxId") Integer boxId,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyBox(boxId, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -47,7 +53,9 @@ public class UserController {
 	}
 
 	@PutMapping("/email/{email}")
-	public ResponseEntity<UserDto> modifyEmail(@PathVariable(name = "email") String email, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 이메일 수정", notes = "유저의 이메일을 수정하는 API")
+	public ResponseEntity<UserDto> modifyEmail(@PathVariable(name = "email") String email,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyEmail(email, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -57,7 +65,9 @@ public class UserController {
 	}
 
 	@PutMapping("/nickname/{nickname}")
-	public ResponseEntity<UserDto> modifyNickname(@PathVariable(name = "nickname") String nickname, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 닉네임 수정", notes = "유저의 닉네임을 수정하는 API")
+	public ResponseEntity<UserDto> modifyNickname(@PathVariable(name = "nickname") String nickname,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyNickname(nickname, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -67,7 +77,9 @@ public class UserController {
 	}
 
 	@PutMapping("/age-range/{ageRange}")
-	public ResponseEntity<UserDto> modifyAgeRange(@PathVariable(name = "ageRange") String ageRange, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 나이대 수정", notes = "유저의 나이대를 수정하는 API")
+	public ResponseEntity<UserDto> modifyAgeRange(@PathVariable(name = "ageRange") String ageRange,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyAgeRange(ageRange, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -77,7 +89,9 @@ public class UserController {
 	}
 
 	@PutMapping("/gender/{gender}")
-	public ResponseEntity<UserDto> modifyGender(@PathVariable(name = "gender") Boolean gender, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 성별 수정", notes = "유저의 성별을 수정하는 API")
+	public ResponseEntity<UserDto> modifyGender(@PathVariable(name = "gender") Boolean gender,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyGender(gender, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -87,7 +101,9 @@ public class UserController {
 	}
 
 	@PutMapping("/birthday/{birthday}")
-	public ResponseEntity<UserDto> modifyBirthday(@PathVariable(name = "birthday")Date birthday, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 생일 수정", notes = "유저의 생일을 수정하는 API")
+	public ResponseEntity<UserDto> modifyBirthday(@PathVariable(name = "birthday") Date birthday,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyBirthday(birthday, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -97,7 +113,9 @@ public class UserController {
 	}
 
 	@PutMapping("/is-trainder/{isTrainder}")
-	public ResponseEntity<UserDto> modifyIsTrainer(@PathVariable(name = "isTrainer")Boolean isTrainer, @RequestHeader String accessToken) {
+	@ApiOperation(value = "유저 트레이너 여부 수정", notes = "유저가 트레이너인지를 수정하는 API")
+	public ResponseEntity<UserDto> modifyIsTrainer(@PathVariable(name = "isTrainer") Boolean isTrainer,
+		@RequestHeader String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.modifyIsTrainer(isTrainer, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
@@ -108,6 +126,7 @@ public class UserController {
 
 	// TODO : 카카오랑 연결 끊기 구현하기
 	@DeleteMapping
+	@ApiOperation(value = "유저 탈퇴", notes = "회원탈퇴를 하는 API")
 	public ResponseEntity<String> deleteUser(@RequestHeader String accessToken) {
 		try {
 			userService.deleteUser(accessToken);

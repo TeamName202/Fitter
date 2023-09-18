@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mk.fitter.api.box.repository.dto.BoxDto;
 import com.mk.fitter.api.box.service.BoxService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,11 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/box")
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = {"박스 API"})
 public class BoxController {
 
 	private final BoxService boxService;
 
 	@GetMapping("/list")
+	@ApiOperation(value = "박스 목록", notes = "박스 목록 조회하는 API")
 	public ResponseEntity<List<BoxDto>> getBoxList() {
 		try {
 			List<BoxDto> list = boxService.getBoxList();
@@ -38,6 +42,7 @@ public class BoxController {
 	}
 
 	@PutMapping("/create")
+	@ApiOperation(value = "박스 생성", notes = "박스 생성하는 API")
 	public ResponseEntity<Boolean> createBox(@RequestBody BoxDto boxDto) {
 		try {
 			boolean result = boxService.createBox(boxDto);
@@ -49,6 +54,7 @@ public class BoxController {
 	}
 
 	@DeleteMapping("/delete/{boxId}")
+	@ApiOperation(value = "박스 삭제", notes = "박스 삭제하는 API")
 	public ResponseEntity<Boolean> deleteBox(@PathVariable int boxId) {
 		try {
 			boolean result = boxService.deleteBox(boxId);
