@@ -1,3 +1,4 @@
+import 'package:fitter/screens/calendar.dart';
 import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/sign_up/additional_box.dart';
 import 'package:fitter/screens/sign_up/additional_info.dart';
@@ -36,7 +37,7 @@ class _BottomNavigationBarExampleState
   static const List<Widget> _widgetOptions = <Widget>[
     LoginScreen(),
     AdditionalBox(),
-    AdditionalPrivacy(),
+    Calendar(),
     AdditionalInfo(),
     AdditionalBox(),
   ];
