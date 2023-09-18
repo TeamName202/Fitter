@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
+import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 
 public interface PersonalRecordService {
 	List<PersonalRecordDto> getRecordList(Integer userId);
@@ -15,4 +16,6 @@ public interface PersonalRecordService {
 	boolean modifyRecord(Integer userId, HashMap<String, Integer> requestBody, int personalRecordId) throws Exception;
 
 	Boolean deleteRecord(int personalRecordId, Integer userId) throws Exception;
+
+	List<WorkoutTypeDto> getWorkoutCategory();
 }

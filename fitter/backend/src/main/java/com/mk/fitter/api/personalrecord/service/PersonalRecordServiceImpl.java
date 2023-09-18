@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.mk.fitter.api.personalrecord.repository.PersonalRecordRepository;
 import com.mk.fitter.api.personalrecord.repository.WorkoutRepository;
+import com.mk.fitter.api.personalrecord.repository.WorkoutTypeRepository;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
 import com.mk.fitter.api.personalrecord.repository.dto.WorkoutDto;
+import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 import com.mk.fitter.api.user.repository.UserRepository;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 
@@ -22,6 +24,7 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 	private final PersonalRecordRepository personalRecordRepository;
 	private final UserRepository userRepository;
 	private final WorkoutRepository workoutRepository;
+	private final WorkoutTypeRepository workoutTypeRepository;
 
 	@Override
 	public List<PersonalRecordDto> getRecordList(Integer userId) {
@@ -91,5 +94,10 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 		}
 
 		return personalRecordRepository.deleteById(personalRecordId);
+	}
+
+	@Override
+	public List<WorkoutTypeDto> getWorkoutCategory() {
+		return workoutTypeRepository.findAll();
 	}
 }

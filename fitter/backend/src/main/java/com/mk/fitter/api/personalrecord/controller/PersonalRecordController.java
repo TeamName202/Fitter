@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mk.fitter.api.common.service.JwtService;
 import com.mk.fitter.api.personalrecord.repository.dto.PersonalRecordDto;
+import com.mk.fitter.api.personalrecord.repository.dto.WorkoutTypeDto;
 import com.mk.fitter.api.personalrecord.service.PersonalRecordService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,17 @@ public class PersonalRecordController {
 
 	private final PersonalRecordService personalRecordService;
 	private final JwtService jwtService;
+
+	@GetMapping("/category")
+	public ResponseEntity<List<WorkoutTypeDto>> getWorkoutCategory() {
+		try {
+			List<WorkoutTypeDto> category = personalRecordService.getWorkoutCategory();
+			return new ResponseEntity<>(category, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@GetMapping("/list")
 	public ResponseEntity<List<PersonalRecordDto>> getRecordList(@RequestHeader String Authorization) {
