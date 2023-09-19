@@ -36,14 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = {"유저 API"})
 public class UserController {
 
-	@Value("${kakao.admin-key}")
-	private String ADMIN_KEY;
-
-	@Value("${kakao.unlink-uri}")
-	private String KAKAO_UNLINK_PATH;
-
 	private final UserService userService;
-	private final RestTemplate restTemplate = new RestTemplate();
 
 	@GetMapping("/userInfo")
 	@ApiOperation(value = "유저 정보", notes = "유저 정보를 조회하는 API")
@@ -145,33 +138,8 @@ public class UserController {
 	@ApiOperation(value = "유저 탈퇴", notes = "회원탈퇴를 하는 API")
 	public ResponseEntity<String> deleteUser(@RequestHeader(name = "Authorization") String accessToken) {
 		try {
-			// 카카오랑 연결 끊기 구현
-			UserDto user = userService.getUserInfo(accessToken);
-			String socialId = user.getSocialId();
-			System.out.println(socialId);
-
-			// header 만들기
-			HttpHeaders headers = new HttpHeaders();
-			//"Content-Type": "application/x-www-form-urlencoded",
-			//         Authorization: "KakaoAK " + admin 키,
-			headers.add("Content-Type", "application/x-www-form-urlencoded");
-			headers.add("Authorization", "KakaoAK " + ADMIN_KEY);
-
-			// body 만들기
-			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-			params.add("target_id_type", "user_id");
-			params.add("target_id", String.valueOf(socialId));
-
-			// header랑 body 합치기
-			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
-
-			// post 요청
-			ResponseEntity<Long> response = restTemplate.exchange(
-				KAKAO_UNLINK_PATH,
-				HttpMethod.POST,
-				entity,
-				Long.class
-			);
+			// 카카오랑 연결 끊기
+			userService.unlinkUser(accessToken);
 
 			// db에서 지우기
 			userService.deleteUser(accessToken);

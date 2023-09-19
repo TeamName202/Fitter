@@ -15,5 +15,7 @@ public interface UserService {
 	UserDto modifyGender(Boolean gender, String accessToken) throws Exception;
 	UserDto modifyBirthday(Date birthday, String accessToken) throws Exception;
 	UserDto modifyIsTrainer(Boolean isTrainer, String accessToken) throws Exception;
+
+	void unlinkUser(String accessToken) throws Exception;
 	void deleteUser(String accessToken) throws Exception;
 }
