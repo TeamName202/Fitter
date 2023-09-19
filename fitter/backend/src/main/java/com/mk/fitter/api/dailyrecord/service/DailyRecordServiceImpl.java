@@ -74,6 +74,7 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 		if (byId.isPresent()) {
 			DailyRecordDto dailyRecordDto = byId.get();
 			dailyRecordDto.setMemo(memo.get("memo"));
+			dailyRecordRepository.save(dailyRecordDto);
 			return true;
 		} else {
 			throw new Exception("수정에 실패했습니다.");

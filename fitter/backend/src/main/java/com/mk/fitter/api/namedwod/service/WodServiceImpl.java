@@ -84,6 +84,7 @@ public class WodServiceImpl implements WodService {
 			throw new Exception("본인이 작성한 기록이 아닙니다.");
 		}
 		modifyWod.setTime(time);
+		wodRecordRepository.save(modifyWod);
 		return true;
 	}
 

@@ -76,7 +76,9 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 		if (findRecord.get().getUserDto().getId() != userId) {
 			throw new Exception("본인이 작성한 기록이 아닙니다.");
 		}
-		findRecord.get().setMaxWeight(requestBody.get("maxWeight"));
+		PersonalRecordDto personalRecordDto = findRecord.get();
+		personalRecordDto.setMaxWeight(requestBody.get("maxWeight"));
+		personalRecordRepository.save(personalRecordDto);
 		return true;
 	}
 
