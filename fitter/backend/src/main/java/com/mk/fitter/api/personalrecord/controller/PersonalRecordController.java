@@ -51,6 +51,19 @@ public class PersonalRecordController {
 		}
 	}
 
+	@GetMapping("/list/rank")
+	@ApiOperation(value = "각 운동별 최고 기록", notes = "각 운동별 최고 기록을 리스트로 제공하는 API")
+	public ResponseEntity<List<PersonalRecordDto>> getRankList(@RequestHeader String Authorization) {
+		try {
+			Optional<Integer> UID = jwtService.extractUID(Authorization);
+			return new ResponseEntity<>(personalRecordService.getRankList(UID.get()), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 	@GetMapping("/workout")
 	@ApiOperation(value = "운동 목록 조회", notes = "운동 목록 리스트를 조회하는 API")
 	public ResponseEntity<List<WorkoutDto>> getWorkoutList() {

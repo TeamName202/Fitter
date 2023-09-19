@@ -42,9 +42,6 @@ public class DailyRecordController {
 	public ResponseEntity<List<DailyRecordDto>> getAllRecordsByMonth(@RequestParam String date,
 		@RequestHeader String Authorization) {
 		try {
-			/*
-			jwt 구현되면 accessToken으로 유저 정보 가져오기 구현
-			 */
 			Optional<Integer> UID = jwtService.extractUID(Authorization);
 			int userId = UID.get(); // 임시 값
 			String[] dateSplit = date.split("-");

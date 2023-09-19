@@ -22,4 +22,6 @@ public interface PersonalRecordService {
 	List<WorkoutTypeDto> getWorkoutCategory();
 
 	List<WorkoutDto> getWorkoutList();
+
+	List<PersonalRecordDto> getRankList(Integer userId);
 }

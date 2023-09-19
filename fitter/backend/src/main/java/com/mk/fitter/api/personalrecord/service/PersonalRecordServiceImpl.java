@@ -106,4 +106,10 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 	public List<WorkoutDto> getWorkoutList() {
 		return workoutRepository.findAll();
 	}
+
+	@Override
+	public List<PersonalRecordDto> getRankList(Integer userId) {
+
+		return personalRecordRepository.findRankByUserDto_Id(userId);
+	}
 }
