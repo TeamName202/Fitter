@@ -1,6 +1,7 @@
 package com.mk.fitter.api.common.oauth.handler;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.VO.CustomOAuth2User;
@@ -35,17 +37,20 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		Authentication authentication) throws IOException, ServletException {
 
 		log.info("OAuth2 Login 성공!");
-
+		response.setContentType("text/html; charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		try {
 			CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
-			System.out.println(oAuth2User);
+			//System.out.println(oAuth2User);
 			// User의 Role이 GUEST일 경우 처음 요청한 회원이므로 회원가입 페이지로 리다이렉트
 			if(oAuth2User.getRole() == Role.GUEST) {
 				String accessToken = jwtService.createAccessToken(oAuth2User.getUid(), oAuth2User.getEmail());
 				response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
 				response.addHeader("uid", String.valueOf(oAuth2User.getUid()));
-				response.addHeader("nickname", oAuth2User.getNickname());
+
+				//response.addHeader("nickname", oAuth2User.getNickname());
 				//response.sendRedirect(REDIRECT_LOCATION+"/ttt.html"); // 프론트의 회원가입 추가 정보 입력 폼으로 리다이렉트
+				//response.sendRedirect("/api");
 
 				jwtService.sendAccessAndRefreshToken(response, accessToken, null);
 
@@ -67,7 +72,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.addHeader(jwtService.getAccessHeader(), "Bearer "+accessToken);
 		response.addHeader(jwtService.getRefreshHeader(), "Bearer "+refreshToken);
 		response.addHeader("email", oAuth2User.getEmail());
-
 		// response.sendRedirect(UriComponentsBuilder.fromUriString(REDIRECT_LOCATION+"/login")
 		// 	.queryParam("accessToken", accessToken)
 		// 	.queryParam("refreshToken", refreshToken)

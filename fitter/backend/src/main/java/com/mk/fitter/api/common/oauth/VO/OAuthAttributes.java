@@ -1,6 +1,7 @@
 package com.mk.fitter.api.common.oauth.VO;
 
 import java.util.Map;
+import java.util.UUID;
 
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.SocialType;
@@ -58,6 +59,7 @@ public class OAuthAttributes {
 		return UserDto.builder()
 			.socialType(socialType)
 			.socialId(oAuth2UserInfo.getId())
+			.email(UUID.randomUUID() + "@socialUser.com")
 			.nickname(oAuth2UserInfo.getNickname())
 			.role(Role.GUEST)
 			.build();

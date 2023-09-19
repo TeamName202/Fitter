@@ -2,6 +2,9 @@ package com.mk.fitter.api.common.oauth.userInfo;
 
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
 	private final Map<String, Object> account;
@@ -28,8 +31,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
 	@Override
 	public String getEmail() {
-		// System.out.println("==========================");
-		System.out.println((String)account.get("email"));
+		log.info("KakaoOAuth2UserInfo :: "+(String)account.get("email"));
 		if(this.account == null || account.get("email") == null)
 			return "null";
 		return (String)account.get("email");

@@ -77,7 +77,7 @@ public class UserController {
 	}
 
 	@PutMapping("/age-range/{ageRange}")
-	@ApiOperation(value = "유저 나이대 수정", notes = "유저의 나이대를 수정하는 API")
+	@ApiOperation(value = "유저 연령대 수정", notes = "유저의 연령대를 수정하는 API")
 	public ResponseEntity<UserDto> modifyAgeRange(@PathVariable(name = "ageRange") String ageRange,
 		@RequestHeader String accessToken) {
 		try {

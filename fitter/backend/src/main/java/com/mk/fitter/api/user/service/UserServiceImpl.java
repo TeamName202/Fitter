@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
 		BoxDto box = boxRepository.findById(boxId)
 			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 box입니다."));
 		user.setBoxDto(box);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setEmail(email);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -53,6 +55,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setNickname(nickname);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setAgeRange(ageRange);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -69,6 +73,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setGender(gender);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -77,6 +82,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setBirthday(birthday);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -85,6 +91,7 @@ public class UserServiceImpl implements UserService {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		UserDto user = userRepository.findById(uid).orElseThrow(()-> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 		user.setIsTrainer(isTrainer);
+		userRepository.save(user);
 		return user;
 	}
 
@@ -92,6 +99,5 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken).orElseThrow(()->new Exception("UserService :: 유효하지 않은 access token입니다."));
 		userRepository.deleteById(uid);
-		return;
 	}
 }

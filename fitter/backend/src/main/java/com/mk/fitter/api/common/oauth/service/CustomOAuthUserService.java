@@ -60,8 +60,8 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 			attributes,
 			extractAttributes.getNameAttributeKey(),
 			createdUser.getId(),
-			createdUser.getEmail(),
 			createdUser.getNickname(),
+			createdUser.getEmail(),
 			createdUser.getRole()
 		);
 
@@ -95,7 +95,6 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
 	 */
 	private UserDto saveUser(OAuthAttributes attributes, SocialType socialType) {
 		UserDto createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
-		createdUser.setRole(Role.USER);
 		return userRepository.save(createdUser);
 	}
 

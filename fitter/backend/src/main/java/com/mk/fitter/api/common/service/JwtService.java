@@ -45,7 +45,7 @@ public class JwtService {
 	private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
 	private static final String UID_CLAIM = "id";
 	private static final String EMAIL_CLAIM = "email";
-	private static final String BEARER = "Bearer";
+	private static final String BEARER = "Bearer ";
 
 	private final UserRepository userRepository;
 
@@ -96,7 +96,6 @@ public class JwtService {
 		setAccessTokenHeader(response, accessToken);
 		setRefreshTokenHeader(response, refreshToken);
 		log.info("Access Token, Refresh Token 헤더 설정 완료");
-		System.out.println(response.getHeader("uid"));
 	}
 
 	/**
@@ -117,6 +116,7 @@ public class JwtService {
 	 */
 	public Optional<String> extractAccessToken(HttpServletRequest request) {
 		log.info("extractAccessToken");
+		//System.out.println(request.getHeader(accessHeader));
 		return Optional.ofNullable(request.getHeader(accessHeader))
 			.filter(accessToken -> accessToken.startsWith(BEARER))
 			.map(accessToken -> accessToken.replace(BEARER, ""));
@@ -125,10 +125,16 @@ public class JwtService {
 	/**
 	 * Bearer __________형식으로 되어있는 accessToken에서 Bearer를 제거하는 함수
 	 * */
-	public Optional<String> extractAccessToken(String accessToken) {
-		return Optional.ofNullable(accessToken)
-			.filter(token -> token.startsWith(BEARER))
-			.map(token -> token.replace(BEARER, ""));
+	public Optional<String> extractAccessHeaderToToken(String accessToken) {
+		if(accessToken.startsWith(BEARER)){
+			return Optional.ofNullable(accessToken)
+				.map(token -> token.replace(BEARER, ""));
+		} else {
+			return Optional.of(accessToken);
+		}
+		// return Optional.ofNullable(accessToken)
+		// 	.filter(token -> token.startsWith(BEARER))
+		// 	.map(token -> token.replace(BEARER, ""));
 	}
 
 	/**
@@ -140,14 +146,15 @@ public class JwtService {
 	 */
 	public Optional<Integer> extractUID(String accessToken) {
 		try {
-			accessToken = extractAccessToken(accessToken).get();
+			accessToken = extractAccessHeaderToToken(accessToken).get();
 			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
 				.build()
 				.verify(accessToken)
 				.getClaim(UID_CLAIM)
 				.asInt());
 		} catch (Exception e) {
-			log.error("access token이 유효하지 않습니다");
+			log.error("extractUID :: access token이 유효하지 않습니다");
+			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
@@ -162,14 +169,15 @@ public class JwtService {
 	 */
 	public Optional<String> extractEmail(String accessToken) {
 		try {
-			accessToken = extractAccessToken(accessToken).get();
+			accessToken = extractAccessHeaderToToken(accessToken).get();
 			return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
 				.build()
 				.verify(accessToken)
 				.getClaim(EMAIL_CLAIM)
 				.asString());
 		} catch (Exception e) {
-			log.error("액세스 토큰이 유효하지 않습니다.");
+			log.error("extractEmail :: 액세스 토큰이 유효하지 않습니다.");
+			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
