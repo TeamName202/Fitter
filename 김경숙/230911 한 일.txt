@@ -1,0 +1,1 @@
+EC2 docker, 젠킨스, mysql 설지
