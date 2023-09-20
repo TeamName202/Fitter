@@ -40,7 +40,6 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 
 	@Override
 	public boolean writeDailyRecord(DailyRecordDto dailyRecordDto, int userId) throws Exception {
-		//유저 정보 찾기 추가해야함
 		Optional<UserDto> byId = userRepository.findById(userId);
 		if (!byId.isPresent()) {
 			throw new Exception("유저가 없습니다.");
@@ -86,5 +85,20 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 		} else {
 			throw new Exception("수정에 실패했습니다.");
 		}
+	}
+
+	@Override
+	public boolean writeDailyRecordTest(DailyRecordDto dailyRecordDto) throws Exception {
+		Optional<UserDto> byId = userRepository.findById(28);
+		if (!byId.isPresent()) {
+			throw new Exception("유저가 없습니다.");
+		}
+		dailyRecordDto.setUserDto(byId.get());
+		DailyRecordDto save = dailyRecordRepository.save(dailyRecordDto);
+		for (DailyRecordDetailDto temp : dailyRecordDto.getDailyRecordDetails()) {
+			temp.setDailyRecordDto(save);
+			dailyRecordDetailRepository.save(temp);
+		}
+		return true;
 	}
 }

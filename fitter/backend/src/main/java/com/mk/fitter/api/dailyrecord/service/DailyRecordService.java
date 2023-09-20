@@ -18,4 +18,6 @@ public interface DailyRecordService {
 	boolean deleteDailyRecord(int dailyRecordId, int userId) throws Exception;
 
 	boolean modifyDailyRecord(int dailyRecordId, Map<String, String> memo) throws Exception;
+
+	boolean writeDailyRecordTest(DailyRecordDto dailyRecordDto) throws Exception;
 }
