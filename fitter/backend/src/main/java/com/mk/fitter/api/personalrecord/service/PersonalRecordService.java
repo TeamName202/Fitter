@@ -24,4 +24,6 @@ public interface PersonalRecordService {
 	List<WorkoutDto> getWorkoutList();
 
 	List<PersonalRecordDto> getRankList(Integer userId);
+
+	List<PersonalRecordDto> getRecordListByWorkoutName(Integer userId, String workoutName) throws Exception;
 }

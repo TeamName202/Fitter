@@ -18,4 +18,6 @@ public interface PersonalRecordRepository extends JpaRepository<PersonalRecordDt
 	@Query(value = "SELECT *, RANK() over(partition by workout_id ORDER BY max_weight DESC limit 1) AS ranking FROM personal_record WHERE user_id = :userId", nativeQuery = true)
 	List<PersonalRecordDto> findRankByUserDto_Id(int userId);
 
+	List<PersonalRecordDto> findByUserDto_IdAndWorkoutDto_Name(int userId, String workoutName);
+
 }

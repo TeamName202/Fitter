@@ -114,4 +114,18 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 
 		return personalRecordRepository.findRankByUserDto_Id(userId);
 	}
+
+	@Override
+	public List<PersonalRecordDto> getRecordListByWorkoutName(Integer userId, String workoutName) throws Exception {
+		Optional<UserDto> byId = userRepository.findById(userId);
+		if (byId.isEmpty()) {
+			throw new Exception("존재하지 않는 유저입니다.");
+		}
+		Optional<WorkoutDto> byName = workoutRepository.findByName(workoutName);
+		if (byName.isEmpty()) {
+			throw new Exception("존재하지 않는 유저입니다.");
+		}
+		return personalRecordRepository.findByUserDto_IdAndWorkoutDto_Name(
+			userId, workoutName);
+	}
 }
