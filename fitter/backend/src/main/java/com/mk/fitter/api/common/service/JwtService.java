@@ -95,7 +95,7 @@ public class JwtService {
 
 		setAccessTokenHeader(response, accessToken);
 		setRefreshTokenHeader(response, refreshToken);
-		log.info("Access Token, Refresh Token 헤더 설정 완료");
+		log.info("sendAccessAndRefreshToken :: Access Token, Refresh Token 헤더 설정 완료");
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class JwtService {
 		userRepository.findByEmail(email)
 			.ifPresentOrElse(
 				user -> user.updateRefreshToken(refreshToken),
-				() -> new Exception("일치하는 회원이 없습니다.")
+				() -> new Exception("updateRefreshToken :: 일치하는 회원이 없습니다.")
 			);
 	}
 

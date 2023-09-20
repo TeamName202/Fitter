@@ -44,7 +44,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.getUserInfo(accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("getUserInfo :: {} ", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -56,7 +56,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyBox(boxId, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyBox :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -68,7 +68,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyEmail(emailMap.get("email"), accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyEmail :: {}",e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -80,7 +80,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyNickname(nicknameMap.get("nickname"), accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyNickname :: {}",e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -92,7 +92,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyAgeRange(ageRange, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyAgeRange :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -104,7 +104,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyGender(gender, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyGender :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -116,7 +116,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyBirthday(birthday, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyBirthday :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -128,7 +128,7 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyIsTrainer(isTrainer, accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("modifyIsTrainer :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -145,7 +145,7 @@ public class UserController {
 			userService.deleteUser(accessToken);
 			return new ResponseEntity<>("UserController :: 사용자 삭제 성공", HttpStatus.OK);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("deleteUser :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

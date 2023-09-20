@@ -15,7 +15,7 @@ public interface PersonalRecordRepository extends JpaRepository<PersonalRecordDt
 
 	boolean deleteById(int id);
 
-	@Query(value = "SELECT *, RANK() over(partition by workout_id ORDER BY max_weight DESC) AS ranking FROM personal_record where WHERE user_id = :userId limit 1", nativeQuery = true)
+	@Query(value = "SELECT *, RANK() over(partition by workout_id ORDER BY max_weight DESC limit 1) AS ranking FROM personal_record WHERE user_id = :userId", nativeQuery = true)
 	List<PersonalRecordDto> findRankByUserDto_Id(int userId);
 
 }
