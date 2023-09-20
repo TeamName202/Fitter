@@ -2,9 +2,7 @@ package com.mk.fitter.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,7 +10,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mk.fitter.api.common.filter.JwtAuthenticationProcessingFilter;
 import com.mk.fitter.api.common.oauth.handler.OAuth2LoginFailureHandler;
@@ -36,8 +36,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.formLogin().disable()	// FormLogin 사용x
+			.formLogin().disable()    // FormLogin 사용x
 			.httpBasic().disable()
+			.cors()
+			.configurationSource(corsConfigurationSource())
+			.and()
 			.csrf().disable()
 			.headers().frameOptions().disable()
 			.and()
@@ -47,7 +50,7 @@ public class SecurityConfig {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/api/oauth2/**").permitAll() // 회원가입 접근 가능
-			.antMatchers("/**", "/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
+			.antMatchers("/**", "/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
 			.anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
 			.and()
 			// 소셜 로그인
@@ -62,13 +65,29 @@ public class SecurityConfig {
 	}
 
 	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.addAllowedMethod("*");
+		corsConfiguration.addAllowedMethod(HttpMethod.OPTIONS);
+		corsConfiguration.addAllowedHeader("*");
+		corsConfiguration.addAllowedOrigin("*");
+		corsConfiguration.setMaxAge(7200L);
+		corsConfiguration.addExposedHeader("Authorization");
+		corsConfiguration.addExposedHeader("Authorization-refresh");
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
+		return source;
+	}
+
+	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	@Bean
 	public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-		JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository);
+		JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService,
+			userRepository);
 		return jwtAuthenticationFilter;
 	}
 
