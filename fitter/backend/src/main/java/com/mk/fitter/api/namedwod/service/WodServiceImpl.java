@@ -27,9 +27,9 @@ public class WodServiceImpl implements WodService {
 	private final WodCategoryRepository wodCategoryRepository;
 
 	@Override
-	public List<WodRecordDto> getNamedWodList(String namedWodName) {
+	public List<WodRecordDto> getNamedWodList(int userId, String namedWodName) {
 		WodDto byName = wodRepository.findByName(namedWodName);
-		List<WodRecordDto> byWodId = wodRecordRepository.findByWod_Id(byName.getId());
+		List<WodRecordDto> byWodId = wodRecordRepository.findByWod_IdAndUser_Id(userId, byName.getId());
 		return byWodId;
 	}
 
@@ -43,13 +43,8 @@ public class WodServiceImpl implements WodService {
 		if (byId.isEmpty()) {
 			throw new Exception("존재하지 않는 회원입니다.");
 		}
-		WodRecordDto byWodIdAndUserId = wodRecordRepository.findByWod_IdAndUser_Id(wodRecordDto.getWod().getId(),
-			byId.get().getId());
-		if (byWodIdAndUserId != null) {
-			throw new Exception("이미 존재하는 기록입니다.");
-		} else {
-			wodRecordRepository.save(wodRecordDto);
-		}
+		wodRecordDto.setUser(byId.get());
+		wodRecordRepository.save(wodRecordDto);
 		return true;
 	}
 

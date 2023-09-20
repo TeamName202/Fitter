@@ -14,11 +14,11 @@ import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
 public interface WodRecordRepository extends JpaRepository<WodRecordDto, Integer> {
 	List<WodRecordDto> findAll();
 
-	WodRecordDto findByWod_IdAndUser_Id(int wodId, int userId);
-
 	boolean deleteById(int wodRecordId);
 
 	List<WodRecordDto> findByWod_Id(int wodId);
+
+	List<WodRecordDto> findByWod_IdAndUser_Id(int userId, int wodId);
 
 	List<WodRecordDto> findByUser_Id(int userId);
 

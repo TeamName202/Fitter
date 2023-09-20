@@ -63,9 +63,11 @@ public class WodController {
 
 	@GetMapping("/wod-record/list/{namedWodName}")
 	@ApiOperation(value = "네임드 와드 기록 리스트 조회", notes = "해당 네임드 와드의 기록들을 조회하는 API")
-	public ResponseEntity<List<WodRecordDto>> getNamedWodRecordList(@PathVariable String namedWodName) {
+	public ResponseEntity<List<WodRecordDto>> getNamedWodRecordList(@RequestHeader String Authorization,
+		@PathVariable String namedWodName) {
 		try {
-			List<WodRecordDto> namedWodList = wodService.getNamedWodList(namedWodName);
+			Optional<Integer> UID = jwtService.extractUID(Authorization);
+			List<WodRecordDto> namedWodList = wodService.getNamedWodList(UID.get(), namedWodName);
 			return new ResponseEntity<>(namedWodList, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error(e.getMessage());

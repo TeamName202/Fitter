@@ -18,7 +18,7 @@ public interface WodService {
 
 	boolean deleteWodRecord(int wodId, int userId) throws Exception;
 
-	List<WodRecordDto> getNamedWodList(String namedWodName);
+	List<WodRecordDto> getNamedWodList(int userId, String namedWodName);
 
 	List<WodCategoryDto> getWodCategory();
 }
