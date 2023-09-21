@@ -1,3 +1,4 @@
+import 'package:fitter/screens/daily_calendar.dart';
 import 'package:fitter/screens/chart_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/nav_bar.dart';
@@ -26,6 +27,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
         // home: AdditionalInfo(),
-        home: AdditionalInfo());
+        home: AdditionalInfo()); // 랜더링될 페이지 코드 수정하기 AdditionalInfo()
   }
 }

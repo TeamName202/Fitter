@@ -1,4 +1,4 @@
-import 'package:fitter/screens/calendar.dart';
+import 'package:fitter/screens/daily_calendar.dart';
 import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/sign_up/additional_info.dart';
 import 'package:flutter/material.dart';
