@@ -17,6 +17,7 @@ import org.hibernate.annotations.DynamicInsert;
 import com.mk.fitter.api.box.repository.dto.BoxDto;
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.SocialType;
+import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

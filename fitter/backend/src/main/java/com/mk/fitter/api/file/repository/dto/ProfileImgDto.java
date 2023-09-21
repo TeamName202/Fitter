@@ -1,4 +1,4 @@
-package com.mk.fitter.api.user.repository.dto;
+package com.mk.fitter.api.file.repository.dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
