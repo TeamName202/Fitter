@@ -1,6 +1,7 @@
 package com.mk.fitter.api.namedwod.repository.dto;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +49,8 @@ public class WodDto {
 
 	@Column(name = "time_cap")
 	private LocalTime timeCap;
+
+	@OneToMany(mappedBy = "wodDto")
+	@JsonManagedReference
+	List<WodWorkoutDto> workoutDtoList;
 }
