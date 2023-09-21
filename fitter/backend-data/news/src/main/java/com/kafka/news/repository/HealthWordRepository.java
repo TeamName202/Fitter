@@ -1,14 +1,13 @@
-package com.mk.fitter.api.trend.repository;
+package com.kafka.news.repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mk.fitter.api.trend.entity.HealthWord;
+import com.kafka.news.entity.HealthWord;
 
 @Repository
 public interface HealthWordRepository extends JpaRepository<HealthWord, Integer> {
-
-	List<HealthWord> findAllByOrderByCountDesc();
+	Optional<HealthWord> findByName(String name);
 }

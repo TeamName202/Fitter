@@ -1,9 +1,9 @@
 package com.mk.fitter.api.trend.service;
 
 import com.mk.fitter.api.trend.dto.HealthWordDto;
-import com.mk.fitter.api.trend.dto.SportWordDto;
+import com.mk.fitter.api.trend.dto.SportsWordDto;
 import com.mk.fitter.api.trend.repository.HealthWordRepository;
-import com.mk.fitter.api.trend.repository.SportWordRepository;
+import com.mk.fitter.api.trend.repository.SportsWordRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,19 +16,19 @@ import java.util.stream.Collectors;
 @Service
 public class TrendService {
 
-    private final SportWordRepository sportWordRepository;
+    private final SportsWordRepository sportsWordRepository;
     private final HealthWordRepository healthWordRepository;
 
     @Transactional(readOnly = true)
-    public List<SportWordDto> getAllSports() {
-        return  sportWordRepository.findAll().stream()
-                .map(SportWordDto::new)
+    public List<SportsWordDto> getAllSports() {
+        return  sportsWordRepository.findAllByOrderByCountDesc().stream()
+                .map(SportsWordDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<HealthWordDto> getAllHealths() {
-        return healthWordRepository.findAll().stream()
+        return healthWordRepository.findAllByOrderByCountDesc().stream()
             .map(HealthWordDto::new)
             .collect(Collectors.toList());
     }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>스포츠 기사 크롤링</title>
+</head>
+<body>
+    <div id="result">크롤링 진행중...</div>
+</body>
+<script>
+    async function crawler() {
+        try {
+            const response = await fetch("/api/sports", {
+                method: "POST"
+            });
+            if (response.ok) {
+                alert("크롤링이 완료되었습니다!");
+                window.location.href = "/";
+            } else {
+                alert("서버로부터 응답을 받을 수 없습니다.");
+                window.location.href = "/";
+            }
+        } catch (error) {
+             alert("오류 발생");
+            console.error("오류 발생:", error);
+        }
+    }
+    crawler();
+</script>
+</html>

@@ -19,7 +19,7 @@ def get_news():
     news_list = []
     flag = True
     while flag:
-        url = f"https://www.joongang.co.kr/sports?page={page}"
+        url = f"https://www.joongang.co.kr/lifestyle/health?page={page}"
         rq = requests.get(url, headers=headers)
         soup = BeautifulSoup(rq.text, "html.parser")
         selectedList = soup.select("#story_list li")
@@ -42,7 +42,6 @@ def get_news():
                 }
             )
         page += 1
-
 
 
 def get_content(news):
@@ -70,7 +69,7 @@ def save_to_csv(news_list):
     today = date.today()
     formatted_date = str(today).replace("-", "")
     formatted_date = int(formatted_date) - 1
-    output_file_name = f"output/sports/JoongangSportsNews{formatted_date}.csv"
+    output_file_name = f"output/health/JoongangHealthNews{formatted_date}.csv"
     with open(output_file_name, "w", encoding="utf-8") as output_file:
         csvwriter = csv.writer(output_file, delimiter=";")
         csvwriter.writerow(news_list[0].keys())
@@ -82,7 +81,7 @@ def start():
     start_time = time.time()
     news_list = get_news()
     if not news_list:
-        print('---------------중앙 스포츠 뉴스 기사가 없습니다.--------------')
+        print('---------------중앙 건강 뉴스 기사가 없습니다.--------------')
         return
     print("[중앙] 본문 가져오는 중...")
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -91,4 +90,4 @@ def start():
     end_time = time.time()
     print("[중앙] 걸린시간 :", end_time - start_time)
     print("[중앙] 가져온 기사 :", len(news_list))
-    print('---------------중앙 스포츠 뉴스 완료---------------')
+    print('---------------중앙 건강 뉴스 완료---------------')
