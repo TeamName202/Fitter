@@ -30,11 +30,11 @@ class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    LoginScreen(),
-    LoginScreen(),
     Calendar(),
-    AdditionalInfo(),
-    LoginScreen(),
+    Calendar(),
+    Calendar(),
+    Calendar(),
+    Calendar(),
   ];
 
   void _onItemTapped(int index) {

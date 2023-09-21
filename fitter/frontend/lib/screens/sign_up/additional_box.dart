@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/empty_box.dart';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class AdditionalBox extends StatefulWidget {
   final String nickname;
@@ -22,36 +25,52 @@ class AdditionalBox extends StatefulWidget {
 }
 
 class _AdditionalBoxState extends State<AdditionalBox> {
+  @override
+  void initState() {
+    super.initState();
+    onAll();
+  }
+
   List<String> searchResults = [];
   FocusNode focusNode = FocusNode();
   final editingController = TextEditingController();
   final scrollController = ScrollController();
   bool isScrolling = false;
   bool isRightBox = false;
-  List<String> boxLists = [
-    "구미",
-    "크로스핏",
-    "대구 크로스핏",
-    "크로스핏크로스핏",
-    "대구대구대구",
-    "구미구미구미",
-    "하나하나하나",
-    "bbbbbbbbbb",
-    "ㅠㅠㅠㅠㅠㅠㅠ",
-    "ㄹㄹㄴㄹㅇㄹ",
-    "이러쿵저러쿵",
-    "취업하고싶다",
-  ];
+  late List<dynamic> boxList;
+  List<String> boxLists = [];
 
-  // void _handleScrollChange() {
-  //   if (isScrolling != scrollController.position.isScrollingNotifier.value) {
-  //     setState(() {
-  //       isScrolling = scrollController.position.isScrollingNotifier.value;
-  //     });
-  //   }
-  // }
+  Future onCallServer() async {
+// HTTP 요청 보내기
+    var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/box/list');
+    var response = await http.get(url);
+
+// 응답 처리
+    if (response.statusCode == 200) {
+      // 성공적으로 응답을 받았을 때의 처리
+      print('Response data: ${response.body}');
+      boxList = jsonDecode(response.body);
+    } else {
+      // 오류 처리
+      print('Request failed with status: ${response.statusCode}');
+      print('Error message: ${response.body}');
+    }
+  }
+
+  Future onMakeList() async {
+    for (var box in boxList) {
+      boxLists.add(box['boxName'].toString());
+    }
+  }
+
+  Future onAll() async {
+    await onCallServer();
+    await onMakeList();
+  }
 
   void getSearchResults(String query) {
+    // onMakeList();
+    print(boxLists);
     setState(() {
       searchResults = boxLists
           .where((result) => result.toLowerCase().contains(query.toLowerCase()))
@@ -157,15 +176,16 @@ class _AdditionalBoxState extends State<AdditionalBox> {
                   ),
                   Offstage(
                     offstage: !focusNode.hasFocus,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xff0080ff))),
-                      child: Scrollbar(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        height: searchResults.length < 3
+                            ? searchResults.length * 60
+                            : 170,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xff0080ff))),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: searchResults.length > 3
-                              ? 3
-                              : searchResults.length,
+                          itemCount: searchResults.length,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {

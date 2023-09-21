@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class AdditionalInfo extends StatefulWidget {
-  const AdditionalInfo({super.key});
+  final String nickname;
+  const AdditionalInfo({super.key, required this.nickname});
 
   @override
   State<AdditionalInfo> createState() => _AdditionalInfoState();
@@ -42,6 +43,12 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
 
   void getKeyboard() {
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nicknameTextEditController.text = widget.nickname;
   }
 
   @override

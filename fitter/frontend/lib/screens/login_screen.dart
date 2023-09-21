@@ -1,34 +1,48 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:fitter/screens/calendar.dart';
 import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/screens/sign_up/additional_info.dart';
-import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/empty_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+
 import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  // Future<void> fetchHeader() async {
-  //   final response = await http.get(
-  //     Uri.parse("http://j9d202.p.ssafy.io:8000/api/oauth2/authorization/kakao"),
-  //   );
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
-  //   if (response.statusCode == 200) {
-  //     final headers = response.headers;
-  //     final autorization = headers['Authorization'];
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    onPageOpen();
+  }
 
-  //     print('autorization: $autorization');
-  //     print(headers);
-  //   } else {
-  //     // HTTP 요청이 실패한 경우
-  //     print('Failed to load data');
-  //   }
-  // }
+  late SharedPreferences prefs;
+  late OAuthToken kakaoToken;
+
+  // 이 사람이 로그인 되어있는지 확인하는 함수!
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt('userID');
+    // if (userID != null) {
+    //   // 이러면 그냥 바로 이 화면 안 띄우고 메인으로 넘어가면 됨... 되려나?
+    //   Future.delayed(Duration.zero, () {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => const NavBarWidget()),
+    //     );
+    //   });
+    // }
+  }
 
   Future onIsSign(OAuthToken token) async {
     // 헤더에 추가할 데이터
@@ -36,27 +50,51 @@ class LoginScreen extends StatelessWidget {
       'Authorization': token.accessToken,
     };
 
-// HTTP 요청 보내기
-    var url = Uri.parse('https://example.com/api/endpoint');
+    var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/oauth2/kakao');
     var response = await http.get(url, headers: headers);
 
-// 응답 처리
     if (response.statusCode == 200) {
-      // 성공적으로 응답을 받았을 때의 처리
+      print('Response data: ${response.headers}');
       print('Response data: ${response.body}');
+      await onSetInfo(response);
     } else {
-      // 오류 처리
       print('Request failed with status: ${response.statusCode}');
       print('Error message: ${response.body}');
     }
   }
 
+  Future onSetInfo(response) async {
+    // var responsebody = jsonDecode(response.body);
+    Map<String, dynamic> responseBody = jsonDecode(response.body);
+
+    prefs.setString("Authorization", response.headers['authorization']);
+    prefs.setString(
+        "Authorization-refresh", response.headers['authorization-refresh']);
+
+    if (responseBody["user"] == "USER") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NavBarWidget()),
+      );
+    } else {
+      prefs.setInt("userID", responseBody["id"]);
+      prefs.setString("userNickname", responseBody["nickname"]);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AdditionalInfo(nickname: responseBody["nickname"].toString())),
+      );
+    }
+  }
+
+// 카카오톡으로 로그인
   Future onLoginTap() async {
     if (await isKakaoTalkInstalled()) {
       try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+        kakaoToken = await UserApi.instance.loginWithKakaoTalk();
         print('카카오톡으로 로그인 성공');
-        onIsSign(token);
+        // onIsSign(token);
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
 
@@ -67,26 +105,33 @@ class LoginScreen extends StatelessWidget {
         }
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
-          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+          kakaoToken = await UserApi.instance.loginWithKakaoAccount();
           print('카카오톡으로 로그인 성공');
-          onIsSign(token);
+          // onIsSign(token);
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
         }
       }
     } else {
       try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-        print('카카오톡으로 로그인 성공');
-        onIsSign(token);
+        kakaoToken = await UserApi.instance.loginWithKakaoAccount();
+        print('카카오톡으로 로그인 성공 : ${kakaoToken.accessToken}');
+        // onIsSign(token);
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
       }
     }
   }
 
+// 화면 켜졌을 때
+  Future onPageOpen() async {
+    await initPrefs();
+  }
+
+// 버튼 눌렸을 떄
   onLogin() async {
     await onLoginTap();
+    await onIsSign(kakaoToken);
   }
 
   @override
@@ -115,12 +160,6 @@ class LoginScreen extends StatelessWidget {
           GestureDetector(
             // 카카오 로그인
             onTap: onLogin,
-            // onTap: () {
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) => const AdditionalInfo()));
-            // },
             child: Image.asset('assets/images/kakao_login_medium_wide.png'),
           ),
           const EmptyBox(boxSize: 8),
