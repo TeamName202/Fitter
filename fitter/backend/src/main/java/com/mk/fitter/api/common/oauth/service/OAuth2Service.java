@@ -3,6 +3,7 @@ package com.mk.fitter.api.common.oauth.service;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,8 +41,7 @@ public class OAuth2Service {
 		Map<String, Object> userInfo = getUserInfo(accessToken);
 		String userNameAttributeName = "kakao";
 		OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, userInfo);
-
-		return getUser(extractAttributes, socialType).orElse(saveUser(extractAttributes, socialType));
+		return getUser(extractAttributes, socialType).orElseGet(()->saveUser(extractAttributes, socialType));
 	}
 
 	public Map<String, Object> getUserInfo(String accessToken) throws Exception {
@@ -72,11 +72,10 @@ public class OAuth2Service {
 	}
 
 	private Optional<UserDto> getUser(OAuthAttributes attributes, SocialType socialType) {
-		UserDto findUser = userRepository.findBySocialTypeAndSocialId(socialType, attributes.getOAuth2UserInfo().getId()).orElse(null);
+		Optional<UserDto> findUser = userRepository.findBySocialTypeAndSocialId(socialType, attributes.getOAuth2UserInfo().getId());
 		log.info("getUser attribute :: "+attributes.getOAuth2UserInfo());
 		log.info("getUser attribute id :: "+attributes.getOAuth2UserInfo().getId());
-
-		return Optional.ofNullable(findUser);
+		return findUser;
 
 	}
 
