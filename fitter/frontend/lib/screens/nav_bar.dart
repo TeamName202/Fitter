@@ -1,17 +1,14 @@
 import 'package:fitter/screens/calendar.dart';
 import 'package:fitter/screens/login_screen.dart';
-import 'package:fitter/screens/sign_up/additional_box.dart';
 import 'package:fitter/screens/sign_up/additional_info.dart';
-import 'package:fitter/screens/sign_up/additional_privacy.dart';
-import 'package:fitter/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 
 /// Flutter code sample for [BottomNavigationBar].
 
-void main() => runApp(const BottomNavigationBarExampleApp());
+void main() => runApp(const NavBarWidget());
 
-class BottomNavigationBarExampleApp extends StatelessWidget {
-  const BottomNavigationBarExampleApp({super.key});
+class NavBarWidget extends StatelessWidget {
+  const NavBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +29,12 @@ class BottomNavigationBarExample extends StatefulWidget {
 class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     LoginScreen(),
-    AdditionalBox(),
+    LoginScreen(),
     Calendar(),
     AdditionalInfo(),
-    AdditionalBox(),
+    LoginScreen(),
   ];
 
   void _onItemTapped(int index) {

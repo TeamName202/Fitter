@@ -4,11 +4,13 @@ class Dropdown extends StatefulWidget {
   final List<String> dropList;
   final String hintText;
   final double width;
+  final Function(String) onSelected;
   const Dropdown({
     super.key,
     required this.dropList,
     required this.hintText,
     required this.width,
+    required this.onSelected,
   });
 
   @override
@@ -27,6 +29,7 @@ class _DropdownState extends State<Dropdown> {
       onSelected: (String? value) {
         setState(() {
           dropdownValue = value!;
+          widget.onSelected(dropdownValue);
         });
       },
       dropdownMenuEntries:

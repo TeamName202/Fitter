@@ -1,6 +1,4 @@
 import 'dart:ffi';
-
-import 'package:fitter/widgets/record_widget.dart';
 import 'package:flutter/material.dart';
 
 class WodRecordScreen extends StatefulWidget {

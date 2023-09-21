@@ -1,8 +1,17 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" packge="com.example.fitter">
     <application
         android:label="fitter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+       <activity android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="kakaodb6c538af12e033ffc7eb3bbb87fc646" android:host="oauth"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,4 +39,19 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
+    <queries>
+    <!-- If your app checks for SMS support -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="html" />
+    </intent>
+    <!-- If your app checks for call support -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="tel" />
+    </intent>
+    </queries>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
+
