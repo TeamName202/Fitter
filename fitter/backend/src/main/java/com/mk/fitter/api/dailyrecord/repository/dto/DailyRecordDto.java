@@ -1,7 +1,6 @@
 package com.mk.fitter.api.dailyrecord.repository.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mk.fitter.api.namedwod.repository.dto.WodTypeDto;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 
@@ -51,8 +48,6 @@ public class DailyRecordDto {
 
 	private String memo;
 
-	@OneToMany(mappedBy = "dailyRecordDto")
-	@JsonManagedReference
-	private List<DailyRecordDetailDto> dailyRecordDetails;
+	private String detail;
 
 }

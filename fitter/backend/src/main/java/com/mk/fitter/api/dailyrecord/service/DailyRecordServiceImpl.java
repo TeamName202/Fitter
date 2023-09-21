@@ -7,9 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.mk.fitter.api.dailyrecord.repository.DailyRecordDetailRepository;
 import com.mk.fitter.api.dailyrecord.repository.DailyRecordRepository;
-import com.mk.fitter.api.dailyrecord.repository.dto.DailyRecordDetailDto;
 import com.mk.fitter.api.dailyrecord.repository.dto.DailyRecordDto;
 import com.mk.fitter.api.user.repository.UserRepository;
 import com.mk.fitter.api.user.repository.dto.UserDto;
@@ -22,7 +20,6 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 
 	private final DailyRecordRepository dailyRecordRepository;
 	private final UserRepository userRepository;
-	private final DailyRecordDetailRepository dailyRecordDetailRepository;
 
 	@Override
 	public List<DailyRecordDto> getAllRecordsByMonth(int userId, LocalDate startDate, LocalDate endDate) {
@@ -46,10 +43,6 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 		}
 		dailyRecordDto.setUserDto(byId.get());
 		DailyRecordDto save = dailyRecordRepository.save(dailyRecordDto);
-		for (DailyRecordDetailDto temp : dailyRecordDto.getDailyRecordDetails()) {
-			temp.setDailyRecordDto(save);
-			dailyRecordDetailRepository.save(temp);
-		}
 		return true;
 	}
 
@@ -95,10 +88,6 @@ public class DailyRecordServiceImpl implements DailyRecordService {
 		}
 		dailyRecordDto.setUserDto(byId.get());
 		DailyRecordDto save = dailyRecordRepository.save(dailyRecordDto);
-		for (DailyRecordDetailDto temp : dailyRecordDto.getDailyRecordDetails()) {
-			temp.setDailyRecordDto(save);
-			dailyRecordDetailRepository.save(temp);
-		}
 		return true;
 	}
 }
