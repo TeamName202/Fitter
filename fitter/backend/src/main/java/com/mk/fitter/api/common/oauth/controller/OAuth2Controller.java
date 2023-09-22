@@ -102,16 +102,10 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크 API")
 	@PostMapping("/nickname/duplicate")
-	public ResponseEntity<Boolean> checkDupNickname(HttpServletRequest request) {
+	public ResponseEntity<Boolean> checkDupNickname(@ApiParam(name = "닉네임, id") @RequestBody Map<String, Object> nicknameMap) {
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			ServletInputStream inputStream = request.getInputStream();
-			String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-
-			Map<String, Object> requestBody = objectMapper.readValue(messageBody, Map.class);
-
-			int id = (Integer)requestBody.get("id");
-			String nickname = (String)requestBody.get("nickname");
+			int id = (Integer)nicknameMap.get("id");
+			String nickname = (String)nicknameMap.get("nickname");
 
 			return new ResponseEntity<>(userService.checkDupNickname(nickname, id), HttpStatus.OK);
 		} catch (Exception e){
@@ -122,15 +116,10 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "이메일 중복체크", notes = "이메일 중복체크 API")
 	@PostMapping("/email/duplicate")
-	public ResponseEntity<Boolean> checkDupEmail(HttpServletRequest request) {
+	public ResponseEntity<Boolean> checkDupEmail(@ApiParam(name = "이메일, id") @RequestBody Map<String, Object> emailMap) {
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			ServletInputStream inputStream = request.getInputStream();
-			String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-
-			Map<String, Object> requestBody = objectMapper.readValue(messageBody, Map.class);
-			int id = (Integer)requestBody.get("id");
-			String email = (String)requestBody.get("email");
+			int id = (Integer)emailMap.get("id");
+			String email = (String)emailMap.get("email");
 
 			return new ResponseEntity<>(userService.checkDupEmail(email, id), HttpStatus.OK);
 		} catch (Exception e) {
