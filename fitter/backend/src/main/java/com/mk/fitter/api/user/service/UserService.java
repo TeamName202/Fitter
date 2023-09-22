@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mk.fitter.api.common.oauth.VO.UserResponseVO;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 
 public interface UserService {
-	UserDto saveUserInfo(UserDto user, MultipartFile file) throws Exception;
+	UserDto saveUserInfo(UserResponseVO user, MultipartFile file) throws Exception;
 	UserDto getUserInfo(String accessToken) throws Exception;
+	Boolean checkDupNickname(String nickname, String accessToken) throws Exception;
+	Boolean checkDupNickname(int id, String nickname) throws Exception;
 	UserDto modifyBox(int boxId, String accessToken) throws Exception;
 	UserDto modifyEmail(String email, String accessToken) throws Exception;
 	UserDto modifyNickname(String nickname, String accessToken) throws Exception;

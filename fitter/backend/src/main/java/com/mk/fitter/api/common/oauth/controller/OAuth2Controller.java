@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,6 +30,7 @@ import com.mk.fitter.api.user.service.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,7 +47,7 @@ public class OAuth2Controller {
 	private final JwtService jwtService;
 	private final String BEARER = "Bearer ";
 
-	@GetMapping("/kakao")
+	@GetMapping(value = "/kakao", produces="application/json;charset=UTF-8")
 	@ApiOperation(value = "카카오 로그인 api", notes = "카카오 로그인 api")
 	public ResponseEntity<UserResponseVO> kakaoCallback(
 		HttpServletRequest request, HttpServletResponse response,
@@ -82,12 +84,25 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "회원가입 시 회원정보 저장", notes = "회원정보 저장")
 	@PostMapping(path = "/user-info", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file") MultipartFile file, @ApiParam(value = "회원정보") @RequestBody UserDto user) {
+	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file") MultipartFile file, @ApiParam(value = "회원정보") @RequestPart(name = "user") UserResponseVO user) {
 		try {
 			UserDto newUser = userService.saveUserInfo(user, file);
 			return new ResponseEntity<>(newUser, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("saveUserInfo :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크")
+	@GetMapping("/nickname/duplicate/{nickname}")
+	public ResponseEntity<Boolean> checkDupNickname(@ApiParam(value = "중복체크용 닉네임") @PathVariable(name = "nickname") String nickname, HttpServletRequest request) {
+		try {
+			//userService.checkDupNickname()
+
+			return null;
+		} catch (Exception e){
+			log.error("checkDupNickname :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
