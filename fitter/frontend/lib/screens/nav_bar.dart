@@ -1,10 +1,5 @@
 import 'package:fitter/screens/daily_calendar.dart';
 import 'package:fitter/screens/login_screen.dart';
-<<<<<<< HEAD
-import 'package:fitter/screens/record/record_screen.dart';
-import 'package:fitter/screens/sign_up/additional_box.dart';
-=======
->>>>>>> 6690e90267e3a7917ec17a3d92312b06dff4a580
 import 'package:fitter/screens/sign_up/additional_info.dart';
 import 'package:flutter/material.dart';
 

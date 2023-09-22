@@ -12,7 +12,7 @@ class PrRecordScreen extends StatefulWidget {
 class _PrRecordScreenState extends State<PrRecordScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  List<String> prCategory = <String>[];
+  List<String> prCategory = [];
   List<dynamic> prLists = [];
 
   Future onCallServer() async {
@@ -25,6 +25,15 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
       // 성공적으로 응답을 받았을 때의 처리
       print('Response data: ${response.body}');
       prLists = jsonDecode(response.body);
+      for (var prList in prLists) {
+        if (prList["type"] != "None") {
+          if (prList["type"] != "N/A") {
+            prCategory.add(prList['type'].toString());
+          }
+        }
+      }
+      print("최종 운동 목록 : ");
+      print(prCategory);
     } else {
       // 오류 처리
       print('Request failed with status: ${response.statusCode}');
@@ -33,25 +42,30 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
   }
 
   Future onMakeList() async {
-    for (var prList in prLists) {
-      if (prList["type"] != "None") {
-        if (prList["type"] != "N/A") {
-          prCategory.add(prList['type'].toString());
-        }
-      }
-    }
-    print("최종 운동 목록 : ");
-    print(prCategory);
+    dropdownValue = prCategory.first;
+    print("dropdownValue :$dropdownValue ");
   }
 
   Future onAll() async {
     await onCallServer();
     await onMakeList();
+    setState(() {});
     print('데이터 받기 완료');
   }
 
+  List<String> prList = <String>[
+    'Cleans',
+    'Deadlifts',
+    'Jerks',
+    'Olympic Lifts',
+    'Presses',
+    'Squats',
+    'Snatches',
+    'Other'
+  ];
+
   // DropdownButton에서 선택된 요소를 저장하는 변수
-  String selectedPR = 'Abdominal';
+  String selectedPR = 'Cleans';
 
   String dropdownValue = '';
 
@@ -167,9 +181,12 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
     super.initState();
     // print("스택 오버플로우 : $categoryList");
     print("위쪽 테스트");
+    // onCallServer();
+
     onAll();
     print("아래쪽 테스트");
-    dropdownValue = prCategory.first;
+    print(prCategory);
+
     print("드롭다운 선택 된거 : $dropdownValue");
     // print(dropdownValue);
     // prLists = ApiService.getPrList(dropdownValue);
@@ -177,6 +194,7 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
     // print(prLists);
     // _fetchPrCategories();
 
+    // dropdownValue = prList.first;
     currentList = Cleans;
   }
 
@@ -196,33 +214,33 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
     setState(() {
       selectedPR = newValue;
       // prLists = ApiService.getPrList(dropdownValue);
-      _scrollController.jumpTo(0.0);
+      // _scrollController.jumpTo(0.0);
       // 선택된 항목에 따라 다른 리스트를 보여줍니다.
-      // if (selectedPR == 'Cleans') {
-      //   currentList = Cleans;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Deadlifts') {
-      //   currentList = Deadlifts;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Jerks') {
-      //   currentList = Jerks;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Olympic Lifts') {
-      //   currentList = OlympicLifts;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Presses') {
-      //   currentList = Presses;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Squats') {
-      //   currentList = Squats;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Snatches') {
-      //   currentList = Snatches;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // } else if (selectedPR == 'Other') {
-      //   currentList = Other;
-      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      // }
+      if (selectedPR == 'Cleans') {
+        currentList = Cleans;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Deadlifts') {
+        currentList = Deadlifts;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Jerks') {
+        currentList = Jerks;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Olympic Lifts') {
+        currentList = OlympicLifts;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Presses') {
+        currentList = Presses;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Squats') {
+        currentList = Squats;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Snatches') {
+        currentList = Snatches;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      } else if (selectedPR == 'Other') {
+        currentList = Other;
+        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      }
     });
   }
 
@@ -232,7 +250,7 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // const Text('pr 레코드'),
+          const Text('pr 레코드'),
           const SizedBox(
             height: 30,
           ),

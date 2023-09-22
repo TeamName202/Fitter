@@ -40,34 +40,33 @@ class _AdditionalBoxState extends State<AdditionalBox> {
   late List<dynamic> boxList;
   List<String> boxLists = [];
 
+// 서버에서 박스 정보 불러오기
   Future onCallServer() async {
-// HTTP 요청 보내기
     var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/box/list');
     var response = await http.get(url);
 
-// 응답 처리
     if (response.statusCode == 200) {
-      // 성공적으로 응답을 받았을 때의 처리
-      print('Response data: ${response.body}');
       boxList = jsonDecode(response.body);
     } else {
-      // 오류 처리
       print('Request failed with status: ${response.statusCode}');
       print('Error message: ${response.body}');
     }
   }
 
+// 서버에서 받은 리스트를 쓸 수 있는 값으로 형변환
   Future onMakeList() async {
     for (var box in boxList) {
       boxLists.add(box['boxName'].toString());
     }
   }
 
+// 동기처리 될 수 있도록 처리
   Future onAll() async {
     await onCallServer();
     await onMakeList();
   }
 
+// 검색 결과를 띄우는 함수
   void getSearchResults(String query) {
     // onMakeList();
     print(boxLists);
@@ -78,16 +77,19 @@ class _AdditionalBoxState extends State<AdditionalBox> {
     });
   }
 
+// 검색 결과 리스트 초기화
   void outSearchResults() {
     setState(() {
       searchResults = [];
     });
   }
 
+// 바뀐 state 업데이트 위한 빈 set state
   void getKeyboard() {
     setState(() {});
   }
 
+// 유효하게 등록된 box인지 확인
   void checkRightBox(String query) {
     setState(() {
       if (boxLists.contains(query)) {
@@ -97,6 +99,9 @@ class _AdditionalBoxState extends State<AdditionalBox> {
       }
     });
   }
+
+// 정보를 백엔드로 보내서 저장한다.
+  void signUpEnd() {}
 
   @override
   Widget build(BuildContext context) {

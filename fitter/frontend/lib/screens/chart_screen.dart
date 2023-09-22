@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ChartScreen extends StatefulWidget {
-  const ChartScreen({super.key});
+  final String workoutName;
+  const ChartScreen({super.key, required this.workoutName});
 
   @override
   State<ChartScreen> createState() => _ChartScreenState();
@@ -13,6 +17,39 @@ class ChartScreen extends StatefulWidget {
 
 class _ChartScreenState extends State<ChartScreen> {
   bool showChartLabel = false;
+  late SharedPreferences prefs;
+  late Map<String, dynamic> rawData;
+
+  @override
+  void initState() {
+    super.initState();
+    callServer();
+  }
+
+// 백엔드에서 레코드 받아오기
+  Future callServer() async {
+    prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('Authorization');
+
+    Map<String, String> headers = {
+      'Authorization': accessToken.toString(),
+    };
+
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/record/list/${widget.workoutName}');
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      print('Response data: ${response.body}');
+      rawData = jsonDecode(response.body);
+      getRecord(rawData);
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+      print('Error message: ${response.body}');
+    }
+  }
+
+  void getRecord(rawData) {}
 
   @override
   Widget build(BuildContext context) {
