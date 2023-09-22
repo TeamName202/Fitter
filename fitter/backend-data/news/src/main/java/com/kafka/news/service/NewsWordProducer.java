@@ -98,7 +98,7 @@ public class NewsWordProducer {
 
 	private void sendNewsData(KafkaTemplate<String, String> kafkaTemplate, String newsName, String type, String topic) {
 		String yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File csv = new File(path + "\\" + type + "\\" + newsName + yesterday + ".csv");
+		File csv = new File(path + "/" + type + "/" + newsName + yesterday + ".csv");
 
 		if (!csv.exists()){
 			logger.info("뉴스 파일이 존재하지 않습니다. {}", csv.getPath());
