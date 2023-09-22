@@ -27,4 +27,7 @@ public class ProfileImgDto {
 
 	@Column(name = "file_path")
 	private String filePath;
+
+	@Column(name = "original_file_name")
+	private String origName;
 }

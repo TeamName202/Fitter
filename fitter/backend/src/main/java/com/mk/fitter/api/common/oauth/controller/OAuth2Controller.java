@@ -10,14 +10,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.VO.UserResponseVO;
 import com.mk.fitter.api.common.oauth.service.OAuth2Service;
 import com.mk.fitter.api.common.service.JwtService;
+import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
+import com.mk.fitter.api.file.service.FileServiceImpl;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserService;
+import com.mk.fitter.api.user.service.UserServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +38,8 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuth2Controller {
 
 	private final OAuth2Service oAuth2Service;
-	private final UserService userService;
+	private final UserServiceImpl userService;
+	private final FileServiceImpl fileService;
 	private final JwtService jwtService;
 	private final String BEARER = "Bearer ";
 
@@ -74,11 +80,10 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "회원가입 시 회원정보 저장", notes = "회원정보 저장")
 	@PostMapping("/user-info")
-	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "회원정보") @RequestBody UserDto newUser) {
+	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestParam MultipartFile file, @ApiParam(value = "회원정보") @RequestBody UserDto user) {
 		try {
-			newUser.setRole(Role.USER);
-			UserDto user = userService.saveUserInfo(newUser);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			UserDto newUser = userService.saveUserInfo(user, file);
+			return new ResponseEntity<>(newUser, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("saveUserInfo :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

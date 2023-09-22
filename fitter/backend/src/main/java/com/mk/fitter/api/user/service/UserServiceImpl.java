@@ -13,10 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mk.fitter.api.box.repository.BoxRepository;
 import com.mk.fitter.api.box.repository.dto.BoxDto;
+import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.service.JwtService;
+import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
+import com.mk.fitter.api.file.service.FileServiceImpl;
 import com.mk.fitter.api.user.repository.UserRepository;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 
@@ -36,9 +40,14 @@ public class UserServiceImpl implements UserService {
 	private final BoxRepository boxRepository;
 	private final JwtService jwtService;
 
+	private final FileServiceImpl fileService;
+
 	private final RestTemplate restTemplate = new RestTemplate();
 
-	public UserDto saveUserInfo(UserDto user) throws Exception {
+	public UserDto saveUserInfo(UserDto user, MultipartFile file) throws Exception {
+		ProfileImgDto profile = fileService.saveProfileImg(file);
+		user.setProfileImgDto(profile);
+		user.setRole(Role.USER);
 		return userRepository.save(user);
 	}
 
@@ -111,6 +120,51 @@ public class UserServiceImpl implements UserService {
 		user.setIsTrainer(isTrainer);
 		userRepository.save(user);
 		return user;
+	}
+
+	@Override
+	public UserDto modifyUserProfileImg(MultipartFile file, String accessToken) throws Exception {
+		// 사용자 id 가져오기
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		// 사용자 dto 받아오기
+		UserDto user = userRepository.findById(uid).orElseThrow(()->new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		// 기존 프로필 사진 서버/db에서 삭제
+		ProfileImgDto prevProfile = user.getProfileImgDto();
+		if(prevProfile != null) {
+			fileService.deleteProfileImg(prevProfile);
+		}
+
+		// 새 프로필 사진 서버/db에 저장
+		ProfileImgDto newProfile = fileService.saveProfileImg(file);
+
+		// 새 프로필 사진 userDto에 저장
+		user.setProfileImgDto(newProfile);
+
+		return userRepository.save(user);
+	}
+
+	@Override
+	public UserDto deleteUserprofileImg(String accessToken) throws Exception {
+		// 사용자 id 가져오기
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		// 사용자 dto 받아오기
+		UserDto user = userRepository.findById(uid).orElseThrow(()->new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		// 사용자 프로필dto
+		ProfileImgDto profile = user.getProfileImgDto();
+
+		// 프로필 사진 서버/db에서 삭제
+		if(profile != null) {
+			fileService.deleteProfileImg(profile);
+		}
+
+		user.setProfileImgDto(null);
+		return userRepository.save(user);
 	}
 
 	// 카카오랑 연결 끊기 구현

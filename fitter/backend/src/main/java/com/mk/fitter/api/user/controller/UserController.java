@@ -8,11 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserServiceImpl;
@@ -126,7 +129,30 @@ public class UserController {
 		}
 	}
 
-	// TODO : 카카오랑 연결 끊기 구현하기
+	@PostMapping("/profile")
+	@ApiOperation(value = "프로필 사진 수정", notes = "프로필 사진 수정하는 API")
+	public ResponseEntity<UserDto> saveUserProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
+		try {
+			UserDto userDto = userService.modifyUserProfileImg(file, accessToken);
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("userProfileImg :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@DeleteMapping("/profile")
+	@ApiOperation(value = "프로필 사진 삭제", notes = "프로필 사진 삭제하는 API")
+	public ResponseEntity<UserDto> deleteUserProfileImg(@RequestHeader(name = "Authorization") String accessToken) {
+		try {
+			UserDto userDto = userService.deleteUserprofileImg(accessToken);
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("deleteUserProfileImg :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@DeleteMapping
 	@ApiOperation(value = "유저 탈퇴", notes = "회원탈퇴를 하는 API")
 	public ResponseEntity<String> deleteUser(@RequestHeader(name = "Authorization") String accessToken) {
