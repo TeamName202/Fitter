@@ -130,7 +130,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, path = "/profile")
+	@PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ApiOperation(value = "프로필 사진 수정", notes = "프로필 사진 수정하는 API")
 	public ResponseEntity<UserDto> saveUserProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
 		try {
