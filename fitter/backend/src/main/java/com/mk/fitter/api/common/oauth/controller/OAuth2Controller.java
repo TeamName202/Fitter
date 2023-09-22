@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,8 +81,8 @@ public class OAuth2Controller {
 	}
 
 	@ApiOperation(value = "회원가입 시 회원정보 저장", notes = "회원정보 저장")
-	@PostMapping("/user-info")
-	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestParam MultipartFile file, @ApiParam(value = "회원정보") @RequestBody UserDto user) {
+	@PostMapping(path = "/user-info", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file") MultipartFile file, @ApiParam(value = "회원정보") @RequestBody UserDto user) {
 		try {
 			UserDto newUser = userService.saveUserInfo(user, file);
 			return new ResponseEntity<>(newUser, HttpStatus.OK);
