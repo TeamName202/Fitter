@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -129,7 +130,7 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(consumes = "multipart/form‑data", value = "/profile")
+	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, path = "/profile")
 	@ApiOperation(value = "프로필 사진 수정", notes = "프로필 사진 수정하는 API")
 	public ResponseEntity<UserDto> saveUserProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
 		try {
