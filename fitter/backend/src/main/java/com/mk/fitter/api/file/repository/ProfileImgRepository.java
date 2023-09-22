@@ -9,5 +9,4 @@ import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
 @Repository
 @DynamicInsert
 public interface ProfileImgRepository extends JpaRepository<ProfileImgDto, Integer> {
-
 }

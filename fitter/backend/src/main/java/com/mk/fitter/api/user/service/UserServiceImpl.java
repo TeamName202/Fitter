@@ -142,7 +142,6 @@ public class UserServiceImpl implements UserService {
 
 		// 새 프로필 사진 userDto에 저장
 		user.setProfileImgDto(newProfile);
-
 		return userRepository.save(user);
 	}
 
@@ -158,12 +157,12 @@ public class UserServiceImpl implements UserService {
 		// 사용자 프로필dto
 		ProfileImgDto profile = user.getProfileImgDto();
 
+		user.setProfileImgDto(null);
+
 		// 프로필 사진 서버/db에서 삭제
 		if(profile != null) {
 			fileService.deleteProfileImg(profile);
 		}
-
-		user.setProfileImgDto(null);
 		return userRepository.save(user);
 	}
 
