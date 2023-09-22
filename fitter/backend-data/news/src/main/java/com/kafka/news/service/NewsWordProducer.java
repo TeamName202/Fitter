@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,9 @@ public class NewsWordProducer {
 
 	private final HealthWordRepository healthWordRepository;
 	private final SportsWordRepository sportsWordRepository;
-	private final String currentPath = System.getProperty("user.dir");
+
+	@Value("${spring.crawler.csv.folder}")
+	private String path;
 
 	Logger logger = LoggerFactory.getLogger(NewsWordProducer.class);
 
@@ -95,8 +98,7 @@ public class NewsWordProducer {
 
 	private void sendNewsData(KafkaTemplate<String, String> kafkaTemplate, String newsName, String type, String topic) {
 		String yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		String path = currentPath.replace("backend-data\\news", "crawler\\news\\output\\" + type + "\\");
-		File csv = new File(path + newsName + yesterday + ".csv");
+		File csv = new File(path + "\\" + type + "\\" + newsName + yesterday + ".csv");
 
 		if (!csv.exists()){
 			logger.info("뉴스 파일이 존재하지 않습니다. {}", csv.getPath());
