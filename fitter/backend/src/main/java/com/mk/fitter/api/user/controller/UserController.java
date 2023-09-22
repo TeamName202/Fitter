@@ -1,11 +1,16 @@
 package com.mk.fitter.api.user.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +24,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,6 +66,18 @@ public class UserController {
 		}
 	}
 
+	@PostMapping("/email/duplicate")
+	@ApiOperation(value = "유저 이메일 중복체크", notes = "유저 이메일 중복체크 API")
+	public ResponseEntity<Boolean> checkDupEmail(@ApiParam(value = "유저 이메일") @RequestBody Map<String, String> emailMap,
+		@ApiParam(value = "access token") @RequestHeader(name = "Authorization") String accessToken) {
+		try {
+			return new ResponseEntity<>(userService.checkDupEmail(emailMap.get("email"), accessToken), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("checkDupEmail :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PutMapping("/email")
 	@ApiOperation(value = "유저 이메일 수정", notes = "유저의 이메일을 수정하는 API")
 	public ResponseEntity<UserDto> modifyEmail(@RequestBody Map<String, String> emailMap,
@@ -66,7 +85,21 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.modifyEmail(emailMap.get("email"), accessToken), HttpStatus.OK);
 		} catch (Exception e) {
-			log.error("modifyEmail :: {}",e.getMessage());
+			log.error("modifyEmail :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/nickname/duplicate")
+	@ApiOperation(value = "유저 닉네임 중복 체크", notes = "유저 닉네임 중복 체크하는 API")
+	public ResponseEntity<Boolean> checkDupNickname(
+		@ApiParam(value = "유저 닉네임") @RequestBody Map<String, String> nicknameMap,
+		@ApiParam(value = "access token") @RequestHeader(name = "Authorization") String accessToken) {
+		try {
+			return new ResponseEntity<>(userService.checkDupNickname(nicknameMap.get("nickname"), accessToken),
+				HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("checkDupNickname :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -76,9 +109,10 @@ public class UserController {
 	public ResponseEntity<UserDto> modifyNickname(@RequestBody Map<String, String> nicknameMap,
 		@RequestHeader(name = "Authorization") String accessToken) {
 		try {
-			return new ResponseEntity<>(userService.modifyNickname(nicknameMap.get("nickname"), accessToken), HttpStatus.OK);
+			return new ResponseEntity<>(userService.modifyNickname(nicknameMap.get("nickname"), accessToken),
+				HttpStatus.OK);
 		} catch (Exception e) {
-			log.error("modifyNickname :: {}",e.getMessage());
+			log.error("modifyNickname :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -133,7 +167,8 @@ public class UserController {
 
 	@PostMapping(path = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ApiOperation(value = "프로필 사진 수정", notes = "프로필 사진 수정하는 API")
-	public ResponseEntity<UserDto> saveUserProfileImg(@RequestPart("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
+	public ResponseEntity<UserDto> saveUserProfileImg(@RequestPart("file") MultipartFile file,
+		@RequestHeader(name = "Authorization") String accessToken) {
 		try {
 			log.info("프로필 수정 컨트롤러 시작!");
 			log.info("파일 : {}", file);

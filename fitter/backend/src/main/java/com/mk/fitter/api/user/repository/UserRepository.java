@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<UserDto, Integer> {
 	Optional<UserDto> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
 	Optional<UserDto> findByIdNotAndNickname(int id, String nickname);
+
+	Optional<UserDto> findByIdNotAndEmail(int id, String email);
 }

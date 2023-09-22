@@ -1,11 +1,16 @@
 package com.mk.fitter.api.common.oauth.controller;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.VO.UserResponseVO;
 import com.mk.fitter.api.common.oauth.service.OAuth2Service;
@@ -94,15 +100,41 @@ public class OAuth2Controller {
 		}
 	}
 
-	@ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크")
-	@GetMapping("/nickname/duplicate/{nickname}")
-	public ResponseEntity<Boolean> checkDupNickname(@ApiParam(value = "중복체크용 닉네임") @PathVariable(name = "nickname") String nickname, HttpServletRequest request) {
+	@ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크 API")
+	@PostMapping("/nickname/duplicate")
+	public ResponseEntity<Boolean> checkDupNickname(HttpServletRequest request) {
 		try {
-			//userService.checkDupNickname()
+			ObjectMapper objectMapper = new ObjectMapper();
+			ServletInputStream inputStream = request.getInputStream();
+			String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
 
-			return null;
+			Map<String, Object> requestBody = objectMapper.readValue(messageBody, Map.class);
+
+			int id = (Integer)requestBody.get("id");
+			String nickname = (String)requestBody.get("nickname");
+
+			return new ResponseEntity<>(userService.checkDupNickname(nickname, id), HttpStatus.OK);
 		} catch (Exception e){
 			log.error("checkDupNickname :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@ApiOperation(value = "이메일 중복체크", notes = "이메일 중복체크 API")
+	@PostMapping("/email/duplicate")
+	public ResponseEntity<Boolean> checkDupEmail(HttpServletRequest request) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			ServletInputStream inputStream = request.getInputStream();
+			String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+
+			Map<String, Object> requestBody = objectMapper.readValue(messageBody, Map.class);
+			int id = (Integer)requestBody.get("id");
+			String email = (String)requestBody.get("email");
+
+			return new ResponseEntity<>(userService.checkDupEmail(email, id), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("checkDupEmail :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

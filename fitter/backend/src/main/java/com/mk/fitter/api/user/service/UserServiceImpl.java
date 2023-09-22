@@ -81,23 +81,6 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findById(uid).orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 	}
 
-	// access token으로 닉네임 중복체크
-	@Override
-	public Boolean checkDupNickname(String nickname, String accessToken) throws Exception {
-		Integer uid = jwtService.extractUID(accessToken)
-			.orElseThrow(() -> new Exception("checkDupNickname :: 존재하지 않는 사용자입니다."));
-
-		UserDto userDto = userRepository.findByIdNotAndNickname(uid, nickname).orElseGet(() -> null);
-		return userDto == null;
-	}
-
-	// id로 닉네임 중복체크
-	@Override
-	public Boolean checkDupNickname(int id, String nickname) throws Exception {
-		UserDto userDto = userRepository.findByIdNotAndNickname(id, nickname).orElseGet(() -> null);
-		return userDto == null;
-	}
-
 	@Override
 	public UserDto modifyBox(int boxId, String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
@@ -111,6 +94,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Boolean checkDupEmail(String email, int id) throws Exception {
+		UserDto userDto = userRepository.findByIdNotAndEmail(id, email).orElseGet(null);
+		return userDto == null;
+	}
+
+	@Override
+	public Boolean checkDupEmail(String email, String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findByIdNotAndEmail(uid, email).orElseGet(null);
+		return userDto == null;
+	}
+
+	@Override
 	public UserDto modifyEmail(String email, String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
 			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
@@ -118,6 +116,23 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(email);
 		userRepository.save(user);
 		return user;
+	}
+
+	// access token으로 닉네임 중복체크
+	@Override
+	public Boolean checkDupNickname(String nickname, String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("checkDupNickname :: 존재하지 않는 사용자입니다."));
+
+		UserDto userDto = userRepository.findByIdNotAndNickname(uid, nickname).orElseGet(() -> null);
+		return userDto == null;
+	}
+
+	// id로 닉네임 중복체크
+	@Override
+	public Boolean checkDupNickname(String nickname, int id) throws Exception {
+		UserDto userDto = userRepository.findByIdNotAndNickname(id, nickname).orElseGet(() -> null);
+		return userDto == null;
 	}
 
 	@Override
