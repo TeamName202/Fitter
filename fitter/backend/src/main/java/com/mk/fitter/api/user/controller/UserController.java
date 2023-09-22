@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -130,9 +131,9 @@ public class UserController {
 		}
 	}
 
-	@PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(path = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ApiOperation(value = "프로필 사진 수정", notes = "프로필 사진 수정하는 API")
-	public ResponseEntity<UserDto> saveUserProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
+	public ResponseEntity<UserDto> saveUserProfileImg(@RequestPart("file") MultipartFile file, @RequestHeader(name = "Authorization") String accessToken) {
 		try {
 			UserDto userDto = userService.modifyUserProfileImg(file, accessToken);
 			return new ResponseEntity<>(userDto, HttpStatus.OK);
