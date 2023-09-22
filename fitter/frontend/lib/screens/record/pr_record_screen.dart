@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PrRecordScreen extends StatefulWidget {
   const PrRecordScreen({super.key});
@@ -10,20 +12,51 @@ class PrRecordScreen extends StatefulWidget {
 class _PrRecordScreenState extends State<PrRecordScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  List<String> prList = <String>[
-    'Cleans',
-    'Deadlifts',
-    'Jerks',
-    'Olympic Lifts',
-    'Presses',
-    'Squats',
-    'Snatches',
-    'Other'
-  ];
+  List<String> prCategory = <String>[];
+  List<dynamic> prLists = [];
+
+  Future onCallServer() async {
+    // HTTP 요청 보내기
+    var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/record/category');
+    var response = await http.get(url);
+
+// 응답 처리
+    if (response.statusCode == 200) {
+      // 성공적으로 응답을 받았을 때의 처리
+      print('Response data: ${response.body}');
+      prLists = jsonDecode(response.body);
+    } else {
+      // 오류 처리
+      print('Request failed with status: ${response.statusCode}');
+      print('Error message: ${response.body}');
+    }
+  }
+
+  Future onMakeList() async {
+    for (var prList in prLists) {
+      if (prList["type"] != "None") {
+        if (prList["type"] != "N/A") {
+          prCategory.add(prList['type'].toString());
+        }
+      }
+    }
+    print("최종 운동 목록 : ");
+    print(prCategory);
+  }
+
+  Future onAll() async {
+    await onCallServer();
+    await onMakeList();
+    print('데이터 받기 완료');
+  }
+
   // DropdownButton에서 선택된 요소를 저장하는 변수
-  String selectedPR = 'Cleans';
+  String selectedPR = 'Abdominal';
 
   String dropdownValue = '';
+
+  // 개인 pr List 싹 다 받아오는거. 여기에서 카테고리별로 나눠줘야 됨.
+  // late Future<List<PrListModel>> prLists;
 
   // 선택된 요소에 따라 보여줄 리스트
   List<Map<String, dynamic>> Cleans = [
@@ -132,41 +165,64 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = prList.first;
+    // print("스택 오버플로우 : $categoryList");
+    print("위쪽 테스트");
+    onAll();
+    print("아래쪽 테스트");
+    dropdownValue = prCategory.first;
+    print("드롭다운 선택 된거 : $dropdownValue");
+    // print(dropdownValue);
+    // prLists = ApiService.getPrList(dropdownValue);
+    print("인잇에서 $prCategory");
+    // print(prLists);
+    // _fetchPrCategories();
+
     currentList = Cleans;
   }
+
+  // Future<void> _fetchPrCategories() async {
+  //   try{
+  //     final prList = await ApiService.getPrList(selectedPR); // 선택된 항목에 따라 데이터 가져오기
+  //   setState(() {
+  //     currentList = prList;
+  //   });
+  //   } catch(e) {
+  //     print('Error fetching PR list: $e');
+  //   }
+  // }
 
   // DropdownButton에서 선택된 항목이 변경되었을 때 호출되는 함수
   void onDropdownChanged(String newValue) {
     setState(() {
       selectedPR = newValue;
-
+      // prLists = ApiService.getPrList(dropdownValue);
+      _scrollController.jumpTo(0.0);
       // 선택된 항목에 따라 다른 리스트를 보여줍니다.
-      if (selectedPR == 'Cleans') {
-        currentList = Cleans;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Deadlifts') {
-        currentList = Deadlifts;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Jerks') {
-        currentList = Jerks;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Olympic Lifts') {
-        currentList = OlympicLifts;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Presses') {
-        currentList = Presses;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Squats') {
-        currentList = Squats;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Snatches') {
-        currentList = Snatches;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      } else if (selectedPR == 'Other') {
-        currentList = Other;
-        _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
-      }
+      // if (selectedPR == 'Cleans') {
+      //   currentList = Cleans;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Deadlifts') {
+      //   currentList = Deadlifts;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Jerks') {
+      //   currentList = Jerks;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Olympic Lifts') {
+      //   currentList = OlympicLifts;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Presses') {
+      //   currentList = Presses;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Squats') {
+      //   currentList = Squats;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Snatches') {
+      //   currentList = Snatches;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // } else if (selectedPR == 'Other') {
+      //   currentList = Other;
+      //   _scrollController.jumpTo(0.0); // 스크롤 제일 위로 올리는거
+      // }
     });
   }
 
@@ -197,7 +253,7 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
                   textStyle: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 20), // dropbdown 되기 전에 보여지는 글자 두께
-                  initialSelection: prList.first,
+                  initialSelection: prCategory.first,
                   onSelected: (String? value) {
                     // This is called when the user selects an item.
                     setState(() {
@@ -206,7 +262,7 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
                     onDropdownChanged(dropdownValue);
                   },
                   dropdownMenuEntries:
-                      prList.map<DropdownMenuEntry<String>>((String value) {
+                      prCategory.map<DropdownMenuEntry<String>>((String value) {
                     return DropdownMenuEntry<String>(
                       value: value,
                       label: value,

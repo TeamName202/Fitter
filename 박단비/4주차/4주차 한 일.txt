@@ -1,0 +1,8 @@
+wod, pr 내 최고기록 리스트 보여주는 페이지 ui 완성
+- pr 페이지
+    - DropdownButton에서 선택한 요소에 해당하는 운동들 보여주기
+    - ListView.separated 이용해서 운동기록들 보여주기
+
+- wod 페이지
+    - ElevatedButton 2개 만들어서 각각 선택되면 true, false에 따라 디자인 변경
+    - 선택된 네임드 와드에 포함된 운동 기록들 ListView.separated로 보여주기
