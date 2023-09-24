@@ -76,6 +76,19 @@ public class WodController {
 
 	}
 
+	@GetMapping("/wod-record/list/test/{namedWodName}")
+	@ApiOperation(value = "네임드 와드 기록 리스트 조회", notes = "해당 네임드 와드의 기록들을 조회하는 API")
+	public ResponseEntity<List<WodRecordDto>> getNamedWodRecordListTest(@PathVariable String namedWodName) {
+		try {
+			List<WodRecordDto> namedWodList = wodService.getNamedWodList(28, namedWodName);
+			return new ResponseEntity<>(namedWodList, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 	@GetMapping("/list")
 	@ApiOperation(value = "네임드 와드 리스트 조회", notes = "네임드 와드 목록을 조회하는 API")
 	public ResponseEntity<List<WodDto>> getWodList() {
