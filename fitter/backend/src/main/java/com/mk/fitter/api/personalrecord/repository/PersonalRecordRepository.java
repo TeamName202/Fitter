@@ -1,6 +1,7 @@
 package com.mk.fitter.api.personalrecord.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,16 @@ public interface PersonalRecordRepository extends JpaRepository<PersonalRecordDt
 
 	boolean deleteById(int id);
 
-	@Query(value = "SELECT *FROM (SELECT *, RANK() over(PARTITION BY workout_id ORDER BY max_weight DESC) AS ranking FROM personal_record WHERE user_id = :userId) AS ranked_records WHERE ranking = 1;", nativeQuery = true)
-	List<PersonalRecordDto> findRankByUserDto_Id(@Param("userId") int userId);
+	@Query(value = "SELECT workout.*, ranked_records.*\n" +
+		"FROM workout\n" +
+		"LEFT OUTER JOIN (\n" +
+		"    SELECT pr.id as pr_id, pr.max_weight, pr.workout_id, RANK() OVER (PARTITION BY pr.workout_id ORDER BY pr.max_weight DESC) AS ranking\n"
+		+
+		"    FROM personal_record pr\n" +
+		"    WHERE pr.user_id = :userId\n" +
+		") AS ranked_records ON workout.id = ranked_records.workout_id\n" +
+		"where ranking = 1 or ranking is null;", nativeQuery = true)
+	List<Map<String, String>> findRankByUserDto_Id(@Param("userId") int userId);
 
 	List<PersonalRecordDto> findByUserDto_IdAndWorkoutDto_Name(int userId, String workoutName);
 

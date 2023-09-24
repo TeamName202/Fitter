@@ -2,6 +2,7 @@ package com.mk.fitter.api.personalrecord.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,7 @@ public class PersonalRecordController {
 
 	@GetMapping("/list/rank")
 	@ApiOperation(value = "각 운동별 최고 기록", notes = "각 운동별 최고 기록을 리스트로 제공하는 API")
-	public ResponseEntity<List<PersonalRecordDto>> getRankList(@RequestHeader String Authorization) {
+	public ResponseEntity<List<Map<String, String>>> getRankList(@RequestHeader String Authorization) {
 		try {
 			Optional<Integer> UID = jwtService.extractUID(Authorization);
 			return new ResponseEntity<>(personalRecordService.getRankList(UID.get()), HttpStatus.OK);
@@ -75,12 +76,11 @@ public class PersonalRecordController {
 			log.error(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@GetMapping("/list/rank/test")
 	@ApiOperation(value = "각 운동별 최고 기록", notes = "각 운동별 최고 기록을 리스트로 제공하는 API")
-	public ResponseEntity<List<PersonalRecordDto>> getRankListTest() {
+	public ResponseEntity<List<Map<String, String>>> getRankListTest() {
 		try {
 			return new ResponseEntity<>(personalRecordService.getRankList(28), HttpStatus.OK);
 		} catch (Exception e) {
