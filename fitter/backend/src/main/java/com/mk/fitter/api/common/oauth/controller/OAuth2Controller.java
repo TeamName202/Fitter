@@ -90,7 +90,7 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "회원가입 시 회원정보 저장", notes = "회원정보 저장")
 	@PostMapping(path = "/user-info", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file") MultipartFile file, @ApiParam(value = "회원정보") @RequestPart(name = "user") UserResponseVO user) {
+	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file", required = false) MultipartFile file, @ApiParam(value = "회원정보") @RequestPart(name = "user") UserResponseVO user) {
 		try {
 			UserDto newUser = userService.saveUserInfo(user, file);
 			return new ResponseEntity<>(newUser, HttpStatus.OK);
