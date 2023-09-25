@@ -58,6 +58,7 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 			.userDto(byId.get())
 			.workoutDto(findWorkout.get())
 			.maxWeight(requestBody.getMaxWeight())
+			.createDate(requestBody.getCreateDate())
 			.build();
 		PersonalRecordDto save = personalRecordRepository.save(record);
 		return true;
