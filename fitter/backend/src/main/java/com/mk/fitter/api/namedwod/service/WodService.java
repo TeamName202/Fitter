@@ -21,4 +21,6 @@ public interface WodService {
 	List<WodRecordDto> getNamedWodList(int userId, String namedWodName);
 
 	List<WodCategoryDto> getWodCategory();
+
+	List<WodDto> getWodListByCategory(String category);
 }

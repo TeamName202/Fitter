@@ -38,6 +38,11 @@ public class WodServiceImpl implements WodService {
 		return wodCategoryRepository.findAll();
 	}
 
+	@Override
+	public List<WodDto> getWodListByCategory(String category) {
+		return wodRepository.findByWodCategoryDto_Category(category);
+	}
+
 	public boolean createWodRecord(WodRecordDto wodRecordDto, int userId) throws Exception {
 		Optional<UserDto> byId = userRepository.findById(userId);
 		if (byId.isEmpty()) {

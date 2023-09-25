@@ -13,4 +13,6 @@ public interface WodRepository extends JpaRepository<WodDto, Integer> {
 	WodDto findByName(String name);
 
 	List<WodDto> findByIsNamedIs(boolean isNamed);
+
+	List<WodDto> findByWodCategoryDto_Category(String category);
 }
