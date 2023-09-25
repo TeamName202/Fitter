@@ -103,7 +103,7 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 
 	@Override
 	public List<WorkoutTypeDto> getWorkoutCategory() {
-		return workoutTypeRepository.findAll();
+		return workoutTypeRepository.findAllByOrderByType();
 	}
 
 	@Override
