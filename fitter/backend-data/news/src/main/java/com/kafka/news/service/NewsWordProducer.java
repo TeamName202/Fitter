@@ -46,8 +46,6 @@ public class NewsWordProducer {
 	@Scheduled(cron = "0 10 0 * * ?") // 정오 자동 실행
 	@Transactional
 	public void sendNewsKeyword(){
-		healthWordRepository.deleteAll();
-		sportsWordRepository.resetCountToZero();
 		sendSportsWord(kafkaSports);
 		sendHealthWord(kafkaHealth);
 	}
@@ -70,12 +68,36 @@ public class NewsWordProducer {
 		List<String> newsNames) {
 		ExecutorService executorService = Executors.newFixedThreadPool(newsNames.size());
 		List<CompletableFuture<Void>> futures = new ArrayList<>();
+		String yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
+
+		List<File> csvList = new ArrayList<>();
 		for (String newsName : newsNames) {
-			CompletableFuture<Void> future = CompletableFuture.runAsync(() ->
-				sendNewsData(kafkaTemplate, newsName, type, topic), executorService);
-			futures.add(future);
+			File csv = new File(path + "/" + type + "/" + newsName + yesterday + ".csv");
+			if (!csv.exists()) {
+				logger.info("뉴스 파일이 존재하지 않습니다. {}", csv.getPath());
+			} else {
+				csvList.add(csv);
+			}
 		}
+
+		if (csvList.size() > newsNames.size() - 2) { // 뉴스가 2개이상 누락되면 키워드 중단
+			if (type.equals("health")){
+				healthWordRepository.deleteAll();
+			} else if (type.equals("sports")){
+				sportsWordRepository.resetCountToZero();
+			}
+
+			for (File csv : csvList) {
+				CompletableFuture<Void> future = CompletableFuture.runAsync(() ->
+					sendNewsData(kafkaTemplate, csv, topic), executorService);
+				futures.add(future);
+			}
+		} else {
+			logger.info("존재하지 않는 뉴스 파일이 많아 키워드 추출을 중지합니다. 뉴스 개수 : {}", csvList.size());
+			return;
+		}
+
 
 		// 모든 작업이 완료될 때까지 대기
 		CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
@@ -96,15 +118,7 @@ public class NewsWordProducer {
 		}
 	}
 
-	private void sendNewsData(KafkaTemplate<String, String> kafkaTemplate, String newsName, String type, String topic) {
-		String yesterday = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File csv = new File(path + "/" + type + "/" + newsName + yesterday + ".csv");
-
-		if (!csv.exists()){
-			logger.info("뉴스 파일이 존재하지 않습니다. {}", csv.getPath());
-			return;
-		}
-
+	private void sendNewsData(KafkaTemplate<String, String> kafkaTemplate, File csv, String topic) {
 		try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
 			String line;
 			while ((line = br.readLine()) != null) {

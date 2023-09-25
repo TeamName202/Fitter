@@ -1,3 +1,5 @@
+import traceback
+
 import requests
 from datetime import date
 from bs4 import BeautifulSoup
@@ -10,8 +12,8 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
 }
 
+
 def get_news():
-    print("[중앙] 뉴스 목록 가져오는 중...")
     today = date.today()
     formatted_date = str(today).replace("-", "")
     formatted_date = int(formatted_date) - 1
@@ -33,7 +35,6 @@ def get_news():
             if formatted_date > newsDate:
                 return news_list
 
-            # title = title.replace("\n", "").replace("\t", "").replace("\r", "").lstrip().rstrip()
             news_list.append(
                 {
                     "url": temp.select_one(".headline a")["href"],
@@ -78,16 +79,19 @@ def save_to_csv(news_list):
 
 
 def start():
-    start_time = time.time()
-    news_list = get_news()
-    if not news_list:
-        print('---------------중앙 건강 뉴스 기사가 없습니다.--------------')
-        return
-    print("[중앙] 본문 가져오는 중...")
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.map(get_content, news_list)
-    save_to_csv(news_list)
-    end_time = time.time()
-    print("[중앙] 걸린시간 :", end_time - start_time)
-    print("[중앙] 가져온 기사 :", len(news_list))
-    print('---------------중앙 건강 뉴스 완료---------------')
+    try:
+        start_time = time.time()
+        news_list = get_news()
+        if not news_list:
+            print('---------------중앙 건강 뉴스 기사가 없습니다.--------------')
+            return
+        print("[중앙] 본문 가져오는 중...")
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(get_content, news_list)
+        save_to_csv(news_list)
+        end_time = time.time()
+        print("[중앙] 걸린시간 :", end_time - start_time)
+        print("[중앙] 가져온 기사 :", len(news_list))
+        print('---------------중앙 건강 뉴스 완료---------------')
+    except AttributeError as e:
+        traceback.print_exc()

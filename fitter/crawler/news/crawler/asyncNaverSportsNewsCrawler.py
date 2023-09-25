@@ -1,4 +1,6 @@
 import math
+import traceback
+
 import requests
 from datetime import date
 from bs4 import BeautifulSoup
@@ -63,16 +65,19 @@ def save_to_csv(news_list):
 
 
 def start():
-    start_time = time.time()
-    news_list = get_news()
-    if not news_list:
-        print('---------------네이버 스포츠 뉴스 기사가 없습니다.--------------')
-        return
-    print("[네이버] 본문 가져오는 중...")
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.map(get_content, news_list)
-    save_to_csv(news_list)
-    end_time = time.time()
-    print("[네이버] 걸린시간 :", end_time - start_time)
-    print("[네이버] 가져온 기사 :", len(news_list))
-    print('---------------네이버 스포츠 뉴스 완료---------------')
+    try:
+        start_time = time.time()
+        news_list = get_news()
+        if not news_list:
+            print('---------------네이버 스포츠 뉴스 기사가 없습니다.--------------')
+            return
+        print("[네이버] 본문 가져오는 중...")
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(get_content, news_list)
+        save_to_csv(news_list)
+        end_time = time.time()
+        print("[네이버] 걸린시간 :", end_time - start_time)
+        print("[네이버] 가져온 기사 :", len(news_list))
+        print('---------------네이버 스포츠 뉴스 완료---------------')
+    except AttributeError as e:
+        traceback.print_exc()

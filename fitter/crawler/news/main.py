@@ -60,9 +60,9 @@ def start_sports_crawler():
 
 def start_health_crawler():
     asyncNaverHealthNewsCrawler.start()
-    asyncJoongangHealthNewsCrawler.start()
     asyncChosunHealthNewsCrawler.start()
     asyncDongaHealthNewsCrawler.start()
+    asyncJoongangHealthNewsCrawler.start()
 
 
 def delete_old_files():  # 일주일 지난 크롤링 파일 삭제
