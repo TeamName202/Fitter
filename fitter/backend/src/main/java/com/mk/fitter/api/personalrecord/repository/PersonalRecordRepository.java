@@ -17,15 +17,15 @@ public interface PersonalRecordRepository extends JpaRepository<PersonalRecordDt
 
 	boolean deleteById(int id);
 
-	@Query(value = "SELECT workout.*, ranked_records.*\n" +
-		"FROM workout\n" +
-		"LEFT OUTER JOIN (\n" +
-		"    SELECT pr.id as pr_id, pr.max_weight, pr.workout_id, RANK() OVER (PARTITION BY pr.workout_id ORDER BY pr.max_weight DESC) AS ranking\n"
-		+
-		"    FROM personal_record pr\n" +
-		"    WHERE pr.user_id = :userId\n" +
-		") AS ranked_records ON workout.id = ranked_records.workout_id\n" +
-		"where ranking = 1 or ranking is null;", nativeQuery = true)
+	@Query(value = "SELECT w1.*, ranked_records.*\n"
+		+ "FROM (select w.id, w.workout_type_id, w.name, wt.type from workout w join workout_type wt on w.workout_type_id = wt.id) w1\n"
+		+ "LEFT OUTER JOIN (\n"
+		+ "SELECT pr.id as pr_id, pr.max_weight, pr.workout_id, RANK() OVER (PARTITION BY pr.workout_id ORDER BY pr.max_weight DESC) AS ranking\n"
+		+ "FROM personal_record pr\n"
+		+ "WHERE pr.user_id = :userId\n"
+		+ ") AS ranked_records ON w1.id = ranked_records.workout_id\n"
+		+ "where ranking = 1 or ranking is null\n"
+		+ "order by name;", nativeQuery = true)
 	List<Map<String, String>> findRankByUserDto_Id(@Param("userId") int userId);
 
 	List<PersonalRecordDto> findByUserDto_IdAndWorkoutDto_Name(int userId, String workoutName);
