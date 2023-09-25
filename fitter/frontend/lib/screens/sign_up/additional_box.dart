@@ -1,15 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/empty_box.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart' show MediaType;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdditionalBox extends StatefulWidget {
   final String nickname;
   final String email;
   final String profileImagePath;
+  final String profileImageName;
   final String age;
   final String gender;
   const AdditionalBox(
@@ -18,7 +25,8 @@ class AdditionalBox extends StatefulWidget {
       required this.email,
       required this.profileImagePath,
       required this.age,
-      required this.gender});
+      required this.gender,
+      required this.profileImageName});
 
   @override
   State<AdditionalBox> createState() => _AdditionalBoxState();
@@ -31,14 +39,19 @@ class _AdditionalBoxState extends State<AdditionalBox> {
     onAll();
   }
 
-  List<String> searchResults = [];
+  List<Map<String, dynamic>> searchResults = [];
   FocusNode focusNode = FocusNode();
   final editingController = TextEditingController();
   final scrollController = ScrollController();
   bool isScrolling = false;
   bool isRightBox = false;
   late List<dynamic> boxList;
-  List<String> boxLists = [];
+  List<Map<String, dynamic>> boxLists = [];
+  String? boxId;
+  bool signUpPassed = false;
+
+  final dio = Dio();
+  late SharedPreferences prefs;
 
 // 서버에서 박스 정보 불러오기
   Future onCallServer() async {
@@ -54,9 +67,14 @@ class _AdditionalBoxState extends State<AdditionalBox> {
   }
 
 // 서버에서 받은 리스트를 쓸 수 있는 값으로 형변환
-  Future onMakeList() async {
+  Future<void> onMakeList() async {
     for (var box in boxList) {
-      boxLists.add(box['boxName'].toString());
+      Map<String, dynamic> boxInfo = {
+        'boxName': box['boxName'].toString(),
+        'boxAddress': box['boxAddress'].toString(),
+        'id': box['id'].toString(),
+      };
+      boxLists.add(boxInfo);
     }
   }
 
@@ -68,11 +86,10 @@ class _AdditionalBoxState extends State<AdditionalBox> {
 
 // 검색 결과를 띄우는 함수
   void getSearchResults(String query) {
-    // onMakeList();
-    print(boxLists);
     setState(() {
       searchResults = boxLists
-          .where((result) => result.toLowerCase().contains(query.toLowerCase()))
+          .where((result) =>
+              result['boxName'].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -96,12 +113,96 @@ class _AdditionalBoxState extends State<AdditionalBox> {
         isRightBox = true;
       } else {
         isRightBox = false;
+        boxId = null;
       }
     });
   }
 
 // 정보를 백엔드로 보내서 저장한다.
-  void signUpEnd() {}
+  Future signUpEnd() async {
+    prefs = await SharedPreferences.getInstance();
+    final userID = prefs.getInt('userID');
+
+    Map<String, dynamic> requestBody = {
+      'id': userID,
+      'email': widget.email,
+      'ageRange': widget.age,
+      'gender': widget.gender == "남성" ? true : false,
+      'nickname': widget.nickname,
+      'boxId': boxId,
+    };
+
+    String requestBodyJson = jsonEncode(requestBody);
+
+    // final formData = FormData.fromMap(
+    //   {
+    //     "file": await MultipartFile.fromFile(
+    //       widget.profileImagePath,
+    //       filename: widget.profileImageName,
+    //     ),
+    //     "user": MultipartFile.fromString(
+    //       requestBodyJson,
+    //       contentType: MediaType.parse('application/json'),
+    //     ),
+    //   },
+    //   ListFormat.multiCompatible,
+    // );
+
+    FormData formData;
+
+    if (widget.profileImagePath == "false") {
+      print("사진없음");
+      formData = FormData.fromMap({
+        "user": MultipartFile.fromString(
+          requestBodyJson,
+          contentType: MediaType.parse('application/json'),
+        ),
+      });
+    } else {
+      formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          widget.profileImagePath,
+          filename: widget.profileImageName,
+        ),
+        "user": MultipartFile.fromString(
+          requestBodyJson,
+          contentType: MediaType.parse('application/json'),
+        ),
+      });
+    }
+
+    try {
+      // POST 요청을 보냅니다.
+      final response = await dio.post(
+        'http://j9d202.p.ssafy.io:8000/api/oauth2/user-info',
+        data: formData, // 바디
+        // options: options, // 헤더
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          signUpPassed = true;
+        });
+        print('응답 데이터: ${response.data} $signUpPassed');
+      } else {
+        print('오류 응답: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('요청 실패: $error');
+    }
+  }
+
+  Future goNext() async {
+    await signUpEnd();
+    if (signUpPassed) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const NavBarWidget(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,12 +295,16 @@ class _AdditionalBoxState extends State<AdditionalBox> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                editingController.text = searchResults[index];
+                                editingController.text =
+                                    searchResults[index]['boxName'];
+                                boxId = searchResults[index]['id'];
                                 outSearchResults();
                                 isRightBox = true;
                               },
                               child: ListTile(
-                                title: Text(searchResults[index]),
+                                title: Text(searchResults[index]['boxName']),
+                                subtitle:
+                                    Text(searchResults[index]['boxAddress']),
                               ),
                             );
                           },
@@ -219,7 +324,9 @@ class _AdditionalBoxState extends State<AdditionalBox> {
             ),
             const EmptyBox(boxSize: 1),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                goNext();
+              },
               child: ButtonMold(
                 btnText: isRightBox ? "다 음 으 로" : "건 너 뛰 기",
                 horizontalLength: 25,

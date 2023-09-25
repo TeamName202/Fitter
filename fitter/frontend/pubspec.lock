@@ -33,6 +33,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  bottom_picker:
+    dependency: "direct main"
+    description:
+      name: bottom_picker
+      sha256: "4a5bc9a0318cf2becb42e12765293b9aac958aa29512e8d63857def13aad33f0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  card_slider:
+    dependency: "direct main"
+    description:
+      name: card_slider
+      sha256: "3d8db347a7cb3ac3f30f4169d74282d0976f42de2615d4ca4c0038dd3e56646b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.1"
   characters:
     dependency: transitive
     description:
@@ -208,8 +232,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-<<<<<<< HEAD
-=======
   image_picker:
     dependency: "direct main"
     description:
@@ -274,7 +296,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
->>>>>>> 6690e90267e3a7917ec17a3d92312b06dff4a580
   intl:
     dependency: "direct main"
     description:

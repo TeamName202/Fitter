@@ -9,12 +9,14 @@ class AdditionalPrivacy extends StatefulWidget {
   final String nickname;
   final String email;
   final String profileImagePath;
+  final String profileImageName;
 
   const AdditionalPrivacy(
       {super.key,
       required this.nickname,
       required this.profileImagePath,
-      required this.email});
+      required this.email,
+      required this.profileImageName});
 
   @override
   State<AdditionalPrivacy> createState() => _AdditionalPrivacyState();
@@ -115,14 +117,15 @@ class _AdditionalPrivacyState extends State<AdditionalPrivacy> {
                               child: child,
                             );
                           },
-                          pageBuilder:
-                              (context, anmation, secondaryAnimation) =>
-                                  AdditionalBox(
-                                      nickname: widget.nickname,
-                                      email: widget.email,
-                                      profileImagePath: widget.profileImagePath,
-                                      age: age,
-                                      gender: gender),
+                          pageBuilder: (context, anmation,
+                                  secondaryAnimation) =>
+                              AdditionalBox(
+                                  nickname: widget.nickname,
+                                  email: widget.email,
+                                  profileImagePath: widget.profileImagePath,
+                                  age: age,
+                                  gender: gender,
+                                  profileImageName: widget.profileImageName),
                         ))
                     : setState(() {
                         isAll = false;

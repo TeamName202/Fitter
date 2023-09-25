@@ -1,6 +1,7 @@
+import 'package:fitter/screens/chart_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
-import 'package:fitter/screens/nav_bar.dart';
-import 'package:fitter/screens/record/record_screen.dart';
+import 'package:fitter/screens/pr_input_screen.dart';
+import 'package:fitter/screens/daily_keyword_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -24,8 +25,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       // home: BottomNavigationBarExampleApp(),
-      // home: RecordScreen(),
       home: LoginScreen(),
+      // home: ChartScreen(workoutName: "Clean"),
+      // home: RecordScreen(),
+      // home: DailyKeyword(),
     );
   }
 }

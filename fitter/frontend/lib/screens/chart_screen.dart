@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fitter/screens/pr_input_screen.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,7 @@ class _ChartScreenState extends State<ChartScreen> {
 
     if (response.statusCode == 200) {
       print('Response data: ${response.body}');
-      rawData = jsonDecode(response.body);
+      rawData = await jsonDecode(response.body);
       getRecord(rawData);
     } else {
       print('Request failed with status: ${response.statusCode}');
@@ -49,7 +50,17 @@ class _ChartScreenState extends State<ChartScreen> {
     }
   }
 
-  void getRecord(rawData) {}
+  void getRecord(rawData) {
+    for (var data in rawData) {
+      // Map<String, dynamic> boxInfo = {
+      //   'boxName': data['workoutDto'].toString(),
+      //   'boxAddress': data['boxAddress'].toString(),
+      //   'id': data['id'].toString(),
+      // };
+      // boxLists.add(boxInfo);
+      print("데이터~~~    ${rawData['workoutDto']['id']}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,16 +152,39 @@ class _ChartScreenState extends State<ChartScreen> {
                 ]),
               ),
             ),
-            const Flexible(
+            Flexible(
                 flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.add_box,
-                      color: Color(0xff0080ff),
-                      size: 50,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  var begin = const Offset(1.0, 0.0);
+                                  var end = Offset.zero;
+                                  var curve = Curves.ease;
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder:
+                                    (context, anmation, secondaryAnimation) =>
+                                        PRInputScreen(
+                                            workoutName: widget.workoutName)));
+                      },
+                      child: const Icon(
+                        Icons.add_box,
+                        color: Color(0xff0080ff),
+                        size: 50,
+                      ),
                     ),
                   ],
                 ))

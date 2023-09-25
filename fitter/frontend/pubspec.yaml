@@ -37,13 +37,15 @@ dependencies:
   cupertino_icons: ^1.0.2
   url_launcher: ^6.1.14
   table_calendar: ^3.0.8
-  http: ^1.1.0
   
   shared_preferences: ^2.2.1
   path_provider: ^2.1.1
   image_picker: ^1.0.4
   kakao_flutter_sdk: ^1.5.0
   syncfusion_flutter_charts: ^21.2.4
+  carousel_slider: ^4.2.1
+  card_slider: ^1.0.5
+  bottom_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:

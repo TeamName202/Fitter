@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:fitter/screens/sign_up/additional_privacy.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/empty_box.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdditionalInfo extends StatefulWidget {
   final String nickname;
@@ -19,9 +23,14 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
   final nicknameTextEditController = TextEditingController();
   final emailTextEditController = TextEditingController();
 
+  late SharedPreferences prefs;
+
   late String name;
+  String checkResponse = "";
+  String isUniqueNickname = "";
   File? _image;
-  late String imagePath;
+  String imagePath = "false";
+  String imageName = "default.jpg";
 
 //   Future<void> saveImageToFile(FileImage imageFile) async {
 //   final directory = await getApplicationDocumentsDirectory();
@@ -37,8 +46,36 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
       if (pickedImage != null) {
         _image = File(pickedImage.path);
         imagePath = pickedImage.path;
+        imageName = pickedImage.name;
       }
     });
+  }
+
+  Future checkNickname() async {
+    prefs = await SharedPreferences.getInstance();
+    var url =
+        Uri.parse('http://j9d202.p.ssafy.io:8000/api/user/nickname/duplicate');
+
+    final headers = {
+      'Authorization': prefs.getString('Authorization').toString(),
+      'Content-Type': 'application/json'
+    };
+    final body = jsonEncode({"닉네임": nicknameTextEditController.text});
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // 요청이 성공한 경우
+      setState(() {
+        print('요청 성공: ${response.body}');
+        isUniqueNickname = response.body;
+      });
+    } else {
+      // 요청이 실패한 경우
+      setState(() {
+        print(checkResponse = '요청 실패: ${response.statusCode}');
+      });
+    }
   }
 
   void getKeyboard() {
@@ -53,6 +90,16 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
 
   @override
   Widget build(BuildContext context) {
+    Widget messageWidget;
+
+    if (isUniqueNickname == "") {
+      messageWidget = const Text("닉네임 중복 확인을 해주세요.");
+    } else if (isUniqueNickname == "false") {
+      messageWidget = const Text("중복된 닉네임입니다.");
+    } else {
+      messageWidget = Text("반갑습니다 ${nicknameTextEditController.text}님!");
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -153,44 +200,48 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
                     focusNode: nicknameFocusNode,
                   ),
                 ),
-                const Flexible(
+                Flexible(
                   flex: 1,
-                  child: ButtonMold(
-                    btnText: " 중복 확인 ",
-                    verticalLength: 10,
-                    horizontalLength: 5,
-                    buttonColor: true,
+                  child: GestureDetector(
+                    onTap: checkNickname,
+                    child: const ButtonMold(
+                      btnText: " 중복 확인 ",
+                      verticalLength: 10,
+                      horizontalLength: 5,
+                      buttonColor: true,
+                    ),
                   ),
                 ),
               ],
             ),
+            messageWidget,
             const EmptyBox(boxSize: 1),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          var begin = const Offset(1.0, 0.0);
-                          var end = Offset.zero;
-                          var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                        pageBuilder: (context, anmation, secondaryAnimation) =>
-                            AdditionalPrivacy(
-                              nickname: nicknameTextEditController.text,
-                              email: emailTextEditController.text,
-                              profileImagePath: _image == null
-                                  ? imagePath
-                                  : "assets/images/default_user_img.jpg",
-                            )));
-                imagePath = "assets/images/default_user_img.jpg";
+                if (isUniqueNickname == "true") {
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                          pageBuilder:
+                              (context, anmation, secondaryAnimation) =>
+                                  AdditionalPrivacy(
+                                      nickname: nicknameTextEditController.text,
+                                      email: emailTextEditController.text,
+                                      profileImagePath: imagePath,
+                                      profileImageName: imageName)));
+                }
               },
               child: const ButtonMold(
                 btnText: "다 음 으 로",
