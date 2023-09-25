@@ -126,7 +126,7 @@ public class PersonalRecordServiceImpl implements PersonalRecordService {
 		if (byName.isEmpty()) {
 			throw new Exception("존재하지 않는 유저입니다.");
 		}
-		return personalRecordRepository.findByUserDto_IdAndWorkoutDto_Name(
+		return personalRecordRepository.findByUserDto_IdAndWorkoutDto_NameOrderByCreateDateDesc(
 			userId, workoutName);
 	}
 }

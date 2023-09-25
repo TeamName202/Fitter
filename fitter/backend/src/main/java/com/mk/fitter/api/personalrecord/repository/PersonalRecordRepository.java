@@ -28,6 +28,6 @@ public interface PersonalRecordRepository extends JpaRepository<PersonalRecordDt
 		+ "order by name;", nativeQuery = true)
 	List<Map<String, String>> findRankByUserDto_Id(@Param("userId") int userId);
 
-	List<PersonalRecordDto> findByUserDto_IdAndWorkoutDto_Name(int userId, String workoutName);
+	List<PersonalRecordDto> findByUserDto_IdAndWorkoutDto_NameOrderByCreateDateDesc(int userId, String workoutName);
 
 }
