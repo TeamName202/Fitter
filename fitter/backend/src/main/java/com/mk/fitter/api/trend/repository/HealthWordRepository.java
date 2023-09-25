@@ -10,5 +10,5 @@ import com.mk.fitter.api.trend.entity.HealthWord;
 @Repository
 public interface HealthWordRepository extends JpaRepository<HealthWord, Integer> {
 
-	List<HealthWord> findAllByOrderByCountDesc();
+	List<HealthWord> findTop5ByOrderByCountDesc();
 }
