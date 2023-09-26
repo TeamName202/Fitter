@@ -43,6 +43,10 @@
     <queries>
     <!-- If your app checks for SMS support -->
     <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    <intent>
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="html" />
     </intent>

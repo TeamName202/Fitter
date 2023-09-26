@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fitter/screens/chart_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:fitter/widgets/button_mold.dart';
@@ -54,6 +55,16 @@ class _PRInputScreenState extends State<PRInputScreen> {
     }
   }
 
+  Future goNext() async {
+    await writePR();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChartScreen(workoutName: widget.workoutName),
+      ),
+    );
+  }
+
   void _openDatePicker(BuildContext context) {
     BottomPicker.date(
       title: ' ',
@@ -71,6 +82,10 @@ class _PRInputScreenState extends State<PRInputScreen> {
       buttonText: '',
       buttonTextStyle: const TextStyle(color: Colors.white),
       buttonSingleColor: const Color(0xff0080ff),
+
+      // 선택할 수 있는 날짜 범위 제한
+      maxDateTime: DateTime.now(),
+      minDateTime: DateTime.now().subtract(const Duration(days: 365 * 100)),
       onChange: (index) {
         print(index);
       },
@@ -148,8 +163,15 @@ class _PRInputScreenState extends State<PRInputScreen> {
             ),
             const EmptyBox(boxSize: 1),
             GestureDetector(
-              onTap: () {
-                writePR();
+              onTap: () async {
+                await writePR();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ChartScreen(workoutName: widget.workoutName),
+                  ),
+                );
               },
               child: const ButtonMold(
                   btnText: "등 록 하 기",

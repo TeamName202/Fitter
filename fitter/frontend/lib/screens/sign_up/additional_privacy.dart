@@ -1,4 +1,4 @@
-import 'package:fitter/model/user_profile.dart';
+import 'package:fitter/models/user_profile.dart';
 import 'package:fitter/screens/sign_up/additional_box.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/dropdown.dart';
