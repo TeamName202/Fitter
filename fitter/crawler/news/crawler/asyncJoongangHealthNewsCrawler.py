@@ -24,8 +24,11 @@ def get_news():
         url = f"https://www.joongang.co.kr/lifestyle/health?page={page}"
         rq = requests.get(url, headers=headers)
         soup = BeautifulSoup(rq.text, "html.parser")
-        selectedList = soup.select("#story_list li")
+        selectedList = soup.select("#story_list .card")
         for temp in selectedList:
+            if 'lg_hidden' in temp['class'] or 'ad_remove' in temp['class']:
+                continue
+
             newsDate = temp.select_one(".date").text
             newsDate = datetime.strptime(newsDate, "%Y.%m.%d %H:%M")
             newsDate = int(newsDate.strftime("%Y%m%d"))

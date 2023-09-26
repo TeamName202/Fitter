@@ -79,7 +79,7 @@ def delete_old_files():  # 일주일 지난 크롤링 파일 삭제
 scheduler = BackgroundScheduler(timezone='Asia/Seoul')
 scheduler.add_job(start_sports_crawler, 'cron', hour=0, minute=1)
 scheduler.add_job(start_health_crawler, 'cron', hour=0, minute=1)
-scheduler.add_job(delete_old_files, 'cron', day_of_week='sun', hour=0, minute=10)
+scheduler.add_job(delete_old_files, 'cron', hour=0, minute=10)
 scheduler.start()
 
 
