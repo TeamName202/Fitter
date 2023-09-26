@@ -7,6 +7,30 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
 
+  static Future<String> getUserProfile(token) async {
+    final url = Uri.parse("$baseUrl/api/user/user-info");
+    final response = await http.get(
+      url,
+      headers: {
+        "Authorization": token,
+      },
+    );
+    // jsonDecode(utf8.decode(response.body));
+    return "";
+  }
+
+  static Future<String> resign(String token) async {
+    const api = "$baseUrl/api/user";
+    final url = Uri.parse(api);
+    final response = await http.delete(
+      url,
+      headers: {
+        "Authorization": token,
+      },
+    );
+    return response.body;
+  }
+
   Future<List> fetchEventsForMonth(DateTime day) async {
     const api = "api/calendar/test";
     final firstDayOfMonth =
