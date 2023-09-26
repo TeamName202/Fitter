@@ -26,11 +26,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        // home: LoginScreen(),
-        home: Calendar()
-        // home: ChartScreen(workoutName: "Clean"),
-        // home: RecordScreen(),
-        // home: DailyKeyword(),
-        );
+      // home: LoginScreen(),
+      // home: Calendar()
+      home: MyPage(),
+      // home: ChartScreen(workoutName: "Clean"),
+      // home: RecordScreen(),
+      // home: DailyKeyword(),
+    );
   }
 }

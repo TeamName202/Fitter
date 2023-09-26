@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fitter/models/month_daily_record.dart';
 import 'package:fitter/models/user_profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
 
-  static Future<String> getUserProfile(token) async {
+  static Future<UserProfile> getUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('Authorization').toString();
     final url = Uri.parse("$baseUrl/api/user/user-info");
     final response = await http.get(
       url,
@@ -15,17 +19,28 @@ class ApiService {
         "Authorization": token,
       },
     );
-    // jsonDecode(utf8.decode(response.body));
-    return "";
+    final userInfo = jsonDecode(utf8.decode(response.bodyBytes));
+    final image = File.fromUri(Uri.parse("$baseUrl/api/user/profile-img"));
+
+    final userprofile = UserProfile(
+      box: userInfo["boxDto"]["boxName"],
+      ageGroup: userInfo["ageRange"],
+      email: userInfo["email"],
+      gender: userInfo["gender"],
+      nickname: userInfo["nickname"],
+      image: image,
+    );
+    return userprofile;
   }
 
-  static Future<String> resign(String token) async {
+  static Future<String> resign() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     const api = "$baseUrl/api/user";
     final url = Uri.parse(api);
     final response = await http.delete(
       url,
       headers: {
-        "Authorization": token,
+        "Authorization": prefs.getString('Authorization').toString(),
       },
     );
     return response.body;

@@ -3,7 +3,6 @@ import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/mypage_alertDialog.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -14,21 +13,18 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   bool button1 = false, button2 = false, button3 = false, button4 = false;
-  late SharedPreferences prefs;
-  late UserProfile userInfo;
+  late Future<UserProfile> userProfile;
 
   @override
-  void initState() async {
+  void initState() {
+    super.initState();
     setState(() {
-      final aaa = ApiService.getUserProfile(
-          prefs.getString('Authorization').toString());
+      userProfile = ApiService.getUserProfile();
     });
   }
 
   resign() async {
-    prefs = await SharedPreferences.getInstance();
-    final result =
-        ApiService.resign(prefs.getString('Authorization').toString());
+    final result = ApiService.resign();
     print(result);
   }
 
@@ -60,40 +56,70 @@ class _MyPageState extends State<MyPage> {
                       Column(
                         children: [
                           Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border: Border.all(
-                                color: const Color(0xFF0080FF),
-                                width: 5,
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  color: const Color(0xFF0080FF),
+                                  width: 5,
+                                ),
                               ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.network(
-                                "http://www.econotelling.com/news/photo/202004/2875_3504_1147.png",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
+                              child: FutureBuilder(
+                                future: userProfile,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Image.file(
+                                        snapshot.data!.image!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  }
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: const Icon(
+                                      Icons.person,
+                                      size: 90,
+                                    ),
+                                  );
+                                },
+                              )),
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            "김 싸 피",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          FutureBuilder(
+                            future: userProfile,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  snapshot.data!.nickname,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black.withOpacity(0.4),
+                                  ),
+                                );
+                              }
+                              return const Text("...");
+                            },
                           ),
-                          Text(
-                            "구미 크로스핏 체육관",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w200,
-                              color: Colors.black.withOpacity(0.4),
-                            ),
+                          FutureBuilder(
+                            future: userProfile,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  snapshot.data!.box,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w200,
+                                    color: Colors.black.withOpacity(0.4),
+                                  ),
+                                );
+                              }
+                              return const Text("...");
+                            },
                           ),
                         ],
                       ),
