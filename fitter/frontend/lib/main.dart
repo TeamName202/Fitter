@@ -1,5 +1,6 @@
 import 'package:fitter/screens/chart_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
+import 'package:fitter/screens/mypage/mypage.dart';
 import 'package:fitter/screens/pr_input_screen.dart';
 import 'package:fitter/screens/daily_keyword_screen.dart';
 
@@ -26,6 +27,7 @@ class App extends StatelessWidget {
     return const MaterialApp(
       // home: BottomNavigationBarExampleApp(),
       home: LoginScreen(),
+      // home: MyPage()
       // home: ChartScreen(workoutName: "Clean"),
       // home: RecordScreen(),
       // home: DailyKeyword(),
