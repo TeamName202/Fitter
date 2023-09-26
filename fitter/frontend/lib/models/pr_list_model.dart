@@ -1,11 +1,9 @@
 class PrListModel {
-  final String createDate;
-  final int id, maxWeight;
-  final dynamic workoutDto;
+  final String max_weight, name, type, pr_id;
 
   PrListModel.fromJson(Map<String, dynamic> json)
-      : createDate = json['createDate'],
-        id = json['id'],
-        maxWeight = json['maxWeight'],
-        workoutDto = json['workoutDto'];
+      : name = json['name'],
+        pr_id = json['pr_id'],
+        max_weight = json['max_weight'],
+        type = json['type'];
 }

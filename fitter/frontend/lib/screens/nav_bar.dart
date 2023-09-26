@@ -1,6 +1,8 @@
 import 'package:fitter/screens/daily_calendar.dart';
 import 'package:fitter/screens/daily_keyword_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
+import 'package:fitter/screens/record/record_screen.dart';
+import 'package:fitter/screens/sign_up/additional_box.dart';
 import 'package:fitter/screens/sign_up/additional_info.dart';
 import 'package:flutter/material.dart';
 
