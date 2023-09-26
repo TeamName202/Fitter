@@ -11,6 +11,7 @@ import com.mk.fitter.api.namedwod.repository.WodRecordRepository;
 import com.mk.fitter.api.namedwod.repository.WodRepository;
 import com.mk.fitter.api.namedwod.repository.dto.WodCategoryDto;
 import com.mk.fitter.api.namedwod.repository.dto.WodDto;
+import com.mk.fitter.api.namedwod.repository.dto.WodRecordCreateRequest;
 import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
 import com.mk.fitter.api.user.repository.UserRepository;
 import com.mk.fitter.api.user.repository.dto.UserDto;
@@ -44,13 +45,23 @@ public class WodServiceImpl implements WodService {
 		return wodRepository.findByWodCategoryDto_Category(category);
 	}
 
-	public boolean createWodRecord(WodRecordDto wodRecordDto, int userId) throws Exception {
+	public boolean createWodRecord(WodRecordCreateRequest wodRecordCreateRequest, int userId) throws Exception {
 		Optional<UserDto> byId = userRepository.findById(userId);
 		if (byId.isEmpty()) {
 			throw new Exception("존재하지 않는 회원입니다.");
 		}
-		wodRecordDto.setUser(byId.get());
-		wodRecordRepository.save(wodRecordDto);
+		Optional<WodDto> wodOp = wodRepository.findById(wodRecordCreateRequest.getWodId());
+		if (wodOp.isEmpty()) {
+			throw new Exception("존재하지 않는 와드입니다.");
+		}
+		WodRecordDto build = WodRecordDto.builder()
+			.wod(wodOp.get())
+			.createDate(wodRecordCreateRequest.getCreateDate())
+			.count(wodRecordCreateRequest.getCount())
+			.time(wodRecordCreateRequest.getTime())
+			.user(byId.get())
+			.build();
+		wodRecordRepository.save(build);
 		return true;
 	}
 

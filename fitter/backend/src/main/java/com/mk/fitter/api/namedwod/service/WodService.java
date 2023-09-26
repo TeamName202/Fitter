@@ -5,10 +5,11 @@ import java.util.List;
 
 import com.mk.fitter.api.namedwod.repository.dto.WodCategoryDto;
 import com.mk.fitter.api.namedwod.repository.dto.WodDto;
+import com.mk.fitter.api.namedwod.repository.dto.WodRecordCreateRequest;
 import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
 
 public interface WodService {
-	boolean createWodRecord(WodRecordDto wodRecordDto, int userId) throws Exception;
+	boolean createWodRecord(WodRecordCreateRequest wodRecordCreateRequest, int userId) throws Exception;
 
 	List<WodDto> getWodList();
 
