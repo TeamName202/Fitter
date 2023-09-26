@@ -80,14 +80,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ProfileImgDto getProfileImg(String accessToken) throws Exception {
+	public byte[] getProfileImg(String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
 			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
 
 		UserDto userDto = userRepository.findById(uid)
 			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 
-		return userDto.getProfileImgDto();
+		ProfileImgDto profile = userDto.getProfileImgDto();
+		if(profile == null)
+			return null;
+
+		return fileService.getProfileImg(profile);
 	}
 
 	@Override

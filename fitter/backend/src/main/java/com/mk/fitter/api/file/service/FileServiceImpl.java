@@ -1,8 +1,11 @@
 package com.mk.fitter.api.file.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +52,14 @@ public class FileServiceImpl implements FileService {
 		file.transferTo(new File(savedPath));
 		// db에 저장
 		return profileImgRepository.save(profile);
+	}
+
+	@Override
+	public byte[] getProfileImg(ProfileImgDto profile) throws Exception {
+		InputStream inputStream = new FileInputStream(profile.getFilePath());
+		byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+		inputStream.close();
+		return imageByteArray;
 	}
 
 	@Override

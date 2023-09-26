@@ -13,7 +13,7 @@ public interface UserService {
 	UserDto saveUserInfo(UserResponseVO user, MultipartFile file) throws Exception;
 	UserDto getUserInfo(String accessToken) throws Exception;
 
-	ProfileImgDto getProfileImg(String accessToken) throws Exception;
+	byte[] getProfileImg(String accessToken) throws Exception;
 	String getEmail(String accessToken) throws Exception;
 	String getNickname(String accessToken) throws Exception;
 	String getAgeRange(String accessToken) throws Exception;

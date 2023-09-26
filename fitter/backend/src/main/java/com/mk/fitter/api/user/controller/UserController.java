@@ -57,7 +57,7 @@ public class UserController {
 
 	@GetMapping("/profile-img")
 	@ApiOperation(value = "유저의 프로필 사진 조회", notes = "유저의 프로필 사진을 조회하는 API")
-	public ResponseEntity<ProfileImgDto> getProfileImg(@RequestHeader(name = "Authorization") String accessToken) {
+	public ResponseEntity<byte[]> getProfileImg(@RequestHeader(name = "Authorization") String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.getProfileImg(accessToken), HttpStatus.OK);
 		} catch (Exception e){

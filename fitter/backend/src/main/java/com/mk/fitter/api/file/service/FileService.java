@@ -7,6 +7,8 @@ import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
 public interface FileService {
 	ProfileImgDto saveProfileImg(MultipartFile file) throws Exception;
 
+	byte[] getProfileImg(ProfileImgDto profile) throws Exception;
+
 	void deleteProfileImg(ProfileImgDto profile) throws Exception;
 
 	String createRandomFileName() throws Exception;
