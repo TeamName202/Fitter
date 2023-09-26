@@ -72,13 +72,88 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
-
-
 	@Override
 	public UserDto getUserInfo(String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
 			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
 		return userRepository.findById(uid).orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+	}
+
+	@Override
+	public ProfileImgDto getProfileImg(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getProfileImgDto();
+	}
+
+	@Override
+	public String getEmail(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getEmail();
+	}
+
+	@Override
+	public String getNickname(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getNickname();
+	}
+
+	@Override
+	public String getAgeRange(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getAgeRange();
+	}
+
+	@Override
+	public Boolean getGender(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getGender();
+	}
+
+	@Override
+	public Date getBirthday(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getBirthday();
+	}
+
+	@Override
+	public Boolean getIsTrainer(String accessToken) throws Exception {
+		Integer uid = jwtService.extractUID(accessToken)
+			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
+
+		UserDto userDto = userRepository.findById(uid)
+			.orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
+
+		return userDto.getIsTrainer();
 	}
 
 	@Override
