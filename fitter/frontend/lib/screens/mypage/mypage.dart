@@ -1,6 +1,9 @@
+import 'package:fitter/models/user_profile.dart';
+import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/mypage_alertDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -11,6 +14,23 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   bool button1 = false, button2 = false, button3 = false, button4 = false;
+  late SharedPreferences prefs;
+  late UserProfile userInfo;
+
+  @override
+  void initState() async {
+    setState(() {
+      final aaa = ApiService.getUserProfile(
+          prefs.getString('Authorization').toString());
+    });
+  }
+
+  resign() async {
+    prefs = await SharedPreferences.getInstance();
+    final result =
+        ApiService.resign(prefs.getString('Authorization').toString());
+    print(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +117,7 @@ class _MyPageState extends State<MyPage> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(45),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
                                   content: const MyPageAlertDialog(),
                                   actions: [
@@ -207,6 +227,57 @@ class _MyPageState extends State<MyPage> {
               setState(() {
                 button4 = false;
               });
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    title: const Text(
+                      '정말 탈퇴하시겠습니까?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              child: const Text(
+                                '확인',
+                                style: TextStyle(
+                                  color: Color(0xFF0080FF),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                resign();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text(
+                                '취소',
+                                style: TextStyle(
+                                  color: Color(0xFF0080FF),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),

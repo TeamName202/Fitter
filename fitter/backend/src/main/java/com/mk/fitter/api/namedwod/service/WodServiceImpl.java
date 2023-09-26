@@ -30,8 +30,8 @@ public class WodServiceImpl implements WodService {
 	@Override
 	public List<WodRecordDto> getNamedWodList(int userId, String namedWodName) {
 		WodDto byName = wodRepository.findByName(namedWodName);
-		List<WodRecordDto> byWodId = wodRecordRepository.findByWod_IdAndUser_IdOrderByCreateDateDesc(userId,
-			byName.getId());
+		List<WodRecordDto> byWodId = wodRecordRepository.findByWod_IdAndUser_IdOrderByCreateDateDesc(
+			byName.getId(), userId);
 		return byWodId;
 	}
 

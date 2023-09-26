@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fitter/models/month_daily_record.dart';
+import 'package:fitter/models/user_profile.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {

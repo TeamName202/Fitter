@@ -18,7 +18,7 @@ public interface WodRecordRepository extends JpaRepository<WodRecordDto, Integer
 
 	List<WodRecordDto> findByWod_Id(int wodId);
 
-	List<WodRecordDto> findByWod_IdAndUser_IdOrderByCreateDateDesc(int userId, int wodId);
+	List<WodRecordDto> findByWod_IdAndUser_IdOrderByCreateDateDesc(int wodId, int userId);
 
 	List<WodRecordDto> findByUser_Id(int userId);
 
