@@ -1,4 +1,5 @@
 import 'package:fitter/widgets/button_mold.dart';
+import 'package:fitter/widgets/mypage_alertDialog.dart';
 import 'package:flutter/material.dart';
 
 class MyPage extends StatefulWidget {
@@ -89,7 +90,36 @@ class _MyPageState extends State<MyPage> {
                         child: IconButton(
                           iconSize: 30,
                           alignment: Alignment.bottomRight,
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(45),
+                                  ),
+                                  content: const MyPageAlertDialog(),
+                                  actions: [
+                                    Center(
+                                      child: TextButton(
+                                        child: const ButtonMold(
+                                          btnText: "수정완료",
+                                          horizontalLength: 30,
+                                          verticalLength: 10,
+                                          buttonColor: true,
+                                        ),
+                                        onPressed: () {
+                                          // 수정한 내용 저장하는 로직 작성해야 함
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           icon: const Icon(
                             Icons.mode_edit_outline_rounded,
                           ),
