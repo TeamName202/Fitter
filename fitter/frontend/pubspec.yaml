@@ -37,11 +37,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   url_launcher: ^6.1.14
   table_calendar: ^3.0.8
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 7eb95054ec0434a1cdbe2897326b99affbf54828
   shared_preferences: ^2.2.1
   path_provider: ^2.1.1
   image_picker: ^1.0.4

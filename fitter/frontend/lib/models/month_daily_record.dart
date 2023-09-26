@@ -1,7 +1,11 @@
 class DailyMonthRecord {
-  final String date, memo;
+  final DateTime? date;
+  final String memo, detail, wodType;
 
-  DailyMonthRecord.fromjson(Map<String, dynamic> json)
-      : date = json['date'],
-        memo = json['memo'];
+  DailyMonthRecord.fromjson(dynamic json)
+      : date = (json['date'] != null) ? DateTime.parse(json['date']) : null,
+        memo = json['memo'] ?? "",
+        detail = json['detail'] ?? "",
+        wodType =
+            (json['wodTypeDto'] != null) ? json['wodTypeDto']['type'] : "";
 }

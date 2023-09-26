@@ -6,25 +6,33 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
 
-  void getDailyRecords() async {
-    const String api = "api/calendar/test";
-    // List<DailyMonthRecord> dailyRecords = [];
+  Future<List> fetchEventsForMonth(DateTime day) async {
+    const api = "api/calendar/test";
+    final firstDayOfMonth =
+        DateTime(day.year, day.month).toIso8601String().substring(0, 7);
     final uri = Uri.parse("$baseUrl/$api")
-        .replace(queryParameters: {'date': '2023-09'});
+        .replace(queryParameters: {'date': firstDayOfMonth});
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
-      print('Response body: ${response.body}');
+      // print("responseBody: ${response.body}");
+      final monthRecord = jsonDecode(utf8.decode(response.bodyBytes));
+      // print(monthRecord);
+      List<dynamic> recordsList =
+          monthRecord.map((item) => DailyMonthRecord.fromjson(item)).toList();
+      // print('monthRecord: ${monthRecord.runtimeType}');
+      return recordsList;
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      throw Error();
     }
   }
 
-  Future<void> sendPostRequest(
-      {required String selectedDay,
-      required Map type,
-      required String detail,
-      required String memo}) async {
+  Future<void> sendPostRequest({
+    required String selectedDay,
+    required Map type,
+    required String detail,
+    required String memo,
+  }) async {
     const String api = "api/calendar/test/write";
     final uri = Uri.parse("$baseUrl/$api");
     final response = await http.post(uri,

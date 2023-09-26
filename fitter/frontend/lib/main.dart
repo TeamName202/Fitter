@@ -1,3 +1,4 @@
+import 'package:fitter/screens/daily/daily_calendar.dart';
 import 'package:fitter/screens/chart_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/mypage/mypage.dart';
@@ -26,7 +27,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
         // home: LoginScreen(),
-        home: MyPage()
+        home: Calendar()
         // home: ChartScreen(workoutName: "Clean"),
         // home: RecordScreen(),
         // home: DailyKeyword(),
