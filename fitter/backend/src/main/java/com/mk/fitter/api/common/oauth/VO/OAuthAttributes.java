@@ -42,7 +42,7 @@ public class OAuthAttributes {
 		return ofKakao(userNameAttributeName, attributes);
 	}
 
-	private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object>attributes) {
+	private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
 		return OAuthAttributes.builder()
 			.nameAttributeKey(userNameAttributeName)
 			.oAuth2UserInfo(new KakaoOAuth2UserInfo(attributes))

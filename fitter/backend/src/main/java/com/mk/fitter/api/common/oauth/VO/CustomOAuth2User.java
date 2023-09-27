@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import com.mk.fitter.api.common.oauth.Role;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 

@@ -66,7 +66,7 @@ public class UserController {
 			headers.add("Content-type", Files.probeContentType(file.toPath()));
 
 			return new ResponseEntity<>(userService.getProfileImg(profileImgDto), headers, HttpStatus.OK);
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error("getProfileImg :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -110,7 +110,7 @@ public class UserController {
 	public ResponseEntity<Boolean> getGender(@RequestHeader(name = "Authorization") String accessToken) {
 		try {
 			return new ResponseEntity<>(userService.getGender(accessToken), HttpStatus.OK);
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error("getGender :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

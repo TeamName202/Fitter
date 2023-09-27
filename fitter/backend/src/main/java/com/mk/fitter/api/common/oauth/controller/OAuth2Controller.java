@@ -1,42 +1,33 @@
 package com.mk.fitter.api.common.oauth.controller;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mk.fitter.api.common.oauth.Role;
 import com.mk.fitter.api.common.oauth.VO.UserResponseVO;
 import com.mk.fitter.api.common.oauth.service.OAuth2Service;
 import com.mk.fitter.api.common.service.JwtService;
 import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
 import com.mk.fitter.api.file.service.FileServiceImpl;
 import com.mk.fitter.api.user.repository.dto.UserDto;
-import com.mk.fitter.api.user.service.UserService;
 import com.mk.fitter.api.user.service.UserServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,7 +79,7 @@ public class OAuth2Controller {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PostMapping(path = "/defaultImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> saveDefaultProfileImg(@RequestPart(name = "file", required = false) MultipartFile file) {
 		try {

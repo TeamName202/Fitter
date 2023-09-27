@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public byte[] getProfileImg(ProfileImgDto profile) throws Exception {
-		if(profile == null)
+		if (profile == null)
 			return null;
 
 		return fileService.getProfileImg(profile);
@@ -333,7 +333,7 @@ public class UserServiceImpl implements UserService {
 		userRepository.deleteById(user.getId());
 
 		// 서버/db에서 프로필 사진 삭제
-		if(profileImgDto != null && profileImgDto.getId() != DEFAULT_IMG_ID) {
+		if (profileImgDto != null && profileImgDto.getId() != DEFAULT_IMG_ID) {
 			fileService.deleteProfileImg(user.getProfileImgDto());
 		}
 
