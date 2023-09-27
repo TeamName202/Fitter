@@ -322,15 +322,8 @@ public class UserServiceImpl implements UserService {
 	public void signOut(String accessToken) throws Exception {
 		UserDto user = getUserInfo(accessToken);
 
-		user.setProfileImgDto(null);
-		userRepository.save(user);
-
 		// 프로필 사진 서버/db에서 삭제
 		ProfileImgDto profileImgDto = user.getProfileImgDto();
-
-		if(profileImgDto != null && profileImgDto.getId() != DEFAULT_IMG_ID) {
-			fileService.deleteProfileImg(user.getProfileImgDto());
-		}
 
 		// 카카오랑 연결 끊기
 		String socialId = user.getSocialId();
@@ -338,6 +331,12 @@ public class UserServiceImpl implements UserService {
 
 		// 사용자 db에서 삭제
 		userRepository.deleteById(user.getId());
+
+		// 서버/db에서 프로필 사진 삭제
+		if(profileImgDto != null && profileImgDto.getId() != DEFAULT_IMG_ID) {
+			fileService.deleteProfileImg(user.getProfileImgDto());
+		}
+
 	}
 
 	// 카카오랑 연결 끊기 구현
