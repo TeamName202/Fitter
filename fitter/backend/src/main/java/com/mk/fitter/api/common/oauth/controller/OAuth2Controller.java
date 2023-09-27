@@ -53,7 +53,7 @@ public class OAuth2Controller {
 	private final JwtService jwtService;
 	private final String BEARER = "Bearer ";
 
-	@GetMapping(value = "/kakao", produces="application/json;charset=UTF-8")
+	@GetMapping(value = "/kakao", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "카카오 로그인 api", notes = "카카오 로그인 api")
 	public ResponseEntity<UserResponseVO> kakaoCallback(
 		HttpServletRequest request, HttpServletResponse response,
@@ -87,10 +87,23 @@ public class OAuth2Controller {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping(path = "/defaultImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> saveDefaultProfileImg(@RequestPart(name = "file", required = false) MultipartFile file) {
+		try {
+			ProfileImgDto profileImgDto = fileService.saveProfileImg(file);
+			return new ResponseEntity<>(profileImgDto, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("saveUserInfo :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@ApiOperation(value = "회원가입 시 회원정보 저장", notes = "회원정보 저장")
 	@PostMapping(path = "/user-info", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<UserDto> saveUserInfo(@ApiParam(value = "프로필사진") @RequestPart(name = "file", required = false) MultipartFile file, @ApiParam(value = "회원정보") @RequestPart(name = "user") UserResponseVO user) {
+	public ResponseEntity<UserDto> saveUserInfo(
+		@ApiParam(value = "프로필사진") @RequestPart(name = "file", required = false) MultipartFile file,
+		@ApiParam(value = "회원정보") @RequestPart(name = "user") UserResponseVO user) {
 		try {
 			UserDto newUser = userService.saveUserInfo(user, file);
 			return new ResponseEntity<>(newUser, HttpStatus.OK);
@@ -102,13 +115,14 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "닉네임 중복체크", notes = "닉네임 중복체크 API")
 	@PostMapping("/nickname/duplicate")
-	public ResponseEntity<Boolean> checkDupNickname(@ApiParam(name = "닉네임, id") @RequestBody Map<String, Object> nicknameMap) {
+	public ResponseEntity<Boolean> checkDupNickname(
+		@ApiParam(name = "닉네임, id") @RequestBody Map<String, Object> nicknameMap) {
 		try {
 			int id = (Integer)nicknameMap.get("id");
 			String nickname = (String)nicknameMap.get("nickname");
 
 			return new ResponseEntity<>(userService.checkDupNickname(nickname, id), HttpStatus.OK);
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error("checkDupNickname :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -116,7 +130,8 @@ public class OAuth2Controller {
 
 	@ApiOperation(value = "이메일 중복체크", notes = "이메일 중복체크 API")
 	@PostMapping("/email/duplicate")
-	public ResponseEntity<Boolean> checkDupEmail(@ApiParam(name = "이메일, id") @RequestBody Map<String, Object> emailMap) {
+	public ResponseEntity<Boolean> checkDupEmail(
+		@ApiParam(name = "이메일, id") @RequestBody Map<String, Object> emailMap) {
 		try {
 			int id = (Integer)emailMap.get("id");
 			String email = (String)emailMap.get("email");

@@ -43,6 +43,7 @@ public class FileServiceImpl implements FileService {
 
 		// dto build
 		ProfileImgDto profile = ProfileImgDto.builder()
+			.id(1)
 			.fileName(savedName)
 			.filePath(savedPath)
 			.origName(origFileName)
