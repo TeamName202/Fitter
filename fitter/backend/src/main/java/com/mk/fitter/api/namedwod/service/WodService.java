@@ -1,6 +1,5 @@
 package com.mk.fitter.api.namedwod.service;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import com.mk.fitter.api.namedwod.repository.dto.WodCategoryDto;
@@ -15,7 +14,7 @@ public interface WodService {
 
 	WodRecordDto getWodRecord(int wodRecordId) throws Exception;
 
-	boolean modifyWodRecord(int wodId, LocalTime time, int userId) throws Exception;
+	boolean modifyWodRecord(int wodId, WodRecordDto time, int userId) throws Exception;
 
 	boolean deleteWodRecord(int wodId, int userId) throws Exception;
 

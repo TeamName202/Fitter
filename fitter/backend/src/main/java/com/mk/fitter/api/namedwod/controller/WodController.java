@@ -150,7 +150,7 @@ public class WodController {
 		Optional<Integer> UID = jwtService.extractUID(Authorization);
 		boolean result = false;
 		try {
-			result = wodService.modifyWodRecord(wodRecordId, time.getTime(), UID.get());
+			result = wodService.modifyWodRecord(wodRecordId, time, UID.get());
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
