@@ -31,6 +31,11 @@ public class FileServiceImpl implements FileService {
 	private final ProfileImgRepository profileImgRepository;
 
 	@Override
+	public ProfileImgDto saveDefaultProfileImg(MultipartFile file) throws Exception {
+		return null;
+	}
+
+	@Override
 	public ProfileImgDto saveProfileImg(MultipartFile file) throws Exception {
 		if(file.isEmpty())
 			return null;
@@ -44,7 +49,6 @@ public class FileServiceImpl implements FileService {
 
 		// dto build
 		ProfileImgDto profile = ProfileImgDto.builder()
-			.id(1)
 			.fileName(savedName)
 			.filePath(savedPath)
 			.origName(origFileName)
