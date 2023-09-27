@@ -32,7 +32,28 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public ProfileImgDto saveDefaultProfileImg(MultipartFile file) throws Exception {
-		return null;
+		if(file.isEmpty())
+			return null;
+
+		// 파일 정보
+		String origFileName = file.getOriginalFilename();
+		String uuid = createRandomFileName();
+		String extension = origFileName.substring(origFileName.lastIndexOf("."));
+		String savedName = uuid+extension;
+		String savedPath = FILE_PATH+PROFILE_FOLDER+savedName;
+
+		// dto build
+		ProfileImgDto profile = ProfileImgDto.builder()
+			.id(1)
+			.fileName(savedName)
+			.filePath(savedPath)
+			.origName(origFileName)
+			.build();
+
+		// 서버에 저장
+		file.transferTo(new File(savedPath));
+		// db에 저장
+		return profileImgRepository.save(profile);
 	}
 
 	@Override

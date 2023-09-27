@@ -92,7 +92,7 @@ public class OAuth2Controller {
 	@PostMapping(path = "/defaultImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<?> saveDefaultProfileImg(@RequestPart(name = "file", required = false) MultipartFile file) {
 		try {
-			ProfileImgDto profileImgDto = fileService.saveProfileImg(file);
+			ProfileImgDto profileImgDto = fileService.saveDefaultProfileImg(file);
 			return new ResponseEntity<>(profileImgDto, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("saveUserInfo :: {}", e.getMessage());
