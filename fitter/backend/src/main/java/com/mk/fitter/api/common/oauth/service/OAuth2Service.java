@@ -83,12 +83,5 @@ public class OAuth2Service {
 		UserDto createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
 		return userRepository.save(createdUser);
 	}
-
-	public UserDto saveRefreshToken(int id, String refreshToken) {
-		UserDto userDto = userRepository.findById(id).orElseGet(() -> null);
-		userDto.setRefreshToken(refreshToken);
-		return userRepository.save(userDto);
-	}
-
 }
 

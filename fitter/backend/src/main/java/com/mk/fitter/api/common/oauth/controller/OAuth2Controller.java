@@ -61,7 +61,8 @@ public class OAuth2Controller {
 		@RequestHeader(name = "Authorization") String kakaoToken) {
 
 		try {
-			log.info("로그인 api 진입");
+			log.info("로그인 api 진입 :: {}", kakaoToken);
+
 			UserDto userDto = oAuth2Service.kakaoLogin(kakaoToken);
 
 			// access, refresh 토큰 생성
@@ -73,9 +74,6 @@ public class OAuth2Controller {
 
 			// 헤더에 access, refresh 추가
 			jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
-
-			// 사용자 refresh token db에 저장
-			//oAuth2Service.saveRefreshToken(userDto.getId(), refreshToken);
 
 			// responsebody에 nickname, id 보냄
 			UserResponseVO userResponseVO = UserResponseVO.builder()
