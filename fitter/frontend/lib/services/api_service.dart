@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cross_file/src/types/interface.dart';
+import 'package:dio/dio.dart';
 import 'package:fitter/models/month_daily_record.dart';
 import 'package:fitter/models/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +12,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
 
+  static void changeProfileImg(
+      pickedImage, Future<UserProfile> userProfile) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('Authorization').toString();
+
+    var formData = FormData.fromMap(
+      {
+        'file': await MultipartFile.fromFile(
+          pickedImage!.path,
+          filename: pickedImage.name,
+        ),
+      },
+    );
+
+    final dio = Dio();
+
+    final response = await dio.post(
+      '$baseUrl/api/user/profile',
+      data: formData,
+      options: Options(
+        headers: {
+          "Authorization": token,
+        },
+      ),
+    );
+
+    print(response);
+
+    final image = Image.network(
+      "$baseUrl/api/user/profile-img",
+      headers: {
+        "Authorization": token,
+      },
+      fit: BoxFit.cover,
+    );
+    userProfile.then((value) => value.image = image);
+  }
+
   static void deleteToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('Authorization');
   }
 
-  static void deleteProfile(Future<UserProfile> userProfile) async {
+  static Future<bool> deleteProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('Authorization').toString();
 
@@ -26,15 +66,7 @@ class ApiService {
         "Authorization": token,
       },
     );
-    userProfile.then(
-      (value) => value.image = Image.network(
-        "$baseUrl/api/user/profile-img",
-        headers: {
-          "Authorization": token,
-        },
-        fit: BoxFit.cover,
-      ),
-    );
+    return true;
   }
 
   static Future<UserProfile> getUserProfile() async {

@@ -144,9 +144,7 @@ class _MyPageState extends State<MyPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
-                                  content: MyPageAlertDialog(
-                                    userProfile: userProfile,
-                                  ),
+                                  content: MyPageAlertDialog(),
                                   actions: [
                                     Center(
                                       child: TextButton(

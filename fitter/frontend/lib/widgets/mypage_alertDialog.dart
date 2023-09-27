@@ -1,14 +1,29 @@
+import 'dart:io';
+
 import 'package:fitter/models/user_profile.dart';
 import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/input_text.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
-class MyPageAlertDialog extends StatelessWidget {
-  const MyPageAlertDialog({super.key, required this.userProfile});
+class MyPageAlertDialog extends StatefulWidget {
+  const MyPageAlertDialog({super.key});
 
-  final Future<UserProfile> userProfile;
+  @override
+  State<MyPageAlertDialog> createState() => _MyPageAlertDialogState();
+}
+
+class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
+  late Future<UserProfile> userProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      userProfile = ApiService.getUserProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +74,11 @@ class MyPageAlertDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    userProfile.then(
-                      (value) => ApiService.deleteProfile(userProfile),
-                    );
+                  onTap: () async {
+                    await ApiService.deleteProfile();
+                    setState(() {
+                      userProfile = ApiService.getUserProfile();
+                    });
                   },
                   child: const ButtonMold(
                       btnText: "사 진 삭 제",
@@ -70,11 +86,21 @@ class MyPageAlertDialog extends StatelessWidget {
                       verticalLength: 15,
                       buttonColor: false),
                 ),
-                const ButtonMold(
-                    btnText: "사 진 수 정",
-                    horizontalLength: 20,
-                    verticalLength: 15,
-                    buttonColor: true)
+                GestureDetector(
+                  onTap: () async {
+                    final pickedImage = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    ApiService.changeProfileImg(pickedImage, userProfile);
+                    setState(() {
+                      userProfile = ApiService.getUserProfile();
+                    });
+                  },
+                  child: const ButtonMold(
+                      btnText: "사 진 수 정",
+                      horizontalLength: 20,
+                      verticalLength: 15,
+                      buttonColor: true),
+                )
               ],
             ),
             const SizedBox(
