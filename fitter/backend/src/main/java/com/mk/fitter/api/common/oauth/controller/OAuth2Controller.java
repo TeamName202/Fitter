@@ -70,7 +70,7 @@ public class OAuth2Controller {
 			String refreshToken = BEARER + jwtService.createRefreshToken();
 
 			// refresh token db에 update
-			jwtService.updateRefreshToken(userDto.getEmail(), refreshToken);
+			jwtService.updateRefreshToken(userDto.getId(), refreshToken);
 
 			// 헤더에 access, refresh 추가
 			jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);

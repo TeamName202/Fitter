@@ -1,16 +1,14 @@
 package com.mk.fitter.api.user.controller;
 
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.Map;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +17,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
-import com.mk.fitter.api.file.service.FileServiceImpl;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserServiceImpl;
 
@@ -44,7 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	private final UserServiceImpl userService;
-	private final FileServiceImpl fileService;
 
 	@GetMapping("/user-info")
 	@ApiOperation(value = "유저 정보", notes = "유저 정보를 조회하는 API")
@@ -57,11 +51,21 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/profile-img")
+	@GetMapping(path = "/profile-img")
 	@ApiOperation(value = "유저의 프로필 사진 조회", notes = "유저의 프로필 사진을 조회하는 API")
 	public ResponseEntity<byte[]> getProfileImg(@RequestHeader(name = "Authorization") String accessToken) {
 		try {
-			return new ResponseEntity<>(userService.getProfileImg(accessToken), HttpStatus.OK);
+			// 프로필 사진 dto
+			ProfileImgDto profileImgDto = userService.getProfileImgDto(accessToken);
+
+			// 프로필 사진 경로를 사용해서 File 객체 만듦
+			File file = new File(profileImgDto.getFilePath());
+
+			// 파일 확장자에 따라 파일 헤더 세팅
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-type", Files.probeContentType(file.toPath()));
+
+			return new ResponseEntity<>(userService.getProfileImg(profileImgDto), headers, HttpStatus.OK);
 		} catch (Exception e){
 			log.error("getProfileImg :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

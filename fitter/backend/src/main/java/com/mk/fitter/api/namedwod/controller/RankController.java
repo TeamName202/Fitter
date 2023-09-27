@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mk.fitter.api.namedwod.repository.dto.WodRecordDto;
-import com.mk.fitter.api.namedwod.service.RankService;
+import com.mk.fitter.api.namedwod.service.RankServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/rank")
 @Api(tags = {"와드 랭킹 API"})
 public class RankController {
-	private final RankService rankService;
+	private final RankServiceImpl rankService;
 
 	@GetMapping("/{wodName}")
 	@ApiOperation(value = "와드 랭킹 api", notes = "ex) /rank/kelly?page=1&size=50, size는 default로 50이 되어있어서 안보내도 괜찮음. page는 0부터 시작함")
@@ -37,6 +37,17 @@ public class RankController {
 			return new ResponseEntity<>(ranks, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("getRank :: {}", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/my-rank/{wodName}")
+	@ApiOperation(value = "내 와드 랭킹", notes = "내 와드 랭킹을 조회하는 API")
+	public ResponseEntity<WodRecordDto> getMyRank(@PathVariable(name = "wodName") String wodName, @RequestHeader(name = "Authorization") String accessToken) {
+		try {
+			return new ResponseEntity<>(rankService.getMyRank(wodName, accessToken), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("getMyRank :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
