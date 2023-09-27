@@ -1,9 +1,14 @@
+import 'package:fitter/models/user_profile.dart';
+import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/input_text.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class MyPageAlertDialog extends StatelessWidget {
-  const MyPageAlertDialog({super.key});
+  const MyPageAlertDialog({super.key, required this.userProfile});
+
+  final Future<UserProfile> userProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +33,44 @@ class MyPageAlertDialog extends StatelessWidget {
                         width: 5,
                       ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        "http://www.econotelling.com/news/photo/202004/2875_3504_1147.png",
-                        fit: BoxFit.cover,
-                      ),
+                    child: FutureBuilder(
+                      future: userProfile,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: snapshot.data!.image!,
+                          );
+                        }
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: const Icon(
+                            Icons.person,
+                            size: 90,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ButtonMold(
-                    btnText: "사 진 삭 제",
-                    horizontalLength: 20,
-                    verticalLength: 15,
-                    buttonColor: false),
-                ButtonMold(
+                GestureDetector(
+                  onTap: () {
+                    userProfile.then(
+                      (value) => ApiService.deleteProfile(userProfile),
+                    );
+                  },
+                  child: const ButtonMold(
+                      btnText: "사 진 삭 제",
+                      horizontalLength: 20,
+                      verticalLength: 15,
+                      buttonColor: false),
+                ),
+                const ButtonMold(
                     btnText: "사 진 수 정",
                     horizontalLength: 20,
                     verticalLength: 15,

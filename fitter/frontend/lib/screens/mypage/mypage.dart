@@ -56,36 +56,34 @@ class _MyPageState extends State<MyPage> {
                       Column(
                         children: [
                           Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(
-                                  color: const Color(0xFF0080FF),
-                                  width: 5,
-                                ),
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: const Color(0xFF0080FF),
+                                width: 5,
                               ),
-                              child: FutureBuilder(
-                                future: userProfile,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: Image.file(
-                                        snapshot.data!.image!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  }
+                            ),
+                            child: FutureBuilder(
+                              future: userProfile,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
                                   return ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: const Icon(
-                                      Icons.person,
-                                      size: 90,
-                                    ),
+                                    child: snapshot.data!.image!,
                                   );
-                                },
-                              )),
+                                }
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 90,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -145,7 +143,9 @@ class _MyPageState extends State<MyPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
-                                  content: const MyPageAlertDialog(),
+                                  content: MyPageAlertDialog(
+                                    userProfile: userProfile,
+                                  ),
                                   actions: [
                                     Center(
                                       child: TextButton(

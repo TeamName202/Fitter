@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class UserProfile {
-  final File? image;
+  Image? image;
   final String email;
   final String nickname;
-  final String gender;
+  final bool gender;
   final String ageGroup;
   final String box;
 

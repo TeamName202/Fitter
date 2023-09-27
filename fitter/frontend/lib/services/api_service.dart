@@ -3,11 +3,33 @@ import 'dart:io';
 
 import 'package:fitter/models/month_daily_record.dart';
 import 'package:fitter/models/user_profile.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
+
+  static void deleteProfile(Future<UserProfile> userProfile) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('Authorization').toString();
+
+    final url = Uri.parse("$baseUrl/api/user/profile");
+    final response = await http.delete(
+      url,
+      headers: {
+        "Authorization": token,
+      },
+    );
+    userProfile.then(
+      (value) => value.image = Image.network(
+        "$baseUrl/api/user/profile-img",
+        headers: {
+          "Authorization": token,
+        },
+      ),
+    );
+  }
 
   static Future<UserProfile> getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -19,8 +41,17 @@ class ApiService {
         "Authorization": token,
       },
     );
-    final userInfo = jsonDecode(utf8.decode(response.bodyBytes));
-    final image = File.fromUri(Uri.parse("$baseUrl/api/user/profile-img"));
+    // final userInfo = jsonDecode(utf8.decode(response.bodyBytes));
+    // final image = Image.network(Uri.parse("$baseUrl/api/user/profile-img"));
+    const jsonString =
+        '{"ageRange": "20대", "boxDto": { "boxName": "체육관" }, "email": "choiyc1446@gmail.com", "gender": true, "nickname": "최영창" }';
+
+    final userInfo = jsonDecode(jsonString);
+
+    final image = Image.network(
+      "https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png",
+      fit: BoxFit.cover,
+    );
 
     final userprofile = UserProfile(
       box: userInfo["boxDto"]["boxName"],
