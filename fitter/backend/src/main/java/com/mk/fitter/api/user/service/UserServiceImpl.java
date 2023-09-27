@@ -322,6 +322,9 @@ public class UserServiceImpl implements UserService {
 	public void signOut(String accessToken) throws Exception {
 		UserDto user = getUserInfo(accessToken);
 
+		user.setProfileImgDto(null);
+		userRepository.save(user);
+
 		// 프로필 사진 서버/db에서 삭제
 		ProfileImgDto profileImgDto = user.getProfileImgDto();
 
