@@ -84,5 +84,11 @@ public class OAuth2Service {
 		return userRepository.save(createdUser);
 	}
 
+	public UserDto saveRefreshToken(int id, String refreshToken) {
+		UserDto userDto = userRepository.findById(id).orElseGet(() -> null);
+		userDto.setRefreshToken(refreshToken);
+		return userRepository.save(userDto);
+	}
+
 }
 

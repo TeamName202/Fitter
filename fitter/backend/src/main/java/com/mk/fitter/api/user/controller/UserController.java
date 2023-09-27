@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mk.fitter.api.file.repository.dto.ProfileImgDto;
+import com.mk.fitter.api.file.service.FileServiceImpl;
 import com.mk.fitter.api.user.repository.dto.UserDto;
 import com.mk.fitter.api.user.service.UserServiceImpl;
 
@@ -43,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	private final UserServiceImpl userService;
+	private final FileServiceImpl fileService;
 
 	@GetMapping("/user-info")
 	@ApiOperation(value = "유저 정보", notes = "유저 정보를 조회하는 API")
@@ -274,11 +276,7 @@ public class UserController {
 	@ApiOperation(value = "유저 탈퇴", notes = "회원탈퇴를 하는 API")
 	public ResponseEntity<String> deleteUser(@RequestHeader(name = "Authorization") String accessToken) {
 		try {
-			// 카카오랑 연결 끊기
-			userService.unlinkUser(accessToken);
-
-			// db에서 지우기
-			userService.deleteUser(accessToken);
+			userService.signOut(accessToken);
 			return new ResponseEntity<>("UserController :: 사용자 삭제 성공", HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("deleteUser :: {}", e.getMessage());

@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
 
 	private final RestTemplate restTemplate = new RestTemplate();
 
+	private final Integer DEFAULT_IMG_ID = 1;
+
 	public UserDto saveUserInfo(UserResponseVO newUserInfo, MultipartFile file) throws Exception {
 
 		UserDto user = userRepository.findById(newUserInfo.getId())
@@ -275,7 +277,7 @@ public class UserServiceImpl implements UserService {
 
 		// 기존 프로필 사진 서버/db에서 삭제
 		ProfileImgDto prevProfile = user.getProfileImgDto();
-		if (prevProfile != null) {
+		if (prevProfile != null && prevProfile.getId() != DEFAULT_IMG_ID) {
 			fileService.deleteProfileImg(prevProfile);
 		}
 
@@ -305,17 +307,35 @@ public class UserServiceImpl implements UserService {
 		user.setProfileImgDto(defaultImg);
 
 		// 프로필 사진 서버/db에서 삭제
-		if (profile != null) {
+		if (profile != null && profile.getId() != DEFAULT_IMG_ID) {
 			fileService.deleteProfileImg(profile);
 		}
 		return userRepository.save(user);
 	}
 
+	// 회원 탈퇴
+	@Override
+	public void signOut(String accessToken) throws Exception {
+		UserDto user = getUserInfo(accessToken);
+
+		// 프로필 사진 서버/db에서 삭제
+		ProfileImgDto profileImgDto = user.getProfileImgDto();
+
+		if(profileImgDto != null && profileImgDto.getId() != DEFAULT_IMG_ID) {
+			fileService.deleteProfileImg(user.getProfileImgDto());
+		}
+
+		// 카카오랑 연결 끊기
+		String socialId = user.getSocialId();
+		unlinkUser(socialId);
+
+		// 사용자 db에서 삭제
+		userRepository.deleteById(user.getId());
+	}
+
 	// 카카오랑 연결 끊기 구현
 	@Override
-	public void unlinkUser(String accessToken) throws Exception {
-		UserDto user = getUserInfo(accessToken);
-		String socialId = user.getSocialId();
+	public void unlinkUser(String socialId) throws Exception {
 		System.out.println(socialId);
 
 		// header 만들기
@@ -341,12 +361,5 @@ public class UserServiceImpl implements UserService {
 		);
 
 		//System.out.println("UserServiceImpl :: unlinkUser :: " + response.getBody().get("id"));
-	}
-
-	@Override
-	public void deleteUser(String accessToken) throws Exception {
-		Integer uid = jwtService.extractUID(accessToken)
-			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));
-		userRepository.deleteById(uid);
 	}
 }

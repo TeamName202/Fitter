@@ -74,6 +74,9 @@ public class OAuth2Controller {
 			// 헤더에 access, refresh 추가
 			jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
 
+			// 사용자 refresh token db에 저장
+			oAuth2Service.saveRefreshToken(userDto.getId(), refreshToken);
+
 			// responsebody에 nickname, id 보냄
 			UserResponseVO userResponseVO = UserResponseVO.builder()
 				.id(userDto.getId())

@@ -40,7 +40,7 @@ public interface UserService {
 
 	UserDto deleteUserprofileImg(String accessToken) throws Exception;
 
-	void unlinkUser(String accessToken) throws Exception;
-	void deleteUser(String accessToken) throws Exception;
+	void signOut(String accessToken) throws Exception;
+	void unlinkUser(String socialId) throws Exception;
 
 }
