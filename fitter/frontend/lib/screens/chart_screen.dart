@@ -22,9 +22,6 @@ class _ChartScreenState extends State<ChartScreen> {
   void initState() {
     super.initState();
     setAll();
-    // setState(() {
-    //   oneRM = callServer();
-    // });
   }
 
   bool showChartLabel = false;
@@ -48,7 +45,8 @@ class _ChartScreenState extends State<ChartScreen> {
     List<RMDetailModel> rmLists = [];
 
     if (response.statusCode == 200) {
-      print('Response data: ${response.body}');
+      // print('Response data: ${response.body}');
+      print("success");
       final List<dynamic> rms = jsonDecode(response.body);
       for (var rm in rms) {
         rmLists.add(RMDetailModel.fromJson(rm));
@@ -57,17 +55,6 @@ class _ChartScreenState extends State<ChartScreen> {
     }
     throw Error();
   }
-
-  // Future<void> makeListAsync(List<RMDetailModel> data) async {
-  //   setState(() {
-  //     for (int index = 0; index < data.length; index++) {
-  //       chartData.add(ChartData(
-  //         DateTime.parse(data[index].createDate),
-  //         data[index].maxWeight.toDouble(),
-  //       ));
-  //     }
-  //   });
-  // }
 
   void makeListAsync(List<RMDetailModel> data) async {
     setState(() {

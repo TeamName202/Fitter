@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:fitter/screens/chart_screen.dart';
+import 'package:fitter/screens/wod/wod_detail_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:fitter/widgets/button_mold.dart';
@@ -11,32 +11,65 @@ import 'package:bottom_picker/resources/arrays.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PRInputScreen extends StatefulWidget {
-  final String workoutName;
-  const PRInputScreen({super.key, required this.workoutName});
+class WodInputScreen extends StatefulWidget {
+  final String wodName, type, wodId;
+  const WodInputScreen(
+      {super.key,
+      required this.wodName,
+      required this.type,
+      required this.wodId});
 
   @override
-  State<PRInputScreen> createState() => _PRInputScreenState();
+  State<WodInputScreen> createState() => _WodInputScreenState();
 }
 
-class _PRInputScreenState extends State<PRInputScreen> {
+class _WodInputScreenState extends State<WodInputScreen> {
   final recordController = TextEditingController();
+  final minController = TextEditingController();
+  final secController = TextEditingController();
+  final hourController = TextEditingController();
+  String defaultHour = "00";
+  String defaultMin = "00";
+  String defaultSec = "00";
+
   var selectedDate = DateTime.now();
   late SharedPreferences prefs;
+  late String recordType;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      recordType = (widget.type == "For Time") ? "count" : "time";
+    });
+  }
 
   Future writePR() async {
     prefs = await SharedPreferences.getInstance();
-    var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/record/create');
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/named-wod/wod-record/create');
 
     final headers = {
       'Authorization': prefs.getString('Authorization').toString(),
       'Content-Type': 'application/json'
     };
+
+    if (hourController.text != "") {
+      defaultHour = hourController.text;
+    }
+    if (minController.text != "") {
+      defaultMin = minController.text;
+    }
+    if (secController.text != "") {
+      defaultSec = secController.text;
+    }
+
     final body = jsonEncode(
       {
         "createDate": DateFormat('yyyy-MM-dd').format(selectedDate),
-        "maxWeight": recordController.text,
-        "workoutName": widget.workoutName,
+        "count": recordController.text,
+        "time": "$defaultHour:$defaultMin:$defaultSec",
+        "wodId": widget.wodId,
       },
     );
 
@@ -95,7 +128,7 @@ class _PRInputScreenState extends State<PRInputScreen> {
       appBar: AppBar(
         toolbarHeight: kToolbarHeight * 1.5,
         title: Text(
-          "${widget.workoutName} RECORD",
+          "${widget.wodName} RECORD",
           style: const TextStyle(fontSize: 25),
         ),
         elevation: 0,
@@ -131,10 +164,51 @@ class _PRInputScreenState extends State<PRInputScreen> {
               ),
             ),
             const EmptyBox(boxSize: 1),
+            Container(
+                width: double.maxFinite,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                decoration: BoxDecoration(
+                    border: const Border(
+                        bottom: BorderSide(color: Color(0xff0080ff), width: 3)),
+                    color: Colors.blueGrey.shade50),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: hourController,
+                        decoration: const InputDecoration(
+                          labelText: "시",
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: minController,
+                        decoration: const InputDecoration(
+                          labelText: "분",
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: secController,
+                        decoration: const InputDecoration(
+                          labelText: "초",
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                  ],
+                )),
+            const EmptyBox(boxSize: 1),
             TextField(
               controller: recordController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'RECORD',
+                labelText: "count",
                 enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Color(0xff0080ff),
@@ -158,8 +232,10 @@ class _PRInputScreenState extends State<PRInputScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ChartScreen(workoutName: widget.workoutName),
+                    builder: (context) => WodDetailScreen(
+                        wodName: widget.wodName,
+                        type: widget.type,
+                        wodId: widget.wodId),
                   ),
                 );
               },

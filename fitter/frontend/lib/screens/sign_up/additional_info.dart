@@ -60,7 +60,7 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
       'Authorization': prefs.getString('Authorization').toString(),
       'Content-Type': 'application/json'
     };
-    final body = jsonEncode({"닉네임": nicknameTextEditController.text});
+    final body = jsonEncode({"nickname": nicknameTextEditController.text});
 
     final response = await http.post(url, headers: headers, body: body);
 
