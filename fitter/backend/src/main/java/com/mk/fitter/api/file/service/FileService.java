@@ -9,6 +9,8 @@ public interface FileService {
 
 	byte[] getProfileImg(ProfileImgDto profile) throws Exception;
 
+	ProfileImgDto getProfileImg(int id) throws Exception;
+
 	void deleteProfileImg(ProfileImgDto profile) throws Exception;
 
 	String createRandomFileName() throws Exception;

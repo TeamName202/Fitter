@@ -3,6 +3,7 @@ package com.mk.fitter.api.file.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -61,6 +62,11 @@ public class FileServiceImpl implements FileService {
 		byte[] imageByteArray = IOUtils.toByteArray(inputStream);
 		inputStream.close();
 		return imageByteArray;
+	}
+
+	@Override
+	public ProfileImgDto getProfileImg(int id) throws Exception {
+		 return profileImgRepository.findById(id).orElseThrow(() -> new Exception("getProfileImg :: 존재하지 않는 이미지입니다"));
 	}
 
 	@Override
