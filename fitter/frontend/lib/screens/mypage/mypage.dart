@@ -291,6 +291,13 @@ class _MyPageState extends State<MyPage> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                                 resign();
+                                ApiService.deleteToken();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
                               },
                             ),
                             TextButton(
