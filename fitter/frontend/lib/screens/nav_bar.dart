@@ -1,6 +1,7 @@
 import 'package:fitter/screens/daily/daily_calendar.dart';
 
 import 'package:fitter/screens/daily_keyword_screen.dart';
+import 'package:fitter/screens/mypage/mypage.dart';
 import 'package:flutter/material.dart';
 
 /// Flutter code sample for [BottomNavigationBar].
@@ -36,6 +37,35 @@ class BottomNavigationBarExample extends StatefulWidget {
 class _BottomNavigationBarExampleState
     extends State<BottomNavigationBarExample> {
   int _selectedIndex = 2;
+
+  static final List<Text> _widgetTitle = <Text>[
+    const Text(
+      "랭킹",
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+    const Text(
+      "기록",
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+    const Text(
+      "데일리",
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+    const Text(
+      "오늘의 키워드",
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+    const Text(
+      "와드 생성기",
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+  ];
+
   static const List<Widget> _widgetOptions = <Widget>[
     Calendar(),
     Calendar(),
@@ -54,6 +84,28 @@ class _BottomNavigationBarExampleState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: _widgetTitle.elementAt(_selectedIndex),
+        elevation: 0,
+        foregroundColor: const Color(0xFF0080FF),
+        backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const MyPage();
+                  },
+                ),
+              );
+            },
+            icon: const Icon(Icons.menu),
+          )
+        ],
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

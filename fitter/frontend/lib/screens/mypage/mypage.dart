@@ -1,4 +1,5 @@
 import 'package:fitter/models/user_profile.dart';
+import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/mypage_alertDialog.dart';
@@ -56,8 +57,8 @@ class _MyPageState extends State<MyPage> {
                       Column(
                         children: [
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 150,
+                            height: 150,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
                               border: Border.all(
@@ -93,10 +94,10 @@ class _MyPageState extends State<MyPage> {
                               if (snapshot.hasData) {
                                 return Text(
                                   snapshot.data!.nickname,
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                  style: const TextStyle(
+                                    fontSize: 21,
                                     fontWeight: FontWeight.w200,
-                                    color: Colors.black.withOpacity(0.4),
+                                    color: Colors.black,
                                   ),
                                 );
                               }
@@ -110,9 +111,9 @@ class _MyPageState extends State<MyPage> {
                                 return Text(
                                   snapshot.data!.box,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w200,
-                                    color: Colors.black.withOpacity(0.4),
+                                    color: Colors.black.withOpacity(0.8),
                                   ),
                                 );
                               }
@@ -232,6 +233,13 @@ class _MyPageState extends State<MyPage> {
               setState(() {
                 button3 = false;
               });
+              ApiService.deleteToken();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
