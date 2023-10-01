@@ -5,6 +5,7 @@ from datetime import date, timedelta, datetime
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.cors import CORSMiddleware
+from pytz import timezone
 
 from crawler import (asyncDongaSportsNewsCrawler,
                      asyncDongaHealthNewsCrawler,
@@ -90,7 +91,7 @@ def show_current_time():
     print("Scheduler executed at:", current_datetime)
 
 
-scheduler = BackgroundScheduler(timezone='Asia/Seoul')
+scheduler = BackgroundScheduler(timezone=timezone('Asia/Seoul'))
 scheduler.add_job(start_sports_crawler, 'cron', hour=0, minute=1)
 scheduler.add_job(start_health_crawler, 'cron', hour=0, minute=1)
 scheduler.add_job(show_current_time, 'cron', hour=0, minute=2)

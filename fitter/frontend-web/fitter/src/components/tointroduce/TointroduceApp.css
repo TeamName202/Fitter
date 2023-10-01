@@ -1,0 +1,17 @@
+label, input, button {
+    margin: 10px;
+    padding: 5px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .container {
+    margin: auto;
+  }
