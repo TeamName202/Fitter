@@ -195,12 +195,12 @@ class _AdditionalBoxState extends State<AdditionalBox> {
   Future goNext() async {
     await signUpEnd();
     if (signUpPassed) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const NavBarWidget(),
-        ),
-      );
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NavBarWidget(),
+          ),
+          (route) => false);
     }
   }
 

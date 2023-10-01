@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:fitter/models/news_model.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:flutter/material.dart';
-import 'package:card_slider/card_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher_string.dart';
@@ -175,17 +174,6 @@ class _DailyKeywordState extends State<DailyKeyword> {
     // }
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "오늘의 키워드",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        elevation: 0,
-        foregroundColor: const Color(0xFF0080FF),
-        backgroundColor: Colors.white,
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -239,20 +227,27 @@ class _DailyKeywordState extends State<DailyKeyword> {
               Flexible(
                 flex: 4,
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: Colors.lightBlue[100 * (keywordIndex + 1)],
+                  padding: const EdgeInsetsDirectional.only(
+                      start: 10, end: 10, top: 10),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(14.0), // 왼쪽 위 모서리를 둥글게
+                      topRight: Radius.circular(14.0), // 오른쪽 위 모서리를 둥글게
+                    ),
+                    color: Color.fromARGB(255, 113, 172, 255),
                   ),
                   child: Align(
                     alignment: Alignment.center,
                     child: Column(
                       children: [
-                        Text(
-                          isLoading
-                              ? 'is Loading ...'
-                              : keywords[keywordIndex].toString(),
-                          style: const TextStyle(
-                            fontSize: 28,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            isLoading
+                                ? 'is Loading ...'
+                                : keywords[keywordIndex].toString(),
+                            style: const TextStyle(
+                                fontSize: 28, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Expanded(
@@ -266,8 +261,7 @@ class _DailyKeywordState extends State<DailyKeyword> {
                                       : newsList[index].newsLink);
                                 },
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.all(10),
                                   child: ButtonMold(
                                     btnText: isNewsLoading
                                         ? "is Loading ..."

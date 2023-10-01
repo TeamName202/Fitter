@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fitter/models/rm_detail.dart';
 import 'package:fitter/screens/chart_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PRInputScreen extends StatefulWidget {
   final String workoutName;
-  const PRInputScreen({super.key, required this.workoutName});
+  final dynamic type;
+  const PRInputScreen({super.key, required this.workoutName, this.type});
 
   @override
   State<PRInputScreen> createState() => _PRInputScreenState();
@@ -23,6 +25,69 @@ class _PRInputScreenState extends State<PRInputScreen> {
   final recordController = TextEditingController();
   var selectedDate = DateTime.now();
   late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    (widget.type == "생성") ? () {} : callServer();
+  }
+
+  Future callServer() async {
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/record/read/${widget.type}');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      print('Response data: ${response.body}');
+      print("success");
+      final dynamic rawRecord = jsonDecode(response.body);
+
+      RMDetailModel record = RMDetailModel.fromJson(rawRecord);
+
+      final DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
+
+      setState(() {
+        selectedDate = dateFormatter.parse(record.createDate);
+      });
+
+      recordController.text = record.maxWeight.toString();
+    } else {
+      setState(() {
+        print('요청 실패: ${response.statusCode}');
+      });
+    }
+  }
+
+  Future updatePR() async {
+    prefs = await SharedPreferences.getInstance();
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/record/modify/${widget.type}');
+
+    final headers = {
+      'Authorization': prefs.getString('Authorization').toString(),
+      'Content-Type': 'application/json'
+    };
+
+    final body = jsonEncode(
+      {
+        "maxWeight": recordController.text,
+      },
+    );
+
+    final response = await http.put(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // 요청이 성공한 경우
+      setState(() {
+        print('요청 성공: ${response.body}');
+      });
+    } else {
+      // 요청이 실패한 경우
+      setState(() {
+        print('요청 실패: ${response.statusCode}');
+      });
+    }
+  }
 
   Future writePR() async {
     prefs = await SharedPreferences.getInstance();
@@ -95,7 +160,7 @@ class _PRInputScreenState extends State<PRInputScreen> {
       appBar: AppBar(
         toolbarHeight: kToolbarHeight * 1.5,
         title: Text(
-          "${widget.workoutName} RECORD",
+          (widget.type == "생성") ? "${widget.workoutName} RECORD" : "기 록 수 정",
           style: const TextStyle(fontSize: 25),
         ),
         elevation: 0,
@@ -116,7 +181,7 @@ class _PRInputScreenState extends State<PRInputScreen> {
                   color: Colors.blueGrey.shade50),
               child: GestureDetector(
                 onTap: () {
-                  _openDatePicker(context);
+                  (widget.type == "생성") ? _openDatePicker(context) : () {};
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,17 +219,17 @@ class _PRInputScreenState extends State<PRInputScreen> {
             const EmptyBox(boxSize: 1),
             GestureDetector(
               onTap: () async {
-                await writePR();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ChartScreen(workoutName: widget.workoutName),
-                  ),
-                );
+                (widget.type == "생성") ? await writePR() : await updatePR();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChartScreen(workoutName: widget.workoutName),
+                    ),
+                    (route) => false);
               },
-              child: const ButtonMold(
-                  btnText: "등 록 하 기",
+              child: ButtonMold(
+                  btnText: (widget.type == "생성") ? "등 록 하 기" : "수 정 하 기",
                   horizontalLength: 25,
                   verticalLength: 10,
                   buttonColor: true),

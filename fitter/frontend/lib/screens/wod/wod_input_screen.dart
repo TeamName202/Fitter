@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fitter/models/wod_detail_model.dart';
 import 'package:fitter/screens/wod/wod_detail_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WodInputScreen extends StatefulWidget {
-  final String wodName, type, wodId;
+  final String wodName, wodId;
+  final dynamic type;
   const WodInputScreen(
       {super.key,
       required this.wodName,
@@ -34,14 +36,92 @@ class _WodInputScreenState extends State<WodInputScreen> {
 
   var selectedDate = DateTime.now();
   late SharedPreferences prefs;
-  late String recordType;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      recordType = (widget.type == "For Time") ? "count" : "time";
-    });
+    (widget.type == "생성") ? () {} : callServer();
+  }
+
+  Future callServer() async {
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/named-wod/wod-record/read/${widget.type}');
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      print('Response data: ${response.body}');
+      print("success");
+      final dynamic wod = jsonDecode(response.body);
+
+      WODDetailModel wodDetail = WODDetailModel.fromJson(wod);
+
+      final DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
+
+      setState(() {
+        selectedDate = dateFormatter.parse(wodDetail.createDate);
+      });
+
+      if (wodDetail.time != null) {
+        final parts = wodDetail.time!.split(':');
+        if (parts.length == 3) {
+          hourController.text = parts[0];
+          minController.text = parts[1];
+          secController.text = parts[2];
+        }
+      }
+
+      if (wodDetail.count != null) {
+        recordController.text = wodDetail.count.toString();
+      }
+    } else {
+      // 요청이 실패한 경우
+      setState(() {
+        print('요청 실패: ${response.statusCode}');
+      });
+    }
+  }
+
+  Future updatePR() async {
+    prefs = await SharedPreferences.getInstance();
+    var url = Uri.parse(
+        'http://j9d202.p.ssafy.io:8000/api/named-wod/wod-record/modify/${widget.type}');
+
+    final headers = {
+      'Authorization': prefs.getString('Authorization').toString(),
+      'Content-Type': 'application/json'
+    };
+
+    if (hourController.text != "") {
+      defaultHour = hourController.text;
+    }
+    if (minController.text != "") {
+      defaultMin = minController.text;
+    }
+    if (secController.text != "") {
+      defaultSec = secController.text;
+    }
+
+    final body = jsonEncode(
+      {
+        "count": recordController.text,
+        "time": "$defaultHour:$defaultMin:$defaultSec",
+        "wodId": widget.wodId,
+      },
+    );
+
+    final response = await http.put(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // 요청이 성공한 경우
+      setState(() {
+        print('요청 성공: ${response.body}');
+      });
+    } else {
+      // 요청이 실패한 경우
+      setState(() {
+        print('요청 실패: ${response.statusCode}');
+      });
+    }
   }
 
   Future writePR() async {
@@ -128,7 +208,7 @@ class _WodInputScreenState extends State<WodInputScreen> {
       appBar: AppBar(
         toolbarHeight: kToolbarHeight * 1.5,
         title: Text(
-          "${widget.wodName} RECORD",
+          (widget.type == "생성") ? "${widget.wodName} RECORD" : "기 록 수 정",
           style: const TextStyle(fontSize: 25),
         ),
         elevation: 0,
@@ -149,7 +229,7 @@ class _WodInputScreenState extends State<WodInputScreen> {
                   color: Colors.blueGrey.shade50),
               child: GestureDetector(
                 onTap: () {
-                  _openDatePicker(context);
+                  (widget.type == "생성") ? _openDatePicker(context) : () {};
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,19 +308,18 @@ class _WodInputScreenState extends State<WodInputScreen> {
             const EmptyBox(boxSize: 1),
             GestureDetector(
               onTap: () async {
-                await writePR();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WodDetailScreen(
+                (widget.type == "생성") ? await writePR() : await updatePR();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => WodDetailScreen(
                         wodName: widget.wodName,
-                        type: widget.type,
-                        wodId: widget.wodId),
-                  ),
-                );
+                        wodId: widget.wodId,
+                      ),
+                    ),
+                    (route) => false);
               },
-              child: const ButtonMold(
-                  btnText: "등 록 하 기",
+              child: ButtonMold(
+                  btnText: (widget.type == "생성") ? "등 록 하 기" : "수 정 하 기",
                   horizontalLength: 25,
                   verticalLength: 10,
                   buttonColor: true),
