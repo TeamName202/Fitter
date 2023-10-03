@@ -12,6 +12,15 @@ label, input, button {
     align-items: center;
   }
   
-  .container {
-    margin: auto;
-  }
+.container {
+  margin: auto;
+}
+
+img {
+  max-width: 50%;
+  height: auto;
+}
+
+div {
+  margin-bottom: 10px;
+}

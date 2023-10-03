@@ -2,7 +2,7 @@ import atexit
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date, timedelta, datetime
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.cors import CORSMiddleware
 from pytz import timezone
@@ -46,12 +46,28 @@ def health_crawler(request: Request):
 
 @app.post("/api/sports")
 def sports_crawler():
-    start_sports_crawler()
+    try:
+        start_sports_crawler()
+        return {"message": "Sports crawler started successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error occurred: {e}")
 
 
 @app.post("/api/health")
 def health_crawler():
-    start_health_crawler()
+    try:
+        start_health_crawler()
+        return {"message": "Health crawler started successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error occurred: {e}")
+
+@app.post("/api/refresh")
+def refresh_files():
+    try:
+        delete_old_files()
+        return {"message": "delete old files successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error occurred: {e}")
 
 
 def start_sports_crawler():
