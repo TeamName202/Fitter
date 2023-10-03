@@ -1,5 +1,7 @@
 // import 'dart:ffi';
 import 'package:fitter/models/wod_list_model.dart';
+import 'package:fitter/screens/chart_screen.dart';
+import 'package:fitter/screens/wod/wod_detail_screen.dart';
 import 'package:fitter/services/record_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +13,8 @@ class WodRecordScreen extends StatefulWidget {
 }
 
 class _WodRecordScreenState extends State<WodRecordScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   late Future<List<WodListModel>> heros;
   late Future<List<WodListModel>> girls;
 
@@ -41,6 +45,9 @@ class _WodRecordScreenState extends State<WodRecordScreen> {
     selected = 'Girls';
     setState(() {
       currentData = RecordApiService.getNamedWods(selected);
+      // 스크롤 제일 위로 올리기
+      _scrollController.jumpTo(0.0);
+
       // 버튼 스타일 변경
     });
   }
@@ -51,6 +58,9 @@ class _WodRecordScreenState extends State<WodRecordScreen> {
     selected = 'Hero';
     setState(() {
       currentData = RecordApiService.getNamedWods(selected);
+      // 스크롤 제일 위로 올리기
+      _scrollController.jumpTo(0.0);
+
       // 버튼 스타일 변경
     });
   }
@@ -121,7 +131,7 @@ class _WodRecordScreenState extends State<WodRecordScreen> {
               future: currentData,
               builder: (context, snapshot) {
                 return Expanded(
-                  child: makeList(snapshot),
+                  child: makeList(snapshot, _scrollController),
                 );
               }),
           const SizedBox(
@@ -133,26 +143,27 @@ class _WodRecordScreenState extends State<WodRecordScreen> {
   }
 }
 
-ListView makeList(AsyncSnapshot<List<WodListModel>> snapshot) {
+ListView makeList(AsyncSnapshot<List<WodListModel>> snapshot,
+    ScrollController scrollController) {
   return ListView.separated(
+    scrollDirection: Axis.vertical,
+    controller: scrollController, // ScrollController를 ListView에 연결.
     padding: const EdgeInsets.symmetric(horizontal: 20),
     itemCount: snapshot.data!.length,
     itemBuilder: (BuildContext context, int index) {
       var prRecord = snapshot.data![index];
       return GestureDetector(
-        // onTap: () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       // DetailScreen은 wod 상세 페이지로 수정하셈.
-        //       builder: (context) => DetailScreen(
-        //           id: prRecord.id,
-        //           wodtype: prRecord.type,
-        //           workoutName: prRecord.name),
-        //       fullscreenDialog: true,
-        //     ),
-        //   );
-        // },
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              // DetailScreen은 wod 상세 페이지로 수정하셈.
+              builder: (context) => WodDetailScreen(
+                  wodId: prRecord.id.toString(), wodName: prRecord.name),
+              fullscreenDialog: true,
+            ),
+          );
+        },
         child: Container(
             height: 50,
             color: const Color(0XFFEEF1F4),

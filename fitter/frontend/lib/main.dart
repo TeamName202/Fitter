@@ -30,13 +30,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       // home: LoginScreen(),
       // home: MyPage()
       // home: ChartScreen(workoutName: "Clean"),
-      // home: RecordScreen(),
+      home: RecordScreen(),
       // home: DailyKeyword(),
-      home: CrossfitRankingScreen(),
+      // home: CrossfitRankingScreen(),
       // home: WodRakingScreen(),
       // home: LoginScreen(),
     );
