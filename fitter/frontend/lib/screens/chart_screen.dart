@@ -35,8 +35,12 @@ class _ChartScreenState extends State<ChartScreen> {
     prefs = await SharedPreferences.getInstance();
     final accessToken = prefs.getString('Authorization');
 
-    Map<String, String> headers = {
-      'Authorization': accessToken.toString(),
+    // Map<String, String> headers = {
+    //   'Authorization': accessToken.toString(),
+    // };
+    final headers = {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NTg3NjY1NywiaWQiOjQwLCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.hGHLJoP5Nj9p-cI2xADluyNEJIlPN1eu1668kwiob9aWO_LZWh9wZ2H1YJPRbgwNZpsecadDtFOCCjKe5UdzBw'
     };
 
     var url = Uri.parse(

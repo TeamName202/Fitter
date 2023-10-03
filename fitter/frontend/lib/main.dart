@@ -4,6 +4,9 @@ import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/screens/pr_input_screen.dart';
 import 'package:fitter/screens/daily_keyword_screen.dart';
+import 'package:fitter/screens/ranking/crossfit_ranking_screen.dart';
+import 'package:fitter/screens/ranking/wod_ranking_screen.dart';
+import 'package:fitter/screens/record/record_screen.dart';
 import 'package:fitter/screens/wod/wod_detail_screen.dart';
 import 'package:fitter/screens/wod/wod_input_screen.dart';
 
@@ -27,8 +30,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return MaterialApp(
+      // home: LoginScreen(),
+      // home: MyPage()
+      // home: ChartScreen(workoutName: "Clean"),
+      // home: RecordScreen(),
+      // home: DailyKeyword(),
+      home: CrossfitRankingScreen(),
+      // home: WodRakingScreen(),
+      // home: LoginScreen(),
     );
   }
 }

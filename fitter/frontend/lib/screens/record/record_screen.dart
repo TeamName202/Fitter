@@ -36,6 +36,7 @@ class _RecordScreenState extends State<RecordScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         bottom: TabBar(

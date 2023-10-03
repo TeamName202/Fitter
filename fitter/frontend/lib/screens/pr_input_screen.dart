@@ -93,8 +93,13 @@ class _PRInputScreenState extends State<PRInputScreen> {
     prefs = await SharedPreferences.getInstance();
     var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/record/create');
 
+    // final headers = {
+    //   'Authorization': prefs.getString('Authorization').toString(),
+    //   'Content-Type': 'application/json'
+    // };
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NTg3NjY1NywiaWQiOjQwLCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.hGHLJoP5Nj9p-cI2xADluyNEJIlPN1eu1668kwiob9aWO_LZWh9wZ2H1YJPRbgwNZpsecadDtFOCCjKe5UdzBw',
       'Content-Type': 'application/json'
     };
     final body = jsonEncode(

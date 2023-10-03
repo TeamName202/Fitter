@@ -1,6 +1,7 @@
 // import 'package:fitter/widgets/record_widget.dart';
 import 'package:fitter/models/pr_category_model.dart';
 import 'package:fitter/models/pr_list_model.dart';
+import 'package:fitter/screens/chart_screen.dart';
 import 'package:fitter/services/record_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -85,6 +86,7 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // const Text('pr 레코드'),
@@ -175,36 +177,47 @@ ListView makePrList(AsyncSnapshot<List<PrListModel>> snapshot,
     itemBuilder: (BuildContext context, int index) {
       var prRecord = snapshot.data![index];
       print(prRecord);
-      return Container(
-          height: 60,
-          color: const Color(0XFFEEF1F4),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 10),
-                Expanded(
-                  child: SizedBox(
-                    width: 100,
-                    child: Text(
-                      prRecord.name,
-                      textAlign: TextAlign.left,
+      return GestureDetector(
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChartScreen(workoutName: prRecord.name),
+              fullscreenDialog: true,
+            ),
+          );
+        },
+        child: Container(
+            height: 60,
+            color: const Color(0XFFEEF1F4),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SizedBox(
+                      width: 100,
+                      child: Text(
+                        prRecord.name,
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                   ),
-                ),
-                // const SizedBox(width: 50),
-                Expanded(
-                    child: Text(
-                  '${prRecord.max_weight}lb',
-                  textAlign: TextAlign.center,
-                )),
-                // const Expanded(
-                const Icon(Icons.chevron_right_rounded, color: Colors.black),
-                // ),
-                const SizedBox(width: 10),
-              ],
-            ),
-          ));
+                  // const SizedBox(width: 50),
+                  Expanded(
+                      child: Text(
+                    '${prRecord.max_weight}lb',
+                    textAlign: TextAlign.center,
+                  )),
+                  // const Expanded(
+                  const Icon(Icons.chevron_right_rounded, color: Colors.black),
+                  // ),
+                  const SizedBox(width: 10),
+                ],
+              ),
+            )),
+      );
     },
     separatorBuilder: (BuildContext context, int index) => const Divider(),
   );
