@@ -35,7 +35,8 @@ class App extends StatelessWidget {
       // home: LoginScreen(),
       // home: MyPage()
       // home: ChartScreen(workoutName: "Clean"),
-      home: RecordScreen(),
+      // home: RecordScreen(),
+      home: NavBarWidget(),
       // home: DailyKeyword(),
       // home: CrossfitRankingScreen(),
       // home: WodRakingScreen(),

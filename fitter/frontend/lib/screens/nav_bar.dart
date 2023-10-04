@@ -1,6 +1,7 @@
 import 'package:fitter/screens/daily/daily_calendar.dart';
 
 import 'package:fitter/screens/daily_keyword_screen.dart';
+import 'package:fitter/screens/generator/generator.dart';
 import 'package:fitter/screens/mypage/mypage.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +72,7 @@ class _BottomNavigationBarExampleState
     Calendar(),
     Calendar(),
     DailyKeyword(),
-    Calendar(),
+    WodGenerator(),
   ];
 
   void _onItemTapped(int index) {

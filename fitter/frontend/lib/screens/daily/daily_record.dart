@@ -1,3 +1,4 @@
+import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/services/api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -163,7 +164,11 @@ class _DailyExerciseRecordState extends State<DailyExerciseRecord> {
                           'type': getTypeText(selectedIndex), // 클릭된 요소의 정보를 사용
                         },
                       );
-                      // Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NavBarWidget()),
+                          (route) => false);
                     },
                     child: Container(
                       alignment: Alignment.center,
