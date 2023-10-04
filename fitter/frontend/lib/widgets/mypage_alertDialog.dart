@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class MyPageAlertDialog extends StatefulWidget {
-  const MyPageAlertDialog({super.key});
+  const MyPageAlertDialog(Future<UserProfile> userProfile, {super.key});
 
   @override
   State<MyPageAlertDialog> createState() => _MyPageAlertDialogState();

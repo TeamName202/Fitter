@@ -58,15 +58,6 @@ class ApiService {
       },
       fit: BoxFit.cover,
     );
-    // const jsonString =
-    // '{"ageRange": "20대", "boxDto": { "boxName": "체육관" }, "email": "choiyc1446@gmail.com", "gender": true, "nickname": "최영창" }';
-
-    // final userInfo = jsonDecode(jsonString);
-
-    // final image = Image.network(
-    //   "https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png",
-    //   fit: BoxFit.cover,
-    // );
 
     final userprofile = UserProfile(
       box: userInfo["boxDto"]["boxName"],
