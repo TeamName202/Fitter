@@ -61,6 +61,7 @@ def health_crawler():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error occurred: {e}")
 
+
 @app.post("/api/refresh")
 def refresh_files():
     try:
@@ -71,23 +72,17 @@ def refresh_files():
 
 
 def start_sports_crawler():
-    try:
-        asyncChosunSportsNewsCrawler.start()
-        asyncDongaSportsNewsCrawler.start()
-        asyncJoongangSportsNewsCrawler.start()
-        asyncNaverSportsNewsCrawler.start()
-    except Exception as e:
-        print(f"Error occurred: {e}")
+    asyncChosunSportsNewsCrawler.start()
+    asyncDongaSportsNewsCrawler.start()
+    asyncJoongangSportsNewsCrawler.start()
+    asyncNaverSportsNewsCrawler.start()
 
 
 def start_health_crawler():
-    try:
-        asyncNaverHealthNewsCrawler.start()
-        asyncChosunHealthNewsCrawler.start()
-        asyncDongaHealthNewsCrawler.start()
-        asyncJoongangHealthNewsCrawler.start()
-    except Exception as e:
-        print(f"Error occurred: {e}")
+    asyncNaverHealthNewsCrawler.start()
+    asyncChosunHealthNewsCrawler.start()
+    asyncDongaHealthNewsCrawler.start()
+    asyncJoongangHealthNewsCrawler.start()
 
 
 def delete_old_files():  # 일주일 지난 크롤링 파일 삭제
@@ -108,9 +103,9 @@ def show_current_time():
 
 
 scheduler = BackgroundScheduler(timezone=timezone('Asia/Seoul'))
+scheduler.add_job(show_current_time, 'cron', hour=0, minute=1)
 scheduler.add_job(start_sports_crawler, 'cron', hour=0, minute=1)
 scheduler.add_job(start_health_crawler, 'cron', hour=0, minute=1)
-scheduler.add_job(show_current_time, 'cron', hour=0, minute=2)
 scheduler.add_job(delete_old_files, 'cron', hour=0, minute=10)
 scheduler.start()
 
