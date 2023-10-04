@@ -32,6 +32,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -140,27 +141,11 @@ class _MyPageState extends State<MyPage> {
                               context: context,
                               barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
                               builder: (BuildContext context) {
-                                return AlertDialog(
+                                return Dialog(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
-                                  content: MyPageAlertDialog(),
-                                  actions: [
-                                    Center(
-                                      child: TextButton(
-                                        child: const ButtonMold(
-                                          btnText: "수정완료",
-                                          horizontalLength: 30,
-                                          verticalLength: 10,
-                                          buttonColor: true,
-                                        ),
-                                        onPressed: () {
-                                          // 수정한 내용 저장하는 로직 작성해야 함
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ),
-                                  ],
+                                  child: const MyPageAlertDialog(),
                                 );
                               },
                             );

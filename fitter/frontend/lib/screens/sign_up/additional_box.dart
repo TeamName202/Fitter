@@ -59,7 +59,7 @@ class _AdditionalBoxState extends State<AdditionalBox> {
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
-      boxList = jsonDecode(response.body);
+      boxList = jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       print('Request failed with status: ${response.statusCode}');
       print('Error message: ${response.body}');
@@ -251,68 +251,71 @@ class _AdditionalBoxState extends State<AdditionalBox> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: editingController,
-                    decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                            width: 3,
+              child: Expanded(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: editingController,
+                      decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                              width: 3,
+                            ),
                           ),
-                        ),
-                        labelText: "BOX",
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          color: Color.fromARGB(207, 74, 124, 174),
-                        )),
-                    onChanged: (query) {
-                      // 검색에 따라 결과 업데이트
-                      getSearchResults(query);
-                      checkRightBox(query);
-                    },
-                    onTap: () {
-                      outSearchResults();
-                      getKeyboard();
-                    },
-                    onSubmitted: (query) => {getKeyboard()},
-                    focusNode: focusNode,
-                  ),
-                  Offstage(
-                    offstage: !focusNode.hasFocus,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        height: searchResults.length < 3
-                            ? searchResults.length * 60
-                            : 170,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xff0080ff))),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: searchResults.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                editingController.text =
-                                    searchResults[index]['boxName'];
-                                boxId = searchResults[index]['id'];
-                                outSearchResults();
-                                isRightBox = true;
-                              },
-                              child: ListTile(
-                                title: Text(searchResults[index]['boxName']),
-                                subtitle:
-                                    Text(searchResults[index]['boxAddress']),
-                              ),
-                            );
-                          },
+                          labelText: "BOX",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(207, 74, 124, 174),
+                          )),
+                      onChanged: (query) {
+                        // 검색에 따라 결과 업데이트
+                        getSearchResults(query);
+                        checkRightBox(query);
+                      },
+                      onTap: () {
+                        outSearchResults();
+                        getKeyboard();
+                      },
+                      onSubmitted: (query) => {getKeyboard()},
+                      focusNode: focusNode,
+                    ),
+                    Offstage(
+                      offstage: !focusNode.hasFocus,
+                      child: SingleChildScrollView(
+                        child: Container(
+                          height: searchResults.length < 3
+                              ? searchResults.length * 60
+                              : 170,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: const Color(0xff0080ff))),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: searchResults.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  editingController.text =
+                                      searchResults[index]['boxName'];
+                                  boxId = searchResults[index]['id'];
+                                  outSearchResults();
+                                  isRightBox = true;
+                                },
+                                child: ListTile(
+                                  title: Text(searchResults[index]['boxName']),
+                                  subtitle:
+                                      Text(searchResults[index]['boxAddress']),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Offstage(

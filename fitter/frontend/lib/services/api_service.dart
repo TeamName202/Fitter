@@ -51,6 +51,29 @@ class ApiService {
     userProfile.then((value) => value.image = image);
   }
 
+  static void updateProfile(String nickname, String? boxId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('Authorization').toString();
+
+    await http.put(
+      Uri.parse("$baseUrl/api/user/nickname"),
+      body: {"nickname": nickname},
+      headers: {
+        "Authorization": token,
+      },
+    );
+
+    if (boxId != null) {
+      print(boxId);
+      await http.put(
+        Uri.parse("$baseUrl/api/user/box/$boxId"),
+        headers: {
+          "Authorization": token,
+        },
+      );
+    }
+  }
+
   static void deleteToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('Authorization');
