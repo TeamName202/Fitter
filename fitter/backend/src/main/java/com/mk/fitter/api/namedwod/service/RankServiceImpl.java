@@ -1,5 +1,7 @@
 package com.mk.fitter.api.namedwod.service;
 
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,14 +28,14 @@ public class RankServiceImpl implements RankService {
 	private final UserRepository userRepository;
 
 	@Override
-	public Page<WodRecordDto> getRanks(String wodName, Pageable pageable) throws Exception {
+	public Page<Map<String, String>> getRanks(String wodName, Pageable pageable) throws Exception {
 		WodDto wodDto = wodRepository.findByName(wodName);
 		if(wodDto == null) return null;
 		return wodRecordRepository.findRankById(wodDto.getId(), pageable);
 	}
 
 	@Override
-	public WodRecordDto getMyRank(String wodName, String accessToken) throws Exception {
+	public Map<String, String> getMyRank(String wodName, String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
 			.orElseThrow(() -> new Exception("getMyRank :: 유효하지 않은 access token입니다."));
 
