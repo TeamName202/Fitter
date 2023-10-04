@@ -37,6 +37,7 @@ class _CalendarState extends State<Calendar> {
   Future<void> fetchEventsForMonth(DateTime day) async {
     final fetchedEvents = await ApiService().fetchEventsForMonth(day);
     setState(() {
+      events = [];
       events.addAll(fetchedEvents);
     });
   }
