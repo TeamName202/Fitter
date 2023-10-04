@@ -40,7 +40,9 @@ class RecordApiService {
     List<PrListModel> prListInstances = [];
     final prefs = await SharedPreferences.getInstance();
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+      // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
     final url = Uri.parse("$baseUrl/record/list/rank");
@@ -81,7 +83,9 @@ class RecordApiService {
     List<WodListModel> namedWodInstances = [];
     final prefs = await SharedPreferences.getInstance();
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+      // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
     final url = Uri.parse('$baseUrl/named-wod/list/$named');
@@ -170,7 +174,9 @@ class RecordApiService {
     List<WodRankingModel> wodRankingInstances = [];
     final prefs = await SharedPreferences.getInstance();
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+      // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
     final url = Uri.parse("$baseUrl/rank/$wodName");
@@ -204,7 +210,8 @@ class RecordApiService {
     List<MyWodRankingModel> myWodRankingInstances = [];
     final prefs = await SharedPreferences.getInstance();
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
     };
 
     final url = Uri.parse("$baseUrl/rank/my-rank/$wodName");
@@ -213,16 +220,14 @@ class RecordApiService {
       final MyWodRankings = jsonDecode(response.body); // string 타입을 json으로 바꿔줌.
       print('wodName : $wodName');
       for (var MyWodRanking in MyWodRankings) {
-        if (MyWodRanking['content']['wodType']['type'] == 'For Time') {
-          MyWodRanking['content']['count'] = MyWodRanking['content']['time']
-                  ['hour'] +
+        if (MyWodRanking['wodDto']['wodType']['type'] == 'For Time') {
+          MyWodRanking['count'] = MyWodRanking['time']['hour'] +
               ':' +
-              MyWodRanking['content']['time']['minute'] +
+              MyWodRanking['time']['minute'] +
               ':' +
-              MyWodRanking['content']['time']['second'];
+              MyWodRanking['time']['second'];
         } else {
-          MyWodRanking['content']['count'] =
-              MyWodRanking['content']['count'].toString();
+          MyWodRanking['count'] = MyWodRanking['count'].toString();
         }
         print('wodRaking : $MyWodRanking');
         myWodRankingInstances.add(MyWodRankingModel.fromJson(MyWodRanking));

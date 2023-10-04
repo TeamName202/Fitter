@@ -86,8 +86,14 @@ class _WodInputScreenState extends State<WodInputScreen> {
     var url = Uri.parse(
         'http://j9d202.p.ssafy.io:8000/api/named-wod/wod-record/modify/${widget.type}');
 
+    // final headers = {
+    //   'Authorization': prefs.getString('Authorization').toString(),
+    //   'Content-Type': 'application/json'
+    // };
+
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA',
       'Content-Type': 'application/json'
     };
 
@@ -130,7 +136,9 @@ class _WodInputScreenState extends State<WodInputScreen> {
         'http://j9d202.p.ssafy.io:8000/api/named-wod/wod-record/create');
 
     final headers = {
-      'Authorization': prefs.getString('Authorization').toString(),
+      // 'Authorization': prefs.getString('Authorization').toString(),
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA',
       'Content-Type': 'application/json'
     };
 

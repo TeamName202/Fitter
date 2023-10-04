@@ -83,6 +83,26 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
     });
   }
 
+  Future<void> navigateAndUpdate(BuildContext context, String prName) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChartScreen(workoutName: prName),
+        fullscreenDialog: true,
+      ),
+    );
+
+    setState(() {
+      prRecordLists = RecordApiService.getPrRecordList(selectedPR);
+    });
+  }
+
+  // void refreshData() {
+  //   setState(() {
+  //     prRecordLists = RecordApiService.getPrRecordList(selectedPR);
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,60 +185,64 @@ class _PrRecordScreenState extends State<PrRecordScreen> {
       ),
     );
   }
-}
 
-ListView makePrList(AsyncSnapshot<List<PrListModel>> snapshot,
-    ScrollController scrollController) {
-  return ListView.separated(
-    scrollDirection: Axis.vertical,
-    controller: scrollController, // ScrollController를 ListView에 연결.
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    itemCount: snapshot.data!.length,
-    itemBuilder: (BuildContext context, int index) {
-      var prRecord = snapshot.data![index];
-      print(prRecord);
-      return GestureDetector(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChartScreen(workoutName: prRecord.name),
-              fullscreenDialog: true,
-            ),
-          );
-        },
-        child: Container(
-            height: 60,
-            color: const Color(0XFFEEF1F4),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: SizedBox(
-                      width: 100,
-                      child: Text(
-                        prRecord.name,
-                        textAlign: TextAlign.left,
+  ListView makePrList(AsyncSnapshot<List<PrListModel>> snapshot,
+      ScrollController scrollController) {
+    return ListView.separated(
+      scrollDirection: Axis.vertical,
+      controller: scrollController, // ScrollController를 ListView에 연결.
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      itemCount: snapshot.data!.length,
+      itemBuilder: (BuildContext context, int index) {
+        var prRecord = snapshot.data![index];
+        print(prRecord);
+        return GestureDetector(
+          // onTap: () async {
+          //   await Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => ChartScreen(workoutName: prRecord.name),
+          //       fullscreenDialog: true,
+          //     ),
+          //   );
+
+          // },
+
+          onTap: () => navigateAndUpdate(context, prRecord.name),
+          child: Container(
+              height: 60,
+              color: const Color(0XFFEEF1F4),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SizedBox(
+                        width: 100,
+                        child: Text(
+                          prRecord.name,
+                          textAlign: TextAlign.left,
+                        ),
                       ),
                     ),
-                  ),
-                  // const SizedBox(width: 50),
-                  Expanded(
-                      child: Text(
-                    '${prRecord.max_weight}lb',
-                    textAlign: TextAlign.center,
-                  )),
-                  // const Expanded(
-                  const Icon(Icons.chevron_right_rounded, color: Colors.black),
-                  // ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-            )),
-      );
-    },
-    separatorBuilder: (BuildContext context, int index) => const Divider(),
-  );
+                    // const SizedBox(width: 50),
+                    Expanded(
+                        child: Text(
+                      '${prRecord.max_weight}lb',
+                      textAlign: TextAlign.center,
+                    )),
+                    // const Expanded(
+                    const Icon(Icons.chevron_right_rounded,
+                        color: Colors.black),
+                    // ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+              )),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+    );
+  }
 }

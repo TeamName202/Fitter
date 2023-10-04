@@ -26,7 +26,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return const MaterialApp(
-      home: LoginScreen(),
-    );
+        // home: LoginScreen(),
+        // home: RecordScreen());
+        home: WodRakingScreen());
+    // home: CrossfitRankingScreen());
   }
 }
