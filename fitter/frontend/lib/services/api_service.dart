@@ -41,8 +41,6 @@ class ApiService {
       ),
     );
 
-    print(response);
-
     final response2 = await http.get(
       Uri.parse("$baseUrl/api/user/user-info"),
       headers: {
@@ -67,6 +65,8 @@ class ApiService {
       nickname: userInfo["nickname"],
       image: image,
     );
+
+    print(response2.body);
     return userprofile;
   }
 
@@ -74,13 +74,17 @@ class ApiService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('Authorization').toString();
 
-    await http.put(
-      Uri.parse("$baseUrl/api/user/nickname"),
-      body: {"nickname": nickname},
-      headers: {
-        "Authorization": token,
-      },
-    );
+    late final headers = {
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    };
+    final response = await http.put(Uri.parse("$baseUrl/api/user/nickname"),
+        headers: headers,
+        body: jsonEncode({
+          'nickname': nickname,
+        }));
+
+    print("asdasdasd$nickname");
 
     if (boxId != null) {
       print(boxId);

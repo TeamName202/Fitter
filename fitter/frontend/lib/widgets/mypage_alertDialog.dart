@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fitter/models/user_profile.dart';
+import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/input_text.dart';
@@ -11,15 +12,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class MyPageAlertDialog extends StatefulWidget {
-  const MyPageAlertDialog(Future<UserProfile> userProfile, {super.key});
+  const MyPageAlertDialog({super.key});
 
   @override
   State<MyPageAlertDialog> createState() => _MyPageAlertDialogState();
 }
 
 class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
-  late Future<UserProfile> userProfile;
   late List<dynamic> boxList;
+  late Future<UserProfile> userProfile;
 
   List<Map<String, dynamic>> searchResults = [];
   FocusNode focusNode = FocusNode();
@@ -37,7 +38,6 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
   @override
   void initState() {
     super.initState();
-
     onAll();
     setState(() {
       userProfile = ApiService.getUserProfile();
@@ -139,7 +139,7 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                         if (snapshot.hasData) {
                           return ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: snapshot.data!.image!,
+                            child: snapshot.data!.image,
                           );
                         }
                         return ClipRRect(
@@ -161,8 +161,9 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                 GestureDetector(
                   onTap: () async {
                     await ApiService.deleteProfile();
+                    Future<UserProfile> newUser = ApiService.getUserProfile();
                     setState(() {
-                      userProfile = ApiService.getUserProfile();
+                      userProfile = newUser;
                     });
                   },
                   child: const ButtonMold(
@@ -176,9 +177,11 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                     final pickedImage = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
 
+                    await ApiService.changeProfileImg(pickedImage, userProfile);
+                    //userProfile 은 Future<UserProfile>
+                    Future<UserProfile> newUser = ApiService.getUserProfile();
                     setState(() {
-                      userProfile =
-                          ApiService.changeProfileImg(pickedImage, userProfile);
+                      userProfile = newUser;
                     });
                   },
                   child: const ButtonMold(
@@ -199,7 +202,6 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                   return TextField(
                     onChanged: (value) {
                       nickname = value;
-                      print(nickname);
                     },
                     controller:
                         TextEditingController(text: snapshot.data!.nickname),

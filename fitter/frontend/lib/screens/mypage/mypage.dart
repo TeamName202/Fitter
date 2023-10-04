@@ -145,7 +145,7 @@ class _MyPageState extends State<MyPage> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
-                                  child: MyPageAlertDialog(userProfile),
+                                  child: const MyPageAlertDialog(),
                                 );
                               },
                             );
