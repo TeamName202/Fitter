@@ -1,5 +1,6 @@
 import 'package:fitter/screens/daily/daily_calendar.dart';
 import 'package:fitter/screens/chart_screen.dart';
+import 'package:fitter/screens/generator/generator.dart';
 import 'package:fitter/screens/login_screen.dart';
 import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/screens/pr_input_screen.dart';

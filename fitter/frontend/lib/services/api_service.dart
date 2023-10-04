@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
+  late SharedPreferences prefs;
 
   static void changeProfileImg(
       pickedImage, Future<UserProfile> userProfile) async {
@@ -122,20 +123,21 @@ class ApiService {
   }
 
   Future<List> fetchEventsForMonth(DateTime day) async {
-    const api = "api/calendar/test";
+    final prefs = await SharedPreferences.getInstance();
+    late final headers = {
+      'Authorization': prefs.getString('Authorization').toString(),
+    };
+    const api = "api/calendar";
     final firstDayOfMonth =
         DateTime(day.year, day.month).toIso8601String().substring(0, 7);
     final uri = Uri.parse("$baseUrl/$api")
         .replace(queryParameters: {'date': firstDayOfMonth});
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
-      // print("responseBody: ${response.body}");
       final monthRecord = jsonDecode(utf8.decode(response.bodyBytes));
-      // print(monthRecord);
       List<dynamic> recordsList =
           monthRecord.map((item) => DailyMonthRecord.fromjson(item)).toList();
-      // print('monthRecord: ${monthRecord.runtimeType}');
       return recordsList;
     } else {
       throw Error();
@@ -148,12 +150,15 @@ class ApiService {
     required String detail,
     required String memo,
   }) async {
-    const String api = "api/calendar/test/write";
+    final prefs = await SharedPreferences.getInstance();
+    late final headers = {
+      'Authorization': prefs.getString('Authorization').toString(),
+      'Content-Type': 'application/json',
+    };
+    const String api = "api/calendar/write";
     final uri = Uri.parse("$baseUrl/$api");
     final response = await http.post(uri,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: jsonEncode({
           'date': selectedDay,
           'wodTypeDto': type,
