@@ -13,19 +13,31 @@ class WodGenerator extends StatefulWidget {
 class _WodGeneratorState extends State<WodGenerator> {
   final samples = Samples.samples;
 
-  late final int point;
-  late final List<String> wod;
-  late final String title;
-  late final List<String> detail;
+  int point = 0;
+  List<String> wod = [];
+  String title = '';
+  List<String> detail = [];
 
   @override
   void initState() {
     super.initState();
-    var rng = Random();
-    point = rng.nextInt(samples.length);
-    wod = samples[point].split('\r\n');
-    title = wod.sublist(0, 1)[0];
-    detail = wod.sublist(1, wod.length);
+    setState(() {
+      var rng = Random();
+      point = rng.nextInt(samples.length);
+      wod = samples[point].split('\r\n');
+      title = wod.sublist(0, 1)[0];
+      detail = wod.sublist(1, wod.length);
+    });
+  }
+
+  void refresh() {
+    setState(() {
+      var rng = Random();
+      point = rng.nextInt(samples.length);
+      wod = samples[point].split('\r\n');
+      title = wod.sublist(0, 1)[0];
+      detail = wod.sublist(1, wod.length);
+    });
   }
 
   @override
@@ -94,7 +106,13 @@ class _WodGeneratorState extends State<WodGenerator> {
                               );
                             },
                           ),
-                        )
+                        ),
+                        ElevatedButton(
+                            onPressed: refresh,
+                            child: const Icon(
+                              Icons.refresh,
+                              size: 50,
+                            ))
                       ],
                     ),
                   ),
