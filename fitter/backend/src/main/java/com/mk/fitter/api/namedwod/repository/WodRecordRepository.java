@@ -26,6 +26,6 @@ public interface WodRecordRepository extends JpaRepository<WodRecordDto, Integer
 	@Query(value = "SELECT *, RANK() over(ORDER BY time ASC) AS ranking FROM wod_record WHERE wod_id = :wodId", nativeQuery = true)
 	Page<Map<String, String>> findRankById(int wodId, Pageable pageable);
 
-	@Query(value = "SELECT *, RANK() OVER(ORDER BY TIME ASC LIMIT 1) AS ranking FROM wod_record WHERE wod_id = :wodId and user_id = :userId", nativeQuery = true)
+	@Query(value = "SELECT *, RANK() OVER(ORDER BY TIME ASC) AS ranking FROM wod_record WHERE wod_id = :wodId and user_id = :userId limit 1", nativeQuery = true)
 	Map<String, String> findRankByIdAndUserId(int wodId, int userId);
 }
