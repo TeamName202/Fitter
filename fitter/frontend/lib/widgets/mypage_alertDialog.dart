@@ -199,6 +199,7 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
               future: userProfile,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  nickname = snapshot.data!.nickname;
                   return TextField(
                     onChanged: (value) {
                       nickname = value;
@@ -319,6 +320,8 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                   // 수정한 내용 저장하는 로직 작성해야 함
 
                   ApiService.updateProfile(nickname, boxId);
+
+                  setState(() {});
                   Navigator.of(context).pop();
                 },
               ),
