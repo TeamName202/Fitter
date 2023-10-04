@@ -13,7 +13,7 @@ class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
   late SharedPreferences prefs;
 
-  static void changeProfileImg(
+  static Future<UserProfile> changeProfileImg(
       pickedImage, Future<UserProfile> userProfile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('Authorization').toString();
@@ -26,6 +26,8 @@ class ApiService {
         ),
       },
     );
+
+    print(pickedImage);
 
     final dio = Dio();
 
@@ -41,6 +43,14 @@ class ApiService {
 
     print(response);
 
+    final response2 = await http.get(
+      Uri.parse("$baseUrl/api/user/user-info"),
+      headers: {
+        "Authorization": token,
+      },
+    );
+
+    final userInfo = jsonDecode(utf8.decode(response2.bodyBytes));
     final image = Image.network(
       "$baseUrl/api/user/profile-img",
       headers: {
@@ -48,7 +58,25 @@ class ApiService {
       },
       fit: BoxFit.cover,
     );
-    userProfile.then((value) => value.image = image);
+    // const jsonString =
+    // '{"ageRange": "20대", "boxDto": { "boxName": "체육관" }, "email": "choiyc1446@gmail.com", "gender": true, "nickname": "최영창" }';
+
+    // final userInfo = jsonDecode(jsonString);
+
+    // final image = Image.network(
+    //   "https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png",
+    //   fit: BoxFit.cover,
+    // );
+
+    final userprofile = UserProfile(
+      box: userInfo["boxDto"]["boxName"],
+      ageGroup: userInfo["ageRange"],
+      email: userInfo["email"],
+      gender: userInfo["gender"],
+      nickname: userInfo["nickname"],
+      image: image,
+    );
+    return userprofile;
   }
 
   static void updateProfile(String nickname, String? boxId) async {

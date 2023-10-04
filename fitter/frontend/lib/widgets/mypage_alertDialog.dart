@@ -175,9 +175,10 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                   onTap: () async {
                     final pickedImage = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
-                    ApiService.changeProfileImg(pickedImage, userProfile);
+
                     setState(() {
-                      userProfile = ApiService.getUserProfile();
+                      userProfile =
+                          ApiService.changeProfileImg(pickedImage, userProfile);
                     });
                   },
                   child: const ButtonMold(
