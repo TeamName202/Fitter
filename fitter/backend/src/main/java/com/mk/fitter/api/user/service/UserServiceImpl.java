@@ -279,6 +279,8 @@ public class UserServiceImpl implements UserService {
 		// 사용자 dto 받아오기
 		UserDto user = userRepository.findById(uid).orElseThrow(() -> new Exception("UserService :: 존재하지 않는 사용자입니다."));
 
+		// 기존 프로필
+		ProfileImgDto prevProfile = user.getProfileImgDto();
 
 		// 새 프로필 사진 서버/db에 저장
 		ProfileImgDto newProfile = fileService.saveProfileImg(file);
@@ -287,7 +289,6 @@ public class UserServiceImpl implements UserService {
 		user.setProfileImgDto(newProfile);
 
 		// 기존 프로필 사진 서버/db에서 삭제
-		ProfileImgDto prevProfile = user.getProfileImgDto();
 		if (prevProfile != null && prevProfile.getId() != DEFAULT_IMG_ID) {
 			fileService.deleteProfileImg(prevProfile);
 		}
@@ -308,7 +309,7 @@ public class UserServiceImpl implements UserService {
 		ProfileImgDto profile = user.getProfileImgDto();
 
 		// 기본 프로필 사진 받아오기
-		ProfileImgDto defaultImg = fileService.getProfileImg(1);
+		ProfileImgDto defaultImg = fileService.getProfileImg(DEFAULT_IMG_ID);
 
 		user.setProfileImgDto(defaultImg);
 
