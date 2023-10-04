@@ -34,6 +34,7 @@ class _DailyExerciseRecordState extends State<DailyExerciseRecord> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
