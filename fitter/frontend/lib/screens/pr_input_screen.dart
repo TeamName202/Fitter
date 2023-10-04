@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fitter/models/rm_detail.dart';
 import 'package:fitter/screens/chart_screen.dart';
+import 'package:fitter/screens/record/record_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:fitter/widgets/button_mold.dart';
@@ -93,15 +94,11 @@ class _PRInputScreenState extends State<PRInputScreen> {
     prefs = await SharedPreferences.getInstance();
     var url = Uri.parse('http://j9d202.p.ssafy.io:8000/api/record/create');
 
-    // final headers = {
-    //   'Authorization': prefs.getString('Authorization').toString(),
-    //   'Content-Type': 'application/json'
-    // };
     final headers = {
-      'Authorization':
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NTg3NjY1NywiaWQiOjQwLCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.hGHLJoP5Nj9p-cI2xADluyNEJIlPN1eu1668kwiob9aWO_LZWh9wZ2H1YJPRbgwNZpsecadDtFOCCjKe5UdzBw',
+      'Authorization': prefs.getString('Authorization').toString(),
       'Content-Type': 'application/json'
     };
+
     final body = jsonEncode(
       {
         "createDate": DateFormat('yyyy-MM-dd').format(selectedDate),
@@ -231,7 +228,7 @@ class _PRInputScreenState extends State<PRInputScreen> {
                       builder: (context) =>
                           ChartScreen(workoutName: widget.workoutName),
                     ),
-                    (route) => false);
+                    (route) => route.isFirst);
               },
               child: ButtonMold(
                   btnText: (widget.type == "생성") ? "등 록 하 기" : "수 정 하 기",

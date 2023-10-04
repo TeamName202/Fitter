@@ -316,7 +316,7 @@ class _WodInputScreenState extends State<WodInputScreen> {
                         wodId: widget.wodId,
                       ),
                     ),
-                    (route) => false);
+                    (route) => route.isFirst);
               },
               child: ButtonMold(
                   btnText: (widget.type == "생성") ? "등 록 하 기" : "수 정 하 기",
