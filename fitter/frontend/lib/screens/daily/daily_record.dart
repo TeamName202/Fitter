@@ -35,14 +35,25 @@ class _DailyExerciseRecordState extends State<DailyExerciseRecord> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "데일리",
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        elevation: 0,
+        foregroundColor: const Color(0xFF0080FF),
+        backgroundColor: Colors.white,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_sharp)),
+          // IconButton(
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //     },
+          //     icon: const Icon(Icons.arrow_back_sharp)),
           Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
