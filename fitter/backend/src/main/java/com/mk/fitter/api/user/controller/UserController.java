@@ -76,6 +76,7 @@ public class UserController {
 	@ApiOperation(value = "path로 프로필 사진 조회", notes = "path로 프로필 사진을 조회하는 API")
 	public ResponseEntity<byte[]> getProfileImgByPath(@PathVariable(name = "path") String path, @RequestHeader(name = "Authorization") String accessToken) {
 		try {
+			log.info(path);
 			// 프로필 사진 경로를 사용해서 File 객체 만듦
 			File file = new File("/" + path);
 
