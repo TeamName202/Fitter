@@ -77,7 +77,7 @@ public class UserController {
 	public ResponseEntity<byte[]> getProfileImgByPath(@PathVariable(name = "path") String path, @RequestHeader(name = "Authorization") String accessToken) {
 		try {
 			// 프로필 사진 경로를 사용해서 File 객체 만듦
-			File file = new File(path);
+			File file = new File("/" + path);
 
 			// 파일 확장자에 따라 파일 헤더 세팅
 			HttpHeaders headers = new HttpHeaders();
