@@ -81,7 +81,7 @@ public class NewsWordProducer {
 			}
 		}
 
-		if (csvList.size() > newsNames.size() - 2) { // 뉴스가 2개이상 누락되면 키워드 중단
+		if (csvList.size() > newsNames.size() - 3) { // 뉴스가 3개이상 누락되면 키워드 중단
 			if (type.equals("health")){
 				healthWordRepository.deleteAll();
 			} else if (type.equals("sports")){

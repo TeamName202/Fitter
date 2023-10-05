@@ -103,10 +103,11 @@ def show_current_time():
 
 
 scheduler = BackgroundScheduler(timezone=timezone('Asia/Seoul'))
-scheduler.add_job(show_current_time, 'cron', hour=0, minute=1)
-scheduler.add_job(start_sports_crawler, 'cron', hour=0, minute=1)
-scheduler.add_job(start_health_crawler, 'cron', hour=0, minute=1)
-scheduler.add_job(delete_old_files, 'cron', hour=0, minute=10)
+# 9시지만 도커 컨테이너 안은 GCP 타임존이기 때문에 9시간전에 실행됨
+scheduler.add_job(show_current_time, 'cron', hour=9, minute=1)
+scheduler.add_job(start_sports_crawler, 'cron', hour=9, minute=1)
+scheduler.add_job(start_health_crawler, 'cron', hour=9, minute=1)
+scheduler.add_job(delete_old_files, 'cron', hour=9, minute=10)
 scheduler.start()
 
 
