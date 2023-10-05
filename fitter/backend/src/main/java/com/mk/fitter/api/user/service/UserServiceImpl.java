@@ -101,6 +101,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public byte[] getProfileImgByPath(String path) throws Exception {
+		if(path == null)
+			return null;
+
+		return fileService.getprofileImgByPath(path);
+	}
+
+	@Override
 	public String getEmail(String accessToken) throws Exception {
 		Integer uid = jwtService.extractUID(accessToken)
 			.orElseThrow(() -> new Exception("UserService :: 유효하지 않은 access token입니다."));

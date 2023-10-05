@@ -15,6 +15,7 @@ public interface UserService {
 
 	ProfileImgDto getProfileImgDto(String accessToken) throws Exception;
 	byte[] getProfileImg(ProfileImgDto profile) throws Exception;
+	byte[] getProfileImgByPath(String path) throws Exception;
 	String getEmail(String accessToken) throws Exception;
 	String getNickname(String accessToken) throws Exception;
 	String getAgeRange(String accessToken) throws Exception;
