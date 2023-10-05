@@ -81,11 +81,15 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public byte[] getProfileImg(ProfileImgDto profile) throws Exception {
-		return getprofileImgByPath(profile.getFilePath());
+		InputStream inputStream = new FileInputStream(profile.getFilePath());
+		byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+		inputStream.close();
+		return imageByteArray;
 	}
 
 	@Override
-	public byte[] getprofileImgByPath(String path) throws Exception {
+	public byte[] getprofileImg(String fileName) throws Exception {
+		String path = FILE_PATH+PROFILE_FOLDER+fileName;
 		InputStream inputStream = new FileInputStream(path);
 		byte[] imageByteArray = IOUtils.toByteArray(inputStream);
 		inputStream.close();

@@ -101,11 +101,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public byte[] getProfileImgByPath(String path) throws Exception {
-		if(path == null)
+	public byte[] getProfileImg(String fileName) throws Exception {
+		if(fileName == null)
 			return null;
 
-		return fileService.getprofileImgByPath(path);
+		return fileService.getprofileImg(fileName);
 	}
 
 	@Override
