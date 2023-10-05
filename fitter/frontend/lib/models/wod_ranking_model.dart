@@ -15,7 +15,7 @@ class WodRankingModel {
     return WodRankingModel(
       box: json['user']['boxDto']['boxName'] as String,
       nickname: json['user']['nickname'] as String,
-      profile: json['user']['profileImgDto']['filePath'] as String,
+      profile: json['user']['profileImgDto']['fileName'] as String,
       count: json['count'] as String,
       rank: json['index'] as int, // JSON 데이터에서 'index' 필드를 읽어와 인덱스 변수에 저장
     );

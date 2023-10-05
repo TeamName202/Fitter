@@ -307,6 +307,7 @@ ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
     itemCount: snapshot.data!.length,
     itemBuilder: (BuildContext context, int index) {
       var WodRaking = snapshot.data![index];
+      var im = WodRaking.profile;
       print(WodRaking);
       return Container(
           height: 60,
@@ -318,7 +319,7 @@ ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
                 const SizedBox(width: 10),
                 // 랭킹
                 SizedBox(
-                  width: 50,
+                  width: 30,
                   child: Text(
                     WodRaking.rank.toString(),
                     textAlign: TextAlign.left,
@@ -329,7 +330,22 @@ ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
                   ),
                 ),
                 // [Todo] 이미지 넣기
-
+                // Text(WodRaking.profile),
+                SizedBox(
+                  width: 45,
+                  height: 45,
+                  child: ClipOval(
+                    child: SizedBox(
+                      child: Image.network(
+                        'http://j9d202.p.ssafy.io:8000/api/file/profile-img/$im',
+                        fit: BoxFit.cover, // 이미지를 정사각형 안에 맞게 조절합니다.
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
                 //  닉네임
                 SizedBox(
                   width: 50,
@@ -338,6 +354,9 @@ ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.black, fontSize: 17),
                   ),
+                ),
+                const SizedBox(
+                  width: 20,
                 ),
                 // 박스명
                 Expanded(
