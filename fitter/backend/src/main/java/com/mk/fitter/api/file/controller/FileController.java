@@ -50,7 +50,7 @@ public class FileController {
 			return new ResponseEntity<>(fileService.getProfileImg(path), headers, HttpStatus.OK);
 
 		} catch (Exception e) {
-			log.error("getProfileImgByPath :: {}", e.getMessage());
+			log.error("getProfileImgByFileName :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
