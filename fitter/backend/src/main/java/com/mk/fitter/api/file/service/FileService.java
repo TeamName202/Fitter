@@ -11,7 +11,7 @@ public interface FileService {
 
 	byte[] getProfileImg(ProfileImgDto profile) throws Exception;
 
-	byte[] getProfileImg(String path) throws Exception;
+	byte[] getProfileImgByPath(String path) throws Exception;
 
 	ProfileImgDto getProfileImg(int id) throws Exception;
 

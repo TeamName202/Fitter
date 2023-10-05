@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Api(tags = {"파일 API"})
 public class FileController {
 
-	private FileServiceImpl fileService;
+	private final FileServiceImpl fileService;
 
 	@Value("${spring.servlet.multipart.location}")
 	private String FILE_PATH;
@@ -42,13 +42,10 @@ public class FileController {
 			String path = FILE_PATH + PROFILE_FOLDER + fileName;
 			// 프로필 사진 경로를 사용해서 File 객체 만듦
 			File file = new File(path);
-
 			// 파일 확장자에 따라 파일 헤더 세팅
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-type", Files.probeContentType(file.toPath()));
-
-			return new ResponseEntity<>(fileService.getProfileImg(path), headers, HttpStatus.OK);
-
+			return new ResponseEntity<>(fileService.getProfileImgByPath(path), headers, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("getProfileImgByFileName :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
