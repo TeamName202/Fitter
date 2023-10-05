@@ -13,6 +13,30 @@ class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
   late SharedPreferences prefs;
 
+  static Future<bool> checkDuplicate(String nickname) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('Authorization').toString();
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/user/nickname/duplicate'),
+      headers: {
+        "Authorization": token,
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        {
+          'nickname': nickname,
+        },
+      ),
+    );
+    print(nickname);
+    print(response.body);
+    if (response.body == "true") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static Future<UserProfile> changeProfileImg(pickedImage) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('Authorization').toString();

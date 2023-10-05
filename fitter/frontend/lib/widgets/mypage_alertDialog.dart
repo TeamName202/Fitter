@@ -6,6 +6,7 @@ import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/input_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
   String? boxId;
   bool signUpPassed = false;
   String boxName = "";
+  bool check = false;
 
   @override
   void initState() {
@@ -291,23 +293,58 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
               height: 10,
             ),
             Center(
-              child: TextButton(
-                child: const ButtonMold(
-                  btnText: "수정완료",
-                  horizontalLength: 30,
-                  verticalLength: 10,
-                  buttonColor: true,
-                ),
-                onPressed: () {
-                  print("onPressed : $nickname");
-                  ApiService.updateProfile(nickname, boxId);
-                  setState(() {
-                    ApiService.getUserProfile().then((value) {
-                      provider.updateUserProfile(value);
-                    });
-                  });
-                  Navigator.of(context).pop();
-                },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    child: const ButtonMold(
+                      btnText: "중복체크",
+                      horizontalLength: 30,
+                      verticalLength: 10,
+                      buttonColor: false,
+                    ),
+                    onPressed: () {
+                      ApiService.checkDuplicate(nickname).then((value) {
+                        check = value;
+                        print(check);
+                        if (check) {
+                          Fluttertoast.showToast(msg: "닉네임 사용 가능합니다.");
+                        } else {
+                          Fluttertoast.showToast(msg: "닉네임 사용 불가능합니다.");
+                        }
+                      });
+                    },
+                  ),
+                  !check
+                      ? TextButton(
+                          child: const ButtonMold(
+                            btnText: "수정완료",
+                            horizontalLength: 30,
+                            verticalLength: 10,
+                            buttonColor: false,
+                          ),
+                          onPressed: () =>
+                              Fluttertoast.showToast(msg: "중복 확인을 해주세요"),
+                        )
+                      : TextButton(
+                          child: const ButtonMold(
+                            btnText: "수정완료",
+                            horizontalLength: 30,
+                            verticalLength: 10,
+                            buttonColor: true,
+                          ),
+                          onPressed: () {
+                            print("onPressed : $nickname");
+                            ApiService.updateProfile(nickname, boxId);
+                            setState(() {
+                              ApiService.getUserProfile().then((value) {
+                                provider.updateUserProfile(value);
+                              });
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                ],
               ),
             ),
           ],

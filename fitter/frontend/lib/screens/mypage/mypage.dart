@@ -150,48 +150,48 @@ class _MyPageState extends State<MyPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTapDown: (details) {
-                        setState(() {
-                          button1 = true;
-                        });
-                      },
-                      onTapUp: (details) {
-                        setState(() {
-                          button1 = false;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: ButtonMold(
-                          btnText: "기 록  초 기 화",
-                          horizontalLength: 140,
-                          verticalLength: 30,
-                          buttonColor: button1,
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTapDown: (details) {
-                        setState(() {
-                          button2 = true;
-                        });
-                      },
-                      onTapUp: (details) {
-                        setState(() {
-                          button2 = false;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: ButtonMold(
-                          btnText: "다 크 모 드",
-                          horizontalLength: 150,
-                          verticalLength: 30,
-                          buttonColor: button2,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTapDown: (details) {
+                    //     setState(() {
+                    //       button1 = true;
+                    //     });
+                    //   },
+                    //   onTapUp: (details) {
+                    //     setState(() {
+                    //       button1 = false;
+                    //     });
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 10),
+                    //     child: ButtonMold(
+                    //       btnText: "기 록  초 기 화",
+                    //       horizontalLength: 140,
+                    //       verticalLength: 30,
+                    //       buttonColor: button1,
+                    //     ),
+                    //   ),
+                    // ),
+                    // GestureDetector(
+                    //   onTapDown: (details) {
+                    //     setState(() {
+                    //       button2 = true;
+                    //     });
+                    //   },
+                    //   onTapUp: (details) {
+                    //     setState(() {
+                    //       button2 = false;
+                    //     });
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 10),
+                    //     child: ButtonMold(
+                    //       btnText: "다 크 모 드",
+                    //       horizontalLength: 150,
+                    //       verticalLength: 30,
+                    //       buttonColor: button2,
+                    //     ),
+                    //   ),
+                    // ),
                     GestureDetector(
                       onTapDown: (details) {
                         setState(() {
