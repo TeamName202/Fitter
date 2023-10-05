@@ -287,9 +287,7 @@ class MenuOverlay extends StatelessWidget {
       final accessToken = prefs.getString('Authorization');
 
       Map<String, String> headers = {
-        // 'Authorization': accessToken.toString(),
-        'Authorization':
-            'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA',
+        'Authorization': accessToken.toString(),
       };
 
       var url = Uri.parse(
