@@ -61,7 +61,7 @@ CREATE TABLE `daily_record` (
   KEY `FK_wod_type_TO_daily_record_1` (`wod_type_id`),
   CONSTRAINT `FK_user_TO_daily_record_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_wod_type_TO_daily_record_1` FOREIGN KEY (`wod_type_id`) REFERENCES `wod_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `daily_record` (
 
 LOCK TABLES `daily_record` WRITE;
 /*!40000 ALTER TABLE `daily_record` DISABLE KEYS */;
-INSERT INTO `daily_record` VALUES (22,65,2,'2023-10-04',NULL,'dfssdfsd','asfff'),(23,65,3,'2023-10-02',NULL,'ddddddddd','ddddddd'),(24,65,1,'2023-10-10',NULL,'111','Clean'),(25,65,2,'2023-10-12',NULL,'cccccc','dddd'),(28,65,1,'2023-10-11',NULL,'sdsdsds','dsdsd'),(29,61,1,'2023-10-05',NULL,'hard','work'),(30,61,1,'2023-10-04',NULL,'ww','qq'),(31,65,1,'2023-10-24',NULL,'24444','24'),(32,65,1,'2023-10-05',NULL,'Buy In \n\n100 Box Jump Over\n\n​\n\n21Round\n\n5 HSPU\n\n3 Power Clean 155/105\n\n30 DU\n\n​\n\nCash Out\n\n100 Lateral Burpee','Team of 3');
+INSERT INTO `daily_record` VALUES (22,65,2,'2023-10-04',NULL,'dfssdfsd','asfff'),(23,65,3,'2023-10-02',NULL,'ddddddddd','ddddddd'),(24,65,1,'2023-10-10',NULL,'111','Clean'),(25,65,2,'2023-10-12',NULL,'cccccc','dddd'),(28,65,1,'2023-10-11',NULL,'sdsdsds','dsdsd'),(29,61,1,'2023-10-05',NULL,'hard','work'),(30,61,1,'2023-10-04',NULL,'ww','qq'),(31,65,1,'2023-10-24',NULL,'24444','24'),(32,65,1,'2023-10-05',NULL,'Buy In \n\n100 Box Jump Over\n\n​\n\n21Round\n\n5 HSPU\n\n3 Power Clean 155/105\n\n30 DU\n\n​\n\nCash Out\n\n100 Lateral Burpee','Team of 3'),(33,65,2,'2023-10-03',NULL,'it was goooood','squat 100 lunge 100'),(35,68,1,'2023-10-04',NULL,'Buy In\n100 Box Jump Over\n\n21Round\n5 HSPU\n3 Power Clean 155/105\n30 DU\n\nCash out\n100 Lateral Burpee',''),(36,68,4,'2023-10-03',NULL,'오늘은 너무 피곤해서 안함','쉬는 날'),(38,68,3,'2023-10-05',NULL,'2Min AMRAP\n8 Alt. Dumbbll Hang Snatches\n8 Dumbbell Squats\n\nREST 1Min\n\n2Min AMRAP\n6 Pull ups\n10 Lunges\n\nREST 1Min',''),(41,72,1,'2023-10-05',NULL,'하 힘들었다..','숨쉬기 운동'),(43,65,1,'2023-10-01',NULL,'ㅎㅎㅎㅎ','ㅎㅎ'),(44,65,1,'2023-09-21',NULL,'ㅎㅎㅎㅎㅎ','ㅎㅎ'),(45,61,1,'2023-10-05',NULL,'너무 힘들다','Murph 수행 00:23:00'),(53,61,1,'2023-10-05',NULL,'2','1'),(54,61,2,'2023-10-05',NULL,'4','3');
 /*!40000 ALTER TABLE `daily_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `personal_record` (
   KEY `FK_workout_TO_personal_record_1` (`workout_id`),
   CONSTRAINT `FK_user_TO_personal_record_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_workout_TO_personal_record_1` FOREIGN KEY (`workout_id`) REFERENCES `workout` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ CREATE TABLE `personal_record` (
 
 LOCK TABLES `personal_record` WRITE;
 /*!40000 ALTER TABLE `personal_record` DISABLE KEYS */;
-INSERT INTO `personal_record` VALUES (38,65,48,25,'2023-08-09'),(39,65,48,35,'2023-09-04'),(40,65,48,65,'2023-02-21'),(41,65,48,12,'2023-07-15'),(42,65,48,11,'2023-04-10'),(43,65,48,50,'2023-10-04'),(44,65,48,15,'2023-03-09'),(45,65,94,123,'2023-10-04'),(46,65,89,100,'2023-10-04'),(47,65,54,11,'2023-10-04'),(48,65,108,100,'2023-10-04'),(49,65,137,123,'2023-10-04'),(50,65,135,111,'2023-10-04'),(51,65,78,102,'2023-10-04'),(52,65,200,30,'2023-10-04'),(55,65,48,121,'2023-08-20'),(56,65,26,20,'2023-10-04'),(57,65,191,13,'2023-10-04'),(58,65,51,20,'2023-10-04');
+INSERT INTO `personal_record` VALUES (38,65,48,25,'2023-08-09'),(39,65,48,35,'2023-09-04'),(40,65,48,65,'2023-02-21'),(41,65,48,12,'2023-07-15'),(42,65,48,11,'2023-04-10'),(43,65,48,50,'2023-10-04'),(44,65,48,15,'2023-03-09'),(45,65,94,123,'2023-10-04'),(46,65,89,100,'2023-10-04'),(47,65,54,11,'2023-10-04'),(48,65,108,100,'2023-10-04'),(49,65,137,123,'2023-10-04'),(50,65,135,111,'2023-10-04'),(51,65,78,102,'2023-10-04'),(52,65,200,30,'2023-10-04'),(55,65,48,121,'2023-08-20'),(56,65,26,20,'2023-10-04'),(57,65,191,13,'2023-10-04'),(58,65,51,20,'2023-10-04'),(59,61,56,30,'2023-10-03'),(60,61,56,50,'2023-10-04'),(61,61,56,45,'2023-10-05'),(62,61,56,55,'2023-10-05');
 /*!40000 ALTER TABLE `personal_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +171,7 @@ CREATE TABLE `profile_img` (
   `file_path` varchar(1000) DEFAULT NULL,
   `original_file_name` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +180,7 @@ CREATE TABLE `profile_img` (
 
 LOCK TABLES `profile_img` WRITE;
 /*!40000 ALTER TABLE `profile_img` DISABLE KEYS */;
-INSERT INTO `profile_img` VALUES (1,'737d137b-e634-483d-a8ad-e1eb482d8c27.jpeg','/app/file/profileImg/737d137b-e634-483d-a8ad-e1eb482d8c27.jpeg','기본프사.jpeg'),(96,'b9dc35d0-3196-4859-b1ce-1f6bfaa86934.jpg','/app/file/profileImg/b9dc35d0-3196-4859-b1ce-1f6bfaa86934.jpg','111462746.2.jpg');
+INSERT INTO `profile_img` VALUES (1,'737d137b-e634-483d-a8ad-e1eb482d8c27.jpeg','/app/file/profileImg/737d137b-e634-483d-a8ad-e1eb482d8c27.jpeg','기본프사.jpeg'),(101,'5d8edfe0-f4e6-4393-bb42-7478295de7aa.jpg','/app/file/profileImg/5d8edfe0-f4e6-4393-bb42-7478295de7aa.jpg','download.jpg'),(103,'9345e863-180b-4791-8a2f-a80aec8cee79.jpg','/app/file/profileImg/9345e863-180b-4791-8a2f-a80aec8cee79.jpg','1000000018.jpg'),(106,'c5abf72b-6281-47aa-b588-aa6e176c1a68.jpg','/app/file/profileImg/c5abf72b-6281-47aa-b588-aa6e176c1a68.jpg','111462746.2.jpg'),(108,'8a70875d-3ffc-4c69-b739-a428c05b3d2a.jpg','/app/file/profileImg/8a70875d-3ffc-4c69-b739-a428c05b3d2a.jpg','adffc8230a4101903267ddb563b1763f.jpg');
 /*!40000 ALTER TABLE `profile_img` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -220,8 +220,8 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `box_id` int DEFAULT '1',
-  `profile_id` int DEFAULT '1',
+  `box_id` int NOT NULL DEFAULT '1',
+  `profile_id` int NOT NULL DEFAULT '1',
   `email` varchar(100) DEFAULT NULL,
   `refresh_token` varchar(1000) DEFAULT NULL,
   `nickname` varchar(20) DEFAULT NULL,
@@ -235,10 +235,8 @@ CREATE TABLE `user` (
   `social_type` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_crossfit_box_TO_user_1` (`box_id`),
-  KEY `FK_profile_img_TO_user_1` (`profile_id`),
-  CONSTRAINT `FK_crossfit_box_TO_user_1` FOREIGN KEY (`box_id`) REFERENCES `box` (`id`),
-  CONSTRAINT `FK_profile_img_TO_user_1` FOREIGN KEY (`profile_id`) REFERENCES `profile_img` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_profile_img_TO_user_1` (`profile_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +245,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (61,1,96,'choiyc1446@gmail.com','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc2ODAyODd9.nrbABGJS28ISw7LV0uG2GE_SlaKJYX1ocpo1MbLicIosW1bx0PmhB6WP7uV6EkudvVSotD_PWvN6HvL0N3XccQ','최영창','20대',1,NULL,NULL,'2023-09-27 05:05:10','USER','3039143679','KAKAO'),(65,2,1,'aaa@aaa.com','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc2NzQ0Njd9.tHx4EBhTGyVgqB5lc_8cMJ1v6AeTyOwijNQfmCt-OBfSVXa7I0Y87kvIWfWXBG7kntM6lomKLYDvlLgkvkcX9g','꽃개','20대',0,NULL,NULL,'2023-09-27 06:01:19','USER','3027712151','KAKAO');
+INSERT INTO `user` VALUES (61,1,106,'choiyc1446@gmail.com','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc3MDQ1Nzd9.zGTpf2qPsD9UbZxNaNeaCxozTG2lM6qwglxS-zUU29IixeOKU0fBRpI46JtBkfFhiFvjhY9LwgiyQvQqTlVF2g','최영창','20대',1,NULL,NULL,'2023-09-27 05:05:10','USER','3039143679','KAKAO'),(65,2,103,'aaa@aaa.com','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc3MDE2MDF9.tBwcPhXCIl5z6R1gprL5DhDVe45cxFPR17YU0GhezyYnusRlzMN62ynTGnUDja3E9uTaIqE4DghHqTKTx9Igjg','행복해','20대',0,NULL,NULL,'2023-09-27 06:01:19','USER','3027712151','KAKAO'),(68,50,108,'wlsdnr214','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc3MDM5Njh9.TmiA29bOqoB72i--lxUGVzmj-xcqtWtmLI0uXUW-g_3YRxj7Al-fW5Hpumy5znzAXigmprXdifwRIxKL2iY2dA','정진욱','20대',1,NULL,NULL,NULL,'USER','3050811268','KAKAO'),(72,1,1,'lovablekks@naver.com','Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZWZyZXNoVG9rZW4iLCJleHAiOjE2OTc3MDQ1NDZ9.FQEqT_Rz4rWXGguMQeyhI3haOf0HvVEzbMP0h1CN7ROcL_ByL1HNqV4udW-rdcf8cmlIsR3LMFcqjRsRtE1rHw','김파치','20대',0,NULL,NULL,'2023-10-05 06:14:24','USER','3014659769','KAKAO');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,7 +270,7 @@ CREATE TABLE `wod` (
   KEY `FK_wod_category_TO_wod_1` (`wod_category_id`),
   CONSTRAINT `FK_wod_category_TO_wod_1` FOREIGN KEY (`wod_category_id`) REFERENCES `wod_category` (`id`),
   CONSTRAINT `FK_wod_type_TO_wod_1` FOREIGN KEY (`wod_type_id`) REFERENCES `wod_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -281,7 +279,7 @@ CREATE TABLE `wod` (
 
 LOCK TABLES `wod` WRITE;
 /*!40000 ALTER TABLE `wod` DISABLE KEYS */;
-INSERT INTO `wod` VALUES (1,1,'Murph',1,'0',1,'00:00:01',2);
+INSERT INTO `wod` VALUES (1,1,'Murph',1,'0',1,'00:00:01',2),(3,1,'DT',1,'0',5,'00:00:00',2),(4,1,'RYAN',1,'0',0,'00:00:00',2),(5,1,'BELL',1,'0',3,'00:00:00',2),(6,1,'RANDY',1,'0',1,'00:00:00',2),(7,3,'Cindy',1,'0',0,'00:00:00',1),(8,1,'Angie',1,'0',0,'00:00:00',1),(9,1,'Grace',1,'0',0,'00:00:00',1),(10,1,'Karen',1,'0',0,'00:00:00',1),(11,3,'Chelsea',1,'0',0,'00:30:00',1);
 /*!40000 ALTER TABLE `wod` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +326,7 @@ CREATE TABLE `wod_record` (
   KEY `FK_user_TO_wod_record_1` (`user_id`),
   CONSTRAINT `FK_user_TO_wod_record_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_wod_TO_wod_record_1` FOREIGN KEY (`wod_id`) REFERENCES `wod` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +335,7 @@ CREATE TABLE `wod_record` (
 
 LOCK TABLES `wod_record` WRITE;
 /*!40000 ALTER TABLE `wod_record` DISABLE KEYS */;
-INSERT INTO `wod_record` VALUES (21,1,61,'00:00:00',25,'2023-09-27'),(23,1,65,'00:17:45',33,'2023-10-01'),(25,1,65,'00:32:11',0,'2023-10-04'),(26,1,65,'00:13:45',0,'2023-10-04');
+INSERT INTO `wod_record` VALUES (21,1,61,'00:13:20',25,'2023-09-27'),(23,1,65,'00:17:45',33,'2023-10-01'),(25,1,65,'00:32:11',0,'2023-10-04'),(26,1,65,'00:13:45',0,'2023-10-04'),(27,1,68,'00:05:25',32,'2023-09-29'),(28,1,72,'00:26:30',4,'2023-09-30'),(33,3,65,'00:13:40',2,'2023-09-30'),(34,3,61,'00:14:50',13,'2023-09-30'),(35,3,68,'00:12:40',14,'2023-09-30'),(36,3,72,'00:15:30',15,'2023-09-30'),(37,4,61,'00:13:30',1,'2023-09-30'),(38,4,65,'00:15:35',1,'2023-09-30'),(39,4,68,'00:12:10',1,'2023-09-30'),(40,4,72,'00:15:30',1,'2023-09-30');
 /*!40000 ALTER TABLE `wod_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,7 +382,7 @@ CREATE TABLE `wod_workout` (
   KEY `FK_workout_TO_wod_workout_1` (`workout_id`),
   CONSTRAINT `FK_wod_TO_wod_workout_1` FOREIGN KEY (`wod_id`) REFERENCES `wod` (`id`),
   CONSTRAINT `FK_workout_TO_wod_workout_1` FOREIGN KEY (`workout_id`) REFERENCES `workout` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,7 +391,7 @@ CREATE TABLE `wod_workout` (
 
 LOCK TABLES `wod_workout` WRITE;
 /*!40000 ALTER TABLE `wod_workout` DISABLE KEYS */;
-INSERT INTO `wod_workout` VALUES (1,1,184,0,0,1),(2,1,162,0,100,0),(3,1,166,0,200,0),(4,1,8,0,300,0),(5,1,184,0,0,1);
+INSERT INTO `wod_workout` VALUES (1,1,184,0,0,1),(2,1,162,0,100,0),(3,1,166,0,200,0),(4,1,8,0,300,0),(5,1,184,0,0,1),(6,3,56,155,12,0),(7,3,103,155,9,0),(8,3,163,155,6,0),(10,4,177,0,7,0),(11,4,39,0,21,0),(12,5,56,185,21,0),(13,5,162,0,15,0),(14,5,93,185,9,0),(15,6,159,75,75,0),(16,7,162,0,5,0),(17,7,166,0,10,0),(18,7,8,0,15,0),(19,8,162,0,100,0),(20,8,166,0,100,0),(21,8,191,0,100,0),(22,8,8,0,100,0),(23,9,49,135,30,0),(24,10,231,20,150,0),(34,11,162,0,5,0),(35,11,166,0,10,0),(36,11,8,0,15,0);
 /*!40000 ALTER TABLE `wod_workout` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -483,4 +481,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-05 10:51:36
+-- Dump completed on 2023-10-05 17:52:26
