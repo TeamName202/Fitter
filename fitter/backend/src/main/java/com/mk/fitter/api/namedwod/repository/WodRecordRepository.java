@@ -26,9 +26,8 @@ public interface WodRecordRepository extends JpaRepository<WodRecordDto, Integer
 
 	@Query(value =
 		"SELECT w.id, w.wod_id, w.user_id, w.time, w.count, w.create_date, RANK() OVER(ORDER BY time ASC) AS ranking FROM\n"
-			+ "( SELECT user_id, min(time) AS min_time FROM wod_record GROUP BY user_id)\n"
-			+ "AS r INNER JOIN wod_record AS w ON r.user_id = w.user_id AND r.min_time = w.time\n"
-			+ "WHERE wod_id = :wodId", nativeQuery = true)
+			+ "( SELECT user_id, min(time) AS min_time FROM wod_record WHERE wod_id = :wodId GROUP BY user_id)\n"
+			+ "AS r INNER JOIN wod_record AS w ON r.user_id = w.user_id AND r.min_time = w.time", nativeQuery = true)
 	Page<WodRecordDto> findRankById(@Param("wodId") int wodId, Pageable pageable);
 
 	@Query(value = "SELECT * FROM (SELECT *, RANK() OVER(ORDER BY TIME ASC) AS ranking FROM wod_record WHERE wod_id = :wodId) wod_record WHERE user_id = :userId LIMIT 1", nativeQuery = true)
