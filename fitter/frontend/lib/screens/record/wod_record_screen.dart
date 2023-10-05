@@ -130,9 +130,20 @@ class _WodRecordScreenState extends State<WodRecordScreen> {
           FutureBuilder(
               future: currentData,
               builder: (context, snapshot) {
-                return Expanded(
-                  child: makeList(snapshot, _scrollController),
-                );
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // 데이터를 가져오는 중인 경우
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // 에러가 발생한 경우
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  // 데이터가 없는 경우
+                  return const Text('No Data');
+                } else {
+                  return Expanded(
+                    child: makeList(snapshot, _scrollController),
+                  );
+                }
               }),
           const SizedBox(
             height: 15,
