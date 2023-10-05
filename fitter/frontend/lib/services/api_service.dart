@@ -13,8 +13,7 @@ class ApiService {
   static const String baseUrl = "http://j9d202.p.ssafy.io:8000";
   late SharedPreferences prefs;
 
-  static Future<UserProfile> changeProfileImg(
-      pickedImage, Future<UserProfile> userProfile) async {
+  static Future<UserProfile> changeProfileImg(pickedImage) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('Authorization').toString();
 
@@ -107,7 +106,7 @@ class ApiService {
     final token = prefs.getString('Authorization').toString();
 
     final url = Uri.parse("$baseUrl/api/user/profile");
-    final response = await http.delete(
+    await http.delete(
       url,
       headers: {
         "Authorization": token,

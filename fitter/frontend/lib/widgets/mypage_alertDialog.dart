@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fitter/models/user_profile.dart';
-import 'package:fitter/screens/nav_bar.dart';
 import 'package:fitter/services/api_service.dart';
 import 'package:fitter/widgets/button_mold.dart';
 import 'package:fitter/widgets/input_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class MyPageAlertDialog extends StatefulWidget {
   const MyPageAlertDialog({super.key});
@@ -20,7 +19,6 @@ class MyPageAlertDialog extends StatefulWidget {
 
 class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
   late List<dynamic> boxList;
-  late Future<UserProfile> userProfile;
 
   List<Map<String, dynamic>> searchResults = [];
   FocusNode focusNode = FocusNode();
@@ -39,10 +37,22 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
   void initState() {
     super.initState();
     onAll();
-    setState(() {
-      userProfile = ApiService.getUserProfile();
-    });
     print(boxId);
+  }
+
+  Future<Image> xFileToImage(XFile xFile) async {
+    // XFile에서 파일 경로를 가져옵니다.
+    String filePath = xFile.path;
+
+    // File을 읽어와서 Image로 변환합니다.
+    final file = File(filePath);
+    final bytes = await file.readAsBytes();
+    final image = Image.memory(
+      bytes,
+      fit: BoxFit.cover,
+    );
+
+    return image;
   }
 
   Future onCallServer() async {
@@ -110,6 +120,10 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<UserData>(context);
+    var user = provider.userProfile;
+    nickname = user!.nickname;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
@@ -133,23 +147,9 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                         width: 5,
                       ),
                     ),
-                    child: FutureBuilder(
-                      future: userProfile,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: snapshot.data!.image,
-                          );
-                        }
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: const Icon(
-                            Icons.person,
-                            size: 90,
-                          ),
-                        );
-                      },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: user.image,
                     ),
                   ),
                 ],
@@ -161,9 +161,10 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                 GestureDetector(
                   onTap: () async {
                     await ApiService.deleteProfile();
-                    Future<UserProfile> newUser = ApiService.getUserProfile();
+
                     setState(() {
-                      userProfile = newUser;
+                      ApiService.getUserProfile()
+                          .then((value) => provider.updateUserProfile(value));
                     });
                   },
                   child: const ButtonMold(
@@ -177,11 +178,14 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                     final pickedImage = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
 
-                    await ApiService.changeProfileImg(pickedImage, userProfile);
+                    var temp = await xFileToImage(pickedImage!);
+                    ApiService.changeProfileImg(pickedImage);
                     //userProfile 은 Future<UserProfile>
-                    Future<UserProfile> newUser = ApiService.getUserProfile();
                     setState(() {
-                      userProfile = newUser;
+                      ApiService.getUserProfile().then((value) {
+                        print(value.image!.image);
+                        user.image = temp;
+                      });
                     });
                   },
                   child: const ButtonMold(
@@ -195,115 +199,93 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
             const SizedBox(
               height: 10,
             ),
-            FutureBuilder(
-              future: userProfile,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  nickname = snapshot.data!.nickname;
-                  return TextField(
-                    onChanged: (value) {
-                      nickname = value;
-                    },
-                    controller:
-                        TextEditingController(text: snapshot.data!.nickname),
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        borderSide: BorderSide(
-                          color: Colors.blue,
-                          width: 3,
-                        ),
-                      ),
-                      labelText: "이 름",
-                      labelStyle: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(207, 74, 124, 174),
-                      ),
-                    ),
-                  );
-                }
-                return const Text("이 름");
+            TextField(
+              onChanged: (value) {
+                user.nickname = value;
+                print(user.nickname);
+                setState(() {});
               },
+              decoration: const InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(
+                    color: Colors.blue,
+                    width: 3,
+                  ),
+                ),
+                labelText: "이 름",
+                labelStyle: TextStyle(
+                  fontSize: 20,
+                  color: Color.fromARGB(207, 74, 124, 174),
+                ),
+              ),
             ),
             const SizedBox(
               height: 10,
             ),
-            FutureBuilder(
-              future: userProfile,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  boxName = snapshot.data!.box;
-                  return Expanded(
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: editingController,
-                          decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
-                                borderSide: BorderSide(
-                                  color: Colors.blue,
-                                  width: 3,
-                                ),
-                              ),
-                              labelText: "BOX",
-                              labelStyle: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(207, 74, 124, 174),
-                              )),
-                          onChanged: (query) {
-                            // 검색에 따라 결과 업데이트
-                            getSearchResults(query);
-                            checkRightBox(query);
-                          },
-                          onTap: () {
-                            outSearchResults();
-                            getKeyboard();
-                          },
-                          onSubmitted: (query) => {getKeyboard()},
-                          focusNode: focusNode,
-                        ),
-                        Offstage(
-                          offstage: !focusNode.hasFocus,
-                          child: Container(
-                            height: searchResults.length < 3
-                                ? searchResults.length * 60
-                                : 100,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: const Color(0xff0080ff))),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: searchResults.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    editingController.text =
-                                        searchResults[index]['boxName'];
-                                    boxId = searchResults[index]['id'];
-                                    outSearchResults();
-                                    isRightBox = true;
-                                  },
-                                  child: ListTile(
-                                    title:
-                                        Text(searchResults[index]['boxName']),
-                                    subtitle: Text(
-                                        searchResults[index]['boxAddress']),
-                                  ),
-                                );
-                              },
-                            ),
+            Expanded(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: editingController,
+                    decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 3,
                           ),
                         ),
-                      ],
+                        labelText: "BOX",
+                        labelStyle: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(207, 74, 124, 174),
+                        )),
+                    onChanged: (query) {
+                      // 검색에 따라 결과 업데이트
+                      getSearchResults(query);
+                      checkRightBox(query);
+                    },
+                    onTap: () {
+                      outSearchResults();
+                      getKeyboard();
+                    },
+                    onSubmitted: (query) => {getKeyboard()},
+                    focusNode: focusNode,
+                  ),
+                  Offstage(
+                    offstage: !focusNode.hasFocus,
+                    child: Container(
+                      height: searchResults.length < 3
+                          ? searchResults.length * 60
+                          : 100,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xff0080ff))),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: searchResults.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              editingController.text =
+                                  searchResults[index]['boxName'];
+                              user.box = searchResults[index]['boxName'];
+                              boxId = searchResults[index]['id'];
+                              outSearchResults();
+                              isRightBox = true;
+                            },
+                            child: ListTile(
+                              title: Text(searchResults[index]['boxName']),
+                              subtitle:
+                                  Text(searchResults[index]['boxAddress']),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  );
-                }
-                return const InputText(
-                  hintText: "BOX",
-                );
-              },
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -317,11 +299,13 @@ class _MyPageAlertDialogState extends State<MyPageAlertDialog> {
                   buttonColor: true,
                 ),
                 onPressed: () {
-                  // 수정한 내용 저장하는 로직 작성해야 함
-
+                  print("onPressed : $nickname");
                   ApiService.updateProfile(nickname, boxId);
-
-                  setState(() {});
+                  setState(() {
+                    ApiService.getUserProfile().then((value) {
+                      provider.updateUserProfile(value);
+                    });
+                  });
                   Navigator.of(context).pop();
                 },
               ),

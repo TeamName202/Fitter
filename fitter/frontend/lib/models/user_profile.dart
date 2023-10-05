@@ -1,14 +1,14 @@
-import 'dart:io';
+import 'package:fitter/services/api_service.dart';
 
 import 'package:flutter/material.dart';
 
 class UserProfile {
   Image? image;
-  final String email;
-  final String nickname;
-  final bool gender;
-  final String ageGroup;
-  final String box;
+  String email;
+  String nickname;
+  bool gender;
+  String ageGroup;
+  String box;
 
   UserProfile({
     required this.image,
@@ -20,7 +20,7 @@ class UserProfile {
   });
 }
 
-class UserData extends ChangeNotifier {
+class UserData with ChangeNotifier {
   UserProfile? _userProfile;
 
   UserProfile? get userProfile => _userProfile;
