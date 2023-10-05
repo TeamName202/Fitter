@@ -41,12 +41,6 @@ public class UserController {
 
 	private final UserServiceImpl userService;
 
-	@Value("${spring.servlet.multipart.location}")
-	private String FILE_PATH;
-
-	@Value("${file.folder.profile}")
-	private String PROFILE_FOLDER;
-
 	@GetMapping("/user-info")
 	@ApiOperation(value = "유저 정보", notes = "유저 정보를 조회하는 API")
 	public ResponseEntity<UserDto> getUserInfo(@RequestHeader(name = "Authorization") String accessToken) {
@@ -75,25 +69,6 @@ public class UserController {
 			return new ResponseEntity<>(userService.getProfileImg(profileImgDto), headers, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("getProfileImg :: {}", e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping(path = "/profile-img/{filename}")
-	@ApiOperation(value = "path로 프로필 사진 조회", notes = "path로 프로필 사진을 조회하는 API")
-	public ResponseEntity<byte[]> getProfileImgByFileName(@PathVariable(name = "filename") String fileName, @RequestHeader(name = "Authorization") String accessToken) {
-		try {
-			// 프로필 사진 경로를 사용해서 File 객체 만듦
-			File file = new File(FILE_PATH + PROFILE_FOLDER + fileName);
-
-			// 파일 확장자에 따라 파일 헤더 세팅
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Content-type", Files.probeContentType(file.toPath()));
-
-			return new ResponseEntity<>(userService.getProfileImg(fileName), headers, HttpStatus.OK);
-
-		} catch (Exception e) {
-			log.error("getProfileImgByPath :: {}", e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
