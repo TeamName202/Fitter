@@ -131,7 +131,8 @@ class _MyPageState extends State<MyPage> {
                                               borderRadius:
                                                   BorderRadius.circular(30),
                                             ),
-                                            child: const MyPageAlertDialog(),
+                                            child: const SingleChildScrollView(
+                                                child: MyPageAlertDialog()),
                                           );
                                         },
                                       );

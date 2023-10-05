@@ -149,14 +149,31 @@ class ApiService {
         "Authorization": token,
       },
     );
+
     final userInfo = jsonDecode(utf8.decode(response.bodyBytes));
-    final image = Image.network(
-      "$baseUrl/api/user/profile-img",
+
+    var a = await http.get(
+      Uri.parse("$baseUrl/api/user/profile-img"),
       headers: {
         "Authorization": token,
       },
-      fit: BoxFit.cover,
     );
+    late Image image;
+    try {
+      image = Image.network(
+        "$baseUrl/api/user/profile-img",
+        headers: {
+          "Authorization": token,
+        },
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
+      image = Image.asset(
+        'assets/images/default_user_img.jpg',
+        fit: BoxFit.cover,
+      );
+    }
+
     // const jsonString =
     // '{"ageRange": "20대", "boxDto": { "boxName": "체육관" }, "email": "choiyc1446@gmail.com", "gender": true, "nickname": "최영창" }';
 
