@@ -41,7 +41,7 @@ class RecordApiService {
     final prefs = await SharedPreferences.getInstance();
     final headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjYzNzY2NywiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.RbN7XNNP0t2hlQdMI8ARLkypl_Xld0dMLHSnMtfUbQxMnNFqZ7O4-GlyEE1A-g2p9AHeRK0EixwpFU-pdl3apA'
       // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
@@ -54,7 +54,7 @@ class RecordApiService {
         print("list[workoutDto] : ");
         print(PrList["max_weight"]);
         if (PrList["type"] == prCategory) {
-          // print("prListInstances : $prListInstances");
+          print("prListInstances : $prListInstances");
           // null 값 처리
           if (PrList["max_weight"] == null) {
             PrList["max_weight"] = ' ';
@@ -84,7 +84,7 @@ class RecordApiService {
     final prefs = await SharedPreferences.getInstance();
     final headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjYzNzY2NywiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.RbN7XNNP0t2hlQdMI8ARLkypl_Xld0dMLHSnMtfUbQxMnNFqZ7O4-GlyEE1A-g2p9AHeRK0EixwpFU-pdl3apA'
       // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
@@ -158,11 +158,11 @@ class RecordApiService {
     if (response.statusCode == 200) {
       final wodCategorys = jsonDecode(response.body);
       for (var wodCategory in wodCategorys) {
-        print(wodCategory);
+        // print(wodCategory);
         wodCategoryInstances.add(wodCategory["name"]);
       }
 
-      print(wodCategoryInstances);
+      // print(wodCategoryInstances);
       return wodCategoryInstances;
     }
 
@@ -175,29 +175,39 @@ class RecordApiService {
     final prefs = await SharedPreferences.getInstance();
     final headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjYzNzY2NywiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.RbN7XNNP0t2hlQdMI8ARLkypl_Xld0dMLHSnMtfUbQxMnNFqZ7O4-GlyEE1A-g2p9AHeRK0EixwpFU-pdl3apA'
       // 'Authorization': prefs.getString('Authorization').toString(),
     };
 
     final url = Uri.parse("$baseUrl/rank/$wodName");
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      final WodRankings = jsonDecode(response.body); // string 타입을 json으로 바꿔줌.
-      print('wodName : $wodName');
-      for (var WodRaking in WodRankings) {
-        if (WodRaking['content']['wodType']['type'] == 'For Time') {
-          WodRaking['content']['count'] = WodRaking['content']['time']['hour'] +
-              ':' +
-              WodRaking['content']['time']['minute'] +
-              ':' +
-              WodRaking['content']['time']['second'];
+      final WodRankings =
+          jsonDecode(utf8.decode(response.bodyBytes)); // string 타입을 json으로 바꿔줌.
+      print('allwodName : $wodName');
+      print('wod all list : $WodRankings');
+      int index = 1;
+      for (var WodRaking in WodRankings["content"]) {
+        print('test');
+        print(WodRaking['count']);
+        if (WodRaking['wod']['wodType']['type'] == 'For Time') {
+          WodRaking['count'] = WodRaking['time'].toString();
         } else {
-          WodRaking['content']['count'] =
-              WodRaking['content']['count'].toString();
+          WodRaking['count'] = WodRaking['count'].toString();
         }
+        WodRaking["user"]["profileImgDto"]["filePath"] =
+            WodRaking["user"]["profileImgDto"]["filePath"].toString();
+        WodRaking["user"]["nickname"] =
+            WodRaking["user"]["nickname"].toString();
+        WodRaking["user"]["boxDto"]["boxName"] =
+            WodRaking["user"]["boxDto"]["boxName"].toString();
         print('wodRaking : $WodRaking');
-        wodRankingInstances.add(WodRankingModel.fromJson(WodRaking));
+        wodRankingInstances.add(WodRankingModel.fromJson({
+          ...WodRaking,
+          'index': index,
+        }));
         print("wodRankingInstances : $wodRankingInstances");
+        index++;
       }
 
       return wodRankingInstances;
@@ -206,35 +216,33 @@ class RecordApiService {
   }
 
   // 내 와드 랭킹 받아오기
-  static Future<List<MyWodRankingModel>> getMyWodRanking(String wodName) async {
-    List<MyWodRankingModel> myWodRankingInstances = [];
+  static Future<MyWodRankingModel> getMyWodRanking(String wodName) async {
     final prefs = await SharedPreferences.getInstance();
     final headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjU3MTA3NSwiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.3DMwdvZYL7GSpBh3a5g2hESTJn8mYky0U-D7qrjHZ9zQL6Ojjn6qlqIyW4e5mlfPZKtC51xiWr59NRLV00j5HA'
+          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTY5NjYzNzY2NywiaWQiOjY1LCJlbWFpbCI6ImFhYUBhYWEuY29tIn0.RbN7XNNP0t2hlQdMI8ARLkypl_Xld0dMLHSnMtfUbQxMnNFqZ7O4-GlyEE1A-g2p9AHeRK0EixwpFU-pdl3apA'
     };
 
     final url = Uri.parse("$baseUrl/rank/my-rank/$wodName");
     final response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      final MyWodRankings = jsonDecode(response.body); // string 타입을 json으로 바꿔줌.
-      print('wodName : $wodName');
-      for (var MyWodRanking in MyWodRankings) {
-        if (MyWodRanking['wodDto']['wodType']['type'] == 'For Time') {
-          MyWodRanking['count'] = MyWodRanking['time']['hour'] +
-              ':' +
-              MyWodRanking['time']['minute'] +
-              ':' +
-              MyWodRanking['time']['second'];
-        } else {
-          MyWodRanking['count'] = MyWodRanking['count'].toString();
-        }
-        print('wodRaking : $MyWodRanking');
-        myWodRankingInstances.add(MyWodRankingModel.fromJson(MyWodRanking));
-        print("wodRankingInstances : $myWodRankingInstances");
+      final MyWodRanking =
+          jsonDecode(utf8.decode(response.bodyBytes)); // string 타입을 json으로 바꿔줌.
+      print('mywodName : $wodName');
+      print(MyWodRanking["ranking"].toString());
+      print(MyWodRanking["count"].toString());
+      print(MyWodRanking['userDto']['boxDto']['boxName'].toString());
+      print(MyWodRanking['wodDto']['wodType']['type'].toString());
+      if (MyWodRanking['wodDto']['wodType']['type'] == 'For Time') {
+        MyWodRanking['count'] = MyWodRanking['time'].toString();
+      } else {
+        MyWodRanking['count'] = MyWodRanking['count'].toString();
       }
+      MyWodRanking['ranking'] = MyWodRanking['ranking'].toString();
+      print(MyWodRanking['count']);
+      print('wodRaking : $MyWodRanking');
 
-      return myWodRankingInstances;
+      return MyWodRankingModel.fromJson(MyWodRanking);
     }
     throw Error();
   }

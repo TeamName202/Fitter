@@ -1,16 +1,9 @@
 class MyWodRankingModel {
-  // 랭킹 추가 되어야 됨.
-  // final String box, hour, minute, second, wodname, wodtype;
-  final String box, count, wodname, wodtype;
-  // final int count;
+  final String ranking, box, count;
 
   MyWodRankingModel.fromJson(Map<String, dynamic> json)
-      : box = json['content']['user']['boxDto']['boxName'],
-        // hour = json['content']['time']['hour'],
-        // minute = json['content']['time']['minute'],
-        // second = json['content']['time']['second'],
-        count = json['count'],
-        wodname = json['content']['wod']['name'],
-        // count = json['content']['count'],
-        wodtype = json['content']['wodType']['type'];
+      : box = json['userDto']['boxDto']['boxName'],
+        ranking = json['ranking'],
+        count = json['count'];
+  // wodtype = json['wodDto']['wodType']['type'];
 }

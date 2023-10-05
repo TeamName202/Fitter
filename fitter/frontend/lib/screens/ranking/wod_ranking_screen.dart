@@ -23,7 +23,7 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
   // 전체 랭킹 리스트
   late Future<List<WodRankingModel>> wodRakingLists;
   // 내 랭킹 리스트
-  late Future<List<MyWodRankingModel>> myWodRakingLists;
+  late Future<MyWodRankingModel> myWodRakingList;
 
   // 이건 하드코딩으로 해야할듯. 우선은 Murph밖에 없어서 Murph 하나만. 랭킹 기록 불러올때 처음에는 드롭다운 버튼 제일 첫번째꺼 기록 가져오기 위해서 이용함.
   List<String> wodList = <String>['Murph'];
@@ -43,8 +43,9 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
     wodCategory = RecordApiService.getWodCategoryLists();
 
     // 초기화 할 때는 대분류 첫번째의 운동 가져오기. (future 타입이라서 first 안먹혀서 리스트 하드코딩).
+    myWodRakingList = RecordApiService.getMyWodRanking(wodList.first);
+    // print(myWodRakingList);
     wodRakingLists = RecordApiService.getWodRanking(wodList.first);
-    myWodRakingLists = RecordApiService.getMyWodRanking(wodList.first);
   }
 
   // DropdownButton에서 선택된 항목이 변경되었을 때 호출되는 함수
@@ -52,8 +53,8 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
     setState(() {
       selectedWOD = newValue;
 
+      myWodRakingList = RecordApiService.getMyWodRanking(selectedWOD);
       wodRakingLists = RecordApiService.getWodRanking(selectedWOD);
-      myWodRakingLists = RecordApiService.getMyWodRanking(selectedWOD);
 
       // 스크롤 제일 위로 올리기
       _scrollController.jumpTo(0.0);
@@ -206,12 +207,74 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
 
           // 내 기록
           FutureBuilder(
-              future: myWodRakingLists,
+              future: myWodRakingList,
               builder: (context, snapshot) {
+                print(snapshot);
                 if (snapshot.hasData) {
-                  return Expanded(child: makeMyWodList(snapshot));
+                  return Container(
+                      height: 60,
+                      color: const Color.fromARGB(255, 84, 145, 206),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(width: 30),
+                            // 내 랭킹
+                            SizedBox(
+                              width: 50,
+                              child: Text(
+                                snapshot.data!.ranking,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 8, 37, 115),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20),
+                              ),
+                            ),
+                            //  닉네임 들어갈 위치
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            const SizedBox(
+                              width: 50,
+                              child: Text(
+                                '나',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 8, 37, 115),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                width: 100,
+                                child: Text(
+                                  snapshot.data!.box,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            // const SizedBox(width: 50),
+                            Expanded(
+                              child: SizedBox(
+                                width: 100,
+                                child: Text(
+                                  snapshot.data!.count,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            // const Expanded(
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                      ));
                 }
-                return Container();
+                return const Text("...");
               }),
           const SizedBox(
             height: 15,
@@ -235,66 +298,6 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
   }
 }
 
-ListView makeMyWodList(AsyncSnapshot<List<MyWodRankingModel>> snapshot) {
-  return ListView.separated(
-    scrollDirection: Axis.vertical,
-    // controller: scrollController, // ScrollController를 ListView에 연결.
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    itemCount: snapshot.data!.length,
-    itemBuilder: (BuildContext context, int index) {
-      var myWodRaking = snapshot.data![index];
-      print(myWodRaking);
-      return Container(
-          height: 60,
-          color: const Color.fromARGB(255, 143, 183, 223),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 10),
-                // [Todo]내 랭킹 넣기
-
-                //  닉네임 들어갈 위치
-                const SizedBox(
-                  width: 50,
-                  child: Text(
-                    '나',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 8, 37, 115),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20),
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    width: 100,
-                    child: Text(
-                      myWodRaking.box,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                // const SizedBox(width: 50),
-                Expanded(
-                  child: SizedBox(
-                    width: 100,
-                    child: Text(
-                      myWodRaking.count,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                // const Expanded(
-                const SizedBox(width: 10),
-              ],
-            ),
-          ));
-    },
-    separatorBuilder: (BuildContext context, int index) => const Divider(),
-  );
-}
-
 ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
     ScrollController scrollController) {
   return ListView.separated(
@@ -313,8 +316,18 @@ ListView makeWodList(AsyncSnapshot<List<WodRankingModel>> snapshot,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(width: 10),
-                // [Todo] 랭킹 넣기
-
+                // 랭킹
+                SizedBox(
+                  width: 50,
+                  child: Text(
+                    WodRaking.rank.toString(),
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 8, 37, 115),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20),
+                  ),
+                ),
                 // [Todo] 이미지 넣기
 
                 //  닉네임
