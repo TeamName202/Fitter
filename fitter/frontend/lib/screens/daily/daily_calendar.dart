@@ -61,92 +61,93 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TableCalendar(
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: (context, day, dynamic event) {
-                    if (event.isNotEmpty) {
-                      return Container(
-                        width: 35,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0080FF).withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    }
-                    return null;
-                  },
-                ),
-                focusedDay: focusedDay, // 주목할 날짜
-                firstDay: DateTime(1800),
-                lastDay: DateTime(3000),
-                onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                  // 선택된 날짜의 상태를 갱신합니다.
-                  setState(() {
-                    this.selectedDay = selectedDay;
-                    this.focusedDay = focusedDay;
-                  });
-                },
-                selectedDayPredicate: (DateTime day) {
-                  // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
-                  return isSameDay(selectedDay, day);
-                },
-                headerStyle: const HeaderStyle(
-                  headerPadding: EdgeInsets.only(bottom: 10),
-                  titleCentered: true,
-                  formatButtonVisible: false,
-                  titleTextStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 25),
-                  leftChevronIcon: Icon(Icons.arrow_left_sharp),
-                  rightChevronIcon: Icon(Icons.arrow_right_sharp),
-                ),
-                calendarFormat: format,
-                calendarStyle: CalendarStyle(
-                    outsideDaysVisible: false,
-                    markersMaxCount: 4, // 마커 개수 제한
-                    defaultTextStyle: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    weekendTextStyle: const TextStyle(color: Colors.red),
-                    // outsideDaysVisible: false,
-                    todayDecoration: BoxDecoration(
-                      // color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF136AF3)),
-                    ),
-                    todayTextStyle: const TextStyle(
-                      // fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    selectedDecoration: const BoxDecoration(
-                      color: Color(0xFF136AF3),
-                      shape: BoxShape.circle,
-                    )),
-                onFormatChanged: (CalendarFormat format) {
-                  setState(
-                    () {
-                      this.format = format;
-                    },
-                  );
-                },
-                eventLoader: (date) => calendarEventLoader(
-                    date), // 여기서 리턴되는 리스트 안의 요소만큼 mark가 표시됨.
-                onPageChanged: (page) {
-                  focusedDay = page;
-                  fetchEventsForMonth(page);
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: TableCalendar(
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, day, dynamic event) {
+                  if (event.isNotEmpty) {
+                    return Container(
+                      width: 35,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0080FF).withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                    );
+                  }
+                  return null;
                 },
               ),
+              focusedDay: focusedDay, // 주목할 날짜
+              firstDay: DateTime(1800),
+              lastDay: DateTime(3000),
+              onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                // 선택된 날짜의 상태를 갱신합니다.
+                setState(() {
+                  this.selectedDay = selectedDay;
+                  this.focusedDay = focusedDay;
+                });
+              },
+              selectedDayPredicate: (DateTime day) {
+                // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
+                return isSameDay(selectedDay, day);
+              },
+              headerStyle: const HeaderStyle(
+                headerPadding: EdgeInsets.only(bottom: 10),
+                titleCentered: true,
+                formatButtonVisible: false,
+                titleTextStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 25),
+                leftChevronIcon: Icon(Icons.arrow_left_sharp),
+                rightChevronIcon: Icon(Icons.arrow_right_sharp),
+              ),
+              // calendarFormat: format,
+              calendarStyle: CalendarStyle(
+                  outsideDaysVisible: false,
+                  markersMaxCount: 4, // 마커 개수 제한
+                  defaultTextStyle: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  weekendTextStyle: const TextStyle(color: Colors.red),
+                  // outsideDaysVisible: false,
+                  todayDecoration: BoxDecoration(
+                    // color: Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFF136AF3)),
+                  ),
+                  todayTextStyle: const TextStyle(
+                    // fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  selectedDecoration: const BoxDecoration(
+                    color: Color(0xFF136AF3),
+                    shape: BoxShape.circle,
+                  )),
+              onFormatChanged: (CalendarFormat format) {
+                setState(
+                  () {
+                    this.format = format;
+                  },
+                );
+              },
+              eventLoader: (date) =>
+                  calendarEventLoader(date), // 여기서 리턴되는 리스트 안의 요소만큼 mark가 표시됨.
+              onPageChanged: (page) {
+                focusedDay = page;
+                fetchEventsForMonth(page);
+              },
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            ListView(
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 350,
+            child: ListView(
               shrinkWrap: true,
               children: calendarEventLoader(selectedDay)
                   .map((e) => ListTile(
@@ -186,9 +187,9 @@ class _CalendarState extends State<Calendar> {
                         ),
                       ))
                   .toList(),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
