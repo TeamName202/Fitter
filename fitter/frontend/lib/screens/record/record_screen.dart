@@ -38,6 +38,7 @@ class _RecordScreenState extends State<RecordScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        toolbarHeight: 20,
         backgroundColor: Colors.white,
         bottom: TabBar(
           controller: _tabController,

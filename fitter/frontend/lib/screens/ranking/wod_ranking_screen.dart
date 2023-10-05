@@ -65,17 +65,17 @@ class _PrRecordScreenState extends State<WodRakingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "Wod 랭킹",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        elevation: 0,
-        foregroundColor: const Color(0xFF0080FF),
-        backgroundColor: Colors.white,
-      ),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   title: const Text(
+      //     "Wod 랭킹",
+      //     style: TextStyle(
+      //         color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+      //   ),
+      //   elevation: 0,
+      //   foregroundColor: const Color(0xFF0080FF),
+      //   backgroundColor: Colors.white,
+      // ),
       body: Column(
         children: [
           const SizedBox(
