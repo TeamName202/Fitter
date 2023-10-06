@@ -311,11 +311,11 @@ class _WodInputScreenState extends State<WodInputScreen> {
                 (widget.type == "생성") ? await writePR() : await updatePR();
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => WodDetailScreen(
-                        wodName: widget.wodName,
-                        wodId: widget.wodId,
-                      ),
-                    ),
+                        builder: (context) => WodDetailScreen(
+                              wodName: widget.wodName,
+                              wodId: widget.wodId,
+                            ),
+                        fullscreenDialog: true),
                     (route) => route.isFirst);
               },
               child: ButtonMold(

@@ -1,12 +1,5 @@
-import 'package:fitter/screens/bunsan_screen.dart';
 import 'package:fitter/screens/login_screen.dart';
-import 'package:fitter/screens/nav_bar.dart';
-import 'package:fitter/screens/ranking/wod_ranking_screen.dart';
-import 'package:fitter/screens/record/record_screen.dart';
 import 'package:fitter/models/user_profile.dart';
-import 'package:fitter/screens/daily/daily_calendar.dart';
-import 'package:fitter/screens/login_screen.dart';
-import 'package:fitter/screens/ranking/wod_ranking_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -42,9 +35,5 @@ class App extends StatelessWidget {
     return const MaterialApp(
       home: LoginScreen(),
     );
-    // home: RecordScreen());
-    // home: WodRakingScreen());
-    // home: BunsanScreen());
-    // home: NavBarWidget());
   }
 }

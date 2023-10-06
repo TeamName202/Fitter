@@ -225,9 +225,9 @@ class _PRInputScreenState extends State<PRInputScreen> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          ChartScreen(workoutName: widget.workoutName),
-                    ),
+                        builder: (context) =>
+                            ChartScreen(workoutName: widget.workoutName),
+                        fullscreenDialog: true),
                     (route) => route.isFirst);
               },
               child: ButtonMold(

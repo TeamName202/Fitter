@@ -319,12 +319,12 @@ class MenuOverlay extends StatelessWidget {
                     deleteRecord(individual);
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                          builder: (context) => WodDetailScreen(
-                            wodName: wodName,
-                            wodId: wodId,
-                          ),
-                        ),
-                        (route) => false);
+                            builder: (context) => WodDetailScreen(
+                                  wodName: wodName,
+                                  wodId: wodId,
+                                ),
+                            fullscreenDialog: true),
+                        (route) => route.isFirst);
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
